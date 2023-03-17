@@ -1,0 +1,199 @@
+﻿@using Kendo.Mvc.UI;
+@model DMS.Model.TreeSearch_Model
+
+@{
+    int i = 0;
+    bool newrow = true;
+    int colcnt = 0;
+}
+<div class="row">
+    <table>
+
+        @foreach (var category in Model.dept)
+        {
+            //if ( colcnt == 0)
+            //{
+                newrow = true;
+                @*colcnt = 0;
+                @Html.Raw("<tr style='height:30px;'>")
+            }
+            else
+            {
+                newrow = false;
+            }*@
+            if (newrow == true)
+            {
+                 @Html.Raw("<tr style='height:30px;'>")
+                <td width="15px">@Html.Hidden("Attribtype" + i, @category.Atr_Type)</td>
+                <td width="15px">@Html.Hidden("Attribname" + i, @category.Atr_Name)</td>
+                <td width="15px">@Html.Hidden("Docgroupid" + i, @category.Dgroup_Id)</td>
+                <td width="15px">@Html.Hidden("Docnameid" + i, @category.Dname_Id)</td>
+                @*<td>
+                    <label style="font-weight:normal;width:100px;">Attribute</label>
+                </td>*@
+                 <td>
+                    @Html.TextArea("myTextArea", @category.Dgroup_Name + "/" + @category.Dname_Name + "/" + @category.Atr_Name, new { rows = 1, columns = 40, @readonly = "readonly", @class = "form-control", style = "height:30px;width:280px;" }) 
+                </td>
+                <td>
+                    &nbsp;&nbsp;<label style="font-weight:bold;width:100px;">@category.Atr_Name </label>
+                </td>
+                @*<td width="30px"></td>*@
+                if (category.Atr_Type == "Datetime")
+                {
+                    <td>
+                        @Html.Editor("ctl" + i, null, new { htmlAttributes = new { @class = "form-control", style = "height:30px;width:200px;" }, })
+                    </td>
+                    
+                    
+                }
+                if (category.Atr_Type == "Alpha Numeric")
+                {
+                    
+                    <td style="width:120px">
+                        @Html.TextBox("ctl" + i, null, new { @class = "form-control", style = "height:30px;width:200px;" })
+                    </td>
+                   
+                }
+                if (category.Atr_Type == "Numeric")
+                {
+                    
+                    <td style="width:120px">
+                        @Html.TextBox("ctl" + i, null, new { @class = "form-control", style = "height:30px;width:200px;", onkeypress = "return NumersOnly(event)" })
+                    </td>
+                    
+                    
+                }
+                if (category.Atr_Type == "Amount")
+                {
+                    
+                    <td style="width:120px">
+                        @Html.TextBox("ctl" + i, null, new { @class = "form-control", style = "height:30px;width:200px;", onkeypress = "return isNumberKey(event)" })
+                    </td>
+                   
+                    
+                }
+                if (category.Atr_Type == "Logical")
+                {
+                    <td style="width:120px">
+                        @Html.RadioButton("ctl" + i, "Yes") Yes &nbsp;&nbsp;&nbsp;&nbsp;@Html.RadioButton("ctl" + i, "No") No
+                    </td>
+
+                }
+                if (category.Atr_Type == "Lov Name")
+                    {
+                        <td>
+                @*Html.DropDownList("ctl" + i, (IEnumerable<SelectListItem>)ViewBag.Lovexl_Name, "-Select-", new {  style = "height:25px;width:150px;font-weight: normal;" })*@
+                @Html.DropDownList("ctl" + i, category.LovName, null, new { @class = "form-control", style = "height:30px;width:200px;font-weight: normal;" })
+                        </td>
+                    }
+                    <td>
+                        @Html.DropDownList("cont" + i, category.Conditions, null, new { @class = "form-control", style = "height:30px;width:200px;font-weight: normal;" })
+                    </td>
+                 <td>
+                     @Html.DropDownList("ope" + i, category.operators, null, new { @class = "form-control", style = "height:30px;width:200px;font-weight: normal;" })
+                </td>
+            @Html.Raw("</tr>")
+            }
+            else
+            {
+                @Html.Raw("<tr style='height:30px;'>")
+                <td width="15px">@Html.Hidden("Attribtype" + i, @category.Atr_Type)</td>
+                <td width="15px">@Html.Hidden("Attribname" + i, @category.Atr_Name)</td>
+                <td width="15px">@Html.Hidden("Docgroupid" + i, @category.Dgroup_Id)</td>
+                <td width="15px">@Html.Hidden("Docnameid" + i, @category.Dname_Id)</td>
+                <td>
+                    <label style="font-weight:normal;width:100px;">Attribute</label>
+                </td>
+                 <td>
+                    @Html.TextArea("myTextArea", @category.Dgroup_Name + "/" + @category.Dname_Name + "/" + @category.Atr_Name, new { rows = 1, columns = 40, @readonly = "readonly" })
+                </td>
+                <td>
+                    <label style="font-weight:normal;width:100px;">@category.Atr_Name </label>
+                </td>
+                @*<td width="30px"></td>*@
+
+                if (category.Atr_Type == "Datetime")
+                {
+                    <td>
+
+                        @Html.Editor("ctl" + i, null, new { htmlAttributes = new { @class = "form-control", style = "height:30px;width:200px;" } })
+                    </td>
+                   
+                    
+                }
+                if (category.Atr_Type == "Alpha Numeric")
+                {
+                    <td style="width:120px">
+                        @Html.TextBox("ctl" + i, null, new { @class = "form-control", style = "height:30px;width:200px;" })
+                    </td>
+                    
+                }
+                if (category.Atr_Type == "Numeric")
+                {
+                    
+                    <td style="width:120px">
+                        @Html.TextBox("ctl" + i, null, new { @class = "form-control", style = "height:30px;width:200px;", onkeypress = "return NumersOnly(event)" })
+                    </td>
+                  
+                }
+                if (category.Atr_Type == "Amount")
+                {
+                    
+                    <td style="width:120px">
+                        @Html.TextBox("ctl" + i, null, new { @class = "form-control", style = "height:30px;width:200px;", onkeypress = "return isNumberKey(event)" })
+                    </td>
+                   
+                }
+                if (category.Atr_Type == "Logical")
+                {
+                    <td style="width:120px">
+                        @Html.RadioButton("ctl" + i, "Yes") Yes &nbsp;&nbsp;&nbsp;&nbsp;@Html.RadioButton("ctl" + i, "No") No
+                    </td>
+                   
+                }
+                 if (category.Atr_Type == "Lov Name")
+                 {
+                     <td>
+                         @*@Html.DropDownList("ctl" + i, (IEnumerable<SelectListItem>)ViewBag.Lovexl_Name, "-Select-", new { style = "height:25px;width:150px;font-weight: normal;" })*@
+                         @Html.DropDownList("ctl" + i, category.LovName, null, new { @class = "orm-control", style = "height:30px;width:200px;font-weight: normal;" })
+                     </td>
+                    
+                 }
+                 <td>
+                        @Html.DropDownList("cont" + i, category.Conditions, null, new { @class = "form-control", style = "height:30px;width:200px;font-weight: normal;" })
+                    </td>
+                 <td>
+                     @Html.DropDownList("ope" + i, category.operators, null, new { @class = "form-control", style = "height:30px;width:500px;font-weight: normal;" })
+                </td>
+            @Html.Raw("</tr>")
+            }
+            if (colcnt == 0)
+            {
+                @Html.Raw("</tr>")
+            }
+            i++;
+            colcnt++;
+        }
+
+    </table>
+</div>
+    <input type="hidden" id="ctlcount" value="@i" />
+
+    <script type="text/javascript">
+        var count = $('#ctlcount').val();
+        var concatval;
+        for (var i = 0; i < count; i++) {
+            var Attributetypes = $('#Attribtype' + i).val();
+
+            if (Attributetypes == "Datetime") {
+                debugger;
+                $('#ctl' + i).datepicker({
+                    dateFormat: "dd-mm-yy",
+                    changeMonth: true,
+                    changeYear: true
+                })
+                //$('#ctl' + i).datepicker('setDate', 'today')
+            }
+            // var gettxtdesval = $('#ctl' + i).val();
+        }
+    </script>

@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1fpzwyh",
+  "CachePdfKey": "1fpzwyh/1fpzwyh-1k3kk2s.pdf",
+  "CacheXpzKey": "1fpzwyh/1fpzwyh-jlc78.xpz",
+  "CacheInfoKey": "1fpzwyh/1fpzwyh-jlc78.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Invoice\\Supplier Invoice\\ClientInv009(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv009(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1fpzwyh",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1toptfp",
+  "CachePdfKey": "1toptfp/1toptfp-1nrwo2i.pdf",
+  "CacheXpzKey": "1toptfp/1toptfp-1f1fg9e.xpz",
+  "CacheInfoKey": "1toptfp/1toptfp-1f1fg9e.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\DSA(0).png",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "DSA(0).png",
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1toptfp",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

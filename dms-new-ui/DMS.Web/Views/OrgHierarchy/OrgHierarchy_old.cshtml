@@ -1,0 +1,470 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model  DMS.Model.OrgHierarchy_Model
+@{
+    List<DMS.Model.OrgHierarchy_Model> Orglist = new List<DMS.Model.OrgHierarchy_Model>();
+
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+
+        .k-grid-header th.k-header > .k-link {
+            width: 100px;
+        }
+
+        .k-grid-header {
+            font-weight: bold;
+        }
+
+        .k-state-active {
+            display: none;
+        }
+
+        .k-content {
+            font-weight: normal;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:650px">
+
+                        <div class="box-header text-center with-border">
+                            <h4 class="box-title" style="text-align :center ">Org Hierarchy</h4>
+                        </div>
+                        <div class="box-body">
+                            <table style="width:30% !important;position:relative;align-content :flex-start  ">
+
+                                <tr style="height:20px;"></tr>
+                                <tr hidden>
+                                    <td style="position:relative;text-align :center;left:15px">
+                                        <p style="font-weight: bold"> Levels</p>
+                                    </td>
+                                    <td style="position:relative;text-align :center" hidden>
+                                        <p style="font-weight: bold"> Organisation Code</p>
+                                    </td>
+
+                                    <td style="position: relative;text-align :center">
+                                        <p style="font-weight :bold"> Organisation Name</p>
+                                    </td>
+                                </tr>
+
+                                <tr style="height:20px;"></tr>
+
+                                <tr>
+                                    <td style="left:15px; position:relative;text-align :center">
+                                        @Html.Label("Level 1", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td style="left:15px; position:relative" hidden>
+
+                                        @Html.Hidden("L1OrgGid", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+                                        @*onKeypress="blockSpecialKeys(event);",*@
+                                        @Html.TextBox("L1OrgCode", "", new { @pattern = "[a-zA-Z0-9]+", style = "height:25px;width:225px;font-weight: normal;" })
+
+                                        @*@Html.ValidationMessageFor(m => m.OrgCode)*@
+                                    </td>
+
+                                    <td style="left: 15px; padding-right: 30px; position: relative">
+                                        @Html.TextBox("L1OrgName", "", new { style = "height:25px;width:225px;font-weight: normal;margin-left:15px;" })
+                                    </td>
+                                </tr>
+
+                                <tr style="height:20px;"></tr>
+                                <tr>
+                                    <td style="left:15px; position:relative;text-align :center">
+                                        @Html.Label("Level 2", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td style="left:15px; position:relative" hidden>
+                                        @Html.Hidden("L2OrgGid", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+                                        @Html.TextBox("L2OrgCode", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+
+                                    </td>
+
+                                    <td style="left: 15px; padding-right: 30px; position: relative">
+                                        @Html.TextBox("L2OrgName", "", new { style = "height:25px;width:225px;font-weight: normal;margin-left:15px;" })
+                                    </td>
+                                </tr>
+                                <tr style="height:20px;"></tr>
+                                <tr>
+                                    <td style="left:15px; position:relative;text-align :center">
+                                        @Html.Label("Level 3", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td style="left:15px; position:relative" hidden>
+                                        @Html.Hidden("L3OrgGid", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+                                        @Html.TextBox("L3OrgCode", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+
+                                    </td>
+
+                                    <td style="left: 15px; padding-right: 30px; position: relative">
+                                        @Html.TextBox("L3OrgName", "", new { style = "height:25px;width:225px;font-weight: normal;margin-left:15px;" })
+                                    </td>
+                                </tr>
+                                <tr style="height:20px;"></tr>
+                                <tr>
+                                    <td style="left:15px; position:relative;text-align :center">
+                                        @Html.Label("Level 4", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td style="left:15px; position:relative" hidden>
+                                        @Html.Hidden("L4OrgGid", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+                                        @Html.TextBox("L4OrgCode", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+
+                                    </td>
+
+                                    <td style="left: 15px; padding-right: 30px; position: relative">
+                                        @Html.TextBox("L4OrgName", "", new { style = "height:25px;width:225px;font-weight: normal;margin-left:15px;" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="box-footer">
+                            <input type="submit" name="btnsubmit" value="Submit" id="btnsubmit" class="btn btn-orange pull-right" style="margin-right:65%" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+    function blockSpecialKeys(e) {
+        alert(e.keyCode);
+
+        var Keys = e.keyCode;
+        
+            if((Keys >= 65 && k <= 90) || // (A-Z)
+            (Keys >= 97 && k <= 122) || // (a-z)
+            (Keys == 8) || // (BACKSPACE)
+            (Keys == 32) || // (SPACE)
+            (Keys == 45) )// '-' (MINUS, HYPHEN, DASH)
+            { return true; }
+        else
+            { return false;}
+    } // END OF blockSpecialKeys FUNCTION
+    $(btnsubmit).click(function(){
+
+
+
+        var OrgidL1= $("#L1OrgGid").val();
+        var OrgCodeL1= $("#L1OrgCode").val();
+        var OrgNameL1 =$("#L1OrgName").val();
+
+
+        var OrgidL2=$("#L2OrgGid").val();
+        var OrgCodeL2= $("#L2OrgCode").val();
+        var OrgNameL2=$("#L2OrgName").val();
+
+        var OrgidL3=$("#L3OrgGid").val();
+        var OrgCodeL3= $("#L3OrgCode").val();
+        var OrgNameL3= $("#L3OrgName").val();
+
+        var OrgidL4= $("#L4OrgGid").val();
+        var OrgCodeL4=$("#L4OrgCode").val();
+        var OrgNameL4= $("#L4OrgName").val();
+        debugger;
+        var ObjOrg = [{ OrgGId: OrgidL1, OrgCode: OrgCodeL1, OrgName: OrgNameL1 },
+            { OrgGId: OrgidL2, OrgCode: OrgCodeL2, OrgName: OrgNameL2 },
+            { OrgGId: OrgidL3, OrgCode: OrgCodeL3, OrgName: OrgNameL3 },
+            { OrgGId: OrgidL4, OrgCode: OrgCodeL4, OrgName: OrgNameL4 }];
+        var JsonData = JSON.stringify(ObjOrg);
+        $.ajax({
+            url: '@Url.Action("OrgSave", "Orghierarchy")',
+            //data: JSON.stringify(JsonData),
+            data: JSON.stringify(ObjOrg)  ,
+            type: 'Post',
+            contentType: "application/json; charset=utf-8",
+            datatype: 'json',
+            async: false,
+            success: function (result) {
+                if(result="Success")
+                {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                     //   theme: 'dark',
+                        content: 'Org Hierarchy Updated.!',
+                        type: 'green',
+                        animationSpeed: 700,
+                    });
+                }
+            }
+        });
+    });
+    $(document).ready(function () {
+        @*if ('@ViewBag.Message' == "File uploaded successfully") {*@
+        debugger;
+        $("#L1OrgCode").addClass('required');
+        $("#L1OrgName").addClass('required');
+        $.ajax({
+            url: '@Url.Action("OrgSelect", "Orghierarchy")',
+            data: {},
+            type: 'Post',
+            datatype: 'json',
+            async: false,
+            success: function (result) {
+                debugger;
+                //var columns = [];
+                var data = JSON.parse(result.Data1);
+
+
+                for (var key in data) {
+                    // var val = data1[0][key];
+
+                    //alert(data[key]["OrgGId"]);
+                    if (data[key]["OrgGId"] == 1) {
+
+                        $("#L1OrgGid").val(data[key]["OrgGId"]);
+                        $("#L1OrgCode").val(data[key]["OrgCode"]);
+                        $("#L1OrgName").val(data[key]["OrgName"]);
+                    }
+                    else if (data[key]["OrgGId"] == 2) {
+                        $("#L2OrgGid").val(data[key]["OrgGId"]);
+                        $("#L2OrgCode").val(data[key]["OrgCode"]);
+                        $("#L2OrgName").val(data[key]["OrgName"]);
+                    }
+                    else if (data[key]["OrgGId"] == 3) {
+                        $("#L3OrgGid").val(data[key]["OrgGId"]);
+                        $("#L3OrgCode").val(data[key]["OrgCode"]);
+                        $("#L3OrgName").val(data[key]["OrgName"]);
+                    }
+                    else if (data[key]["OrgGId"] == 4) {
+                        $("#L4OrgGid").val(data[key]["OrgGId"]);
+                        $("#L4OrgCode").val(data[key]["OrgCode"]);
+                        $("#L4OrgName").val(data[key]["OrgName"]);
+                    }
+                }
+
+            }
+
+
+
+
+
+
+
+
+        }
+
+        //}
+    );
+
+        //$("#L1OrgName").on("input", function () {
+        //    // Print entered value in a div box
+        //    //var alreadyval = $("#L1OrgCode").val();
+        //    debugger;
+        //    var tempval = "QCD_org_t"+$(this).val();
+        //    $("#L1OrgCode").val(tempval);
+        //});
+        //$("#L2OrgName").on("input", function () {
+        //    // Print entered value in a div box
+        //    //var alreadyval = $("#L1OrgCode").val();
+        //    debugger;
+        //    var tempval = "QCD_org_t" + $(this).val();
+        //    $("#L2OrgCode").val(tempval);
+        //});
+        //$("#L3OrgName").on("input", function () {
+        //    // Print entered value in a div box
+        //    //var alreadyval = $("#L1OrgCode").val();
+        //    debugger;
+        //    var tempval = "QCD_org_t" + $(this).val();
+        //    $("#L3OrgCode").val(tempval);
+        //});
+        //$("#L4OrgName").on("input", function () {
+        //    // Print entered value in a div box
+        //    //var alreadyval = $("#L1OrgCode").val();
+        //    debugger;
+        //    var tempval = "QCD_org_t" + $(this).val();
+        //    $("#L4OrgCode").text(tempval);
+        //});
+    });
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+    function onRequestEnd(e) {
+        debugger;
+        //Check request type
+        if (e.type == "create") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Department has been created successfully.!',
+                    type: 'blue',
+                });
+                setTimeout(function () {
+                    debugger;
+                    window.location.reload(1);
+                }, 1500);
+            }
+        }
+        if (e.type == "update") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Department has been Edited successfully.!',
+                    type: 'blue',
+                });
+                setTimeout(function () {
+                    debugger;
+                    window.location.reload(1);
+                }, 1500);
+            }
+        }
+
+    }
+
+    function myDeleteJs() {
+        debugger;
+        var grid = $("#Department").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var ID = (model.Id);
+        var MastertypeId = (model.MasterTypeId);
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+            theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure do you want to delete this record!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("DeletingDepartment", "CreateMaster")',
+                        data: "{ ID:'" + ID + "',MastertypeId:'" +MastertypeId+"'}",
+                        success: function (data) {
+                            debugger;
+                            if (data == 'Success') {
+                                $.alert({
+                                    icon: 'fa fa-success',
+                                    title: 'DMS',
+                                    theme: 'dark',
+                                    content: 'Record deleted.!',
+                                    type: 'green',
+                                    animationSpeed: 700,
+                                });
+                            }
+                            setTimeout(function () {
+                                window.location.reload(1);
+                            }, 2500);
+                        },
+                    });
+
+                },
+                cancel: function () {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        theme: 'dark',
+                        content: 'Delete Canceled.!',
+                        type: 'blue',
+                        animationSpeed: 700,
+                    });
+                },
+            }
+        });
+    }
+
+    function onChange() {
+        var pid = this.value();
+        var PName = this.text();
+        sessionStorage.setItem('MasterTypeId', pid);
+        debugger;
+       // $.session.set("MasterTypeId", pid);
+        //alert($.session.get("MasterTypeId"));
+        // alert(pid);
+
+        //$.get('/CreateMaster/MasterGrid_Read', { MasterTypeId: pid }, function (data) {
+        //    $("#Department").data("kendoGrid").dataSource.read();
+        //    var grid = $("#Department").data("kendoGrid");
+        //})
+
+//        $.ajax(
+//{
+//    type: 'POST',
+//    url: '/CreateMaster/MasterGrid_Read/',
+//    dataType: 'json',
+//    data: { date: pDate },
+//    success: function (result) {
+//        $("#Department").data("kendoGrid").dataSource.data(result);
+//    }
+        //});
+
+        $("#MasterTypeId").val(pid).trigger("change");
+        $("#Department").data("kendoGrid").dataSource.read();
+
+
+        @*$.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            url: '@Url.Action("MasterGrid_Read", "CreateMaster")',
+            data: "{ MasterTypeId:'" + pid + "'}",
+            success: function (data) {
+                debugger;
+
+
+                $("#Department").data("kendoGrid").dataSource.read();
+                alert("1");
+            },
+        });*@
+        $('h3').text(PName);
+    }
+    function additionalinfo()
+    {
+        var MasterTypeId = $("#MasterTypeId").val();
+
+        //alert(MasterTypeId);
+        if (MasterTypeId == null || MasterTypeId.length==0)
+        {
+            MasterTypeId = "QCD_mst_tdepartment";
+        }
+        else
+        {
+            MasterTypeId = $("#MasterTypeId").val();
+        }
+        alert(MasterTypeId);
+        //Session["MasterType"]=MasterTypeId;
+        return {
+
+            MasterTypeId: MasterTypeId
+
+        }
+    }
+</script>

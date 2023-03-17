@@ -1,0 +1,68 @@
+﻿<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+    /*.label {
+        font-weight: 200;
+    }*/
+</style>
+@*<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <meta name="viewport" content="width=device-width" />*@
+
+<div style="width:100%">
+    @*<table id="myTable" class="table order-list" style="width:100% ;font-weight:normal;"></table>*@
+    <table id="myTable" class="table order-list1" style="width:100% ;font-weight:normal;"></table>
+    @*<div class="modal-content">
+        <div class="modal-body">*@
+    <div class="row text-center mt20">
+    <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange fa-align-center" />
+        @*</div>
+            </div>*@
+    </div>
+</div>
+
+<script>
+    function Close() {
+        debugger;
+        objDialog2.dialog("close");
+    }
+
+    $(document).ready(function () {
+        debugger;
+
+        var group_type = $("#hdn_type").val();
+        var group_gid = $("#hdn_gridgid").val();
+        //$("#hdn_mode").val(mode);
+        $.ajax({
+            url: '@Url.Action("showdynamicattributes", "ViewDocuments")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'group_gid': group_gid, 'group_type': group_type },
+            success: function (data) {
+                debugger;
+                var data2 = JSON.parse(data);
+                for (i = 0; i < data2.length; i++) {
+                    var newRow = $("<tr  width='100%'>");
+                    var cols = "";
+                    cols += '<td><label id="name' + i + '" style="font-weight:normal;font-size: 13px;height:3px;"></label></td> <td><label name="val' + i + '" id="val' + i + '" style="font-weight:normal;font-size: 13px;height:3px"></label></td>';
+                    newRow.append(cols);
+                    $("table.order-list1").append(newRow);
+                }
+                for (i = 0; i < data2.length; i++) {
+                    $("#name" + i).text(data2[i].Atr_Name);
+                    $("#val" + i).text(data2[i].Attribdtl_Description);
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Failed to create..!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+    });
+</script>

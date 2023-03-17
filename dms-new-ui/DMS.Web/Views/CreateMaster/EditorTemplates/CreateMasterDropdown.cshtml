@@ -1,0 +1,79 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.CreateMaster_Model
+
+<div style="width:25px"></div>
+    <table>
+        <tr style="height:30px;">
+
+            <td style="left:10px; position:relative">
+                @Html.Label("QCD Code", new
+           {
+               @class = "form-label" @*style = "width:120px;font-weight: normal;"*@ })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Id, new
+           {
+               @class = "form-control", @*style = "height:25px;width:225px;font-weight: normal;"*@ })
+                @Html.ValidationMessageFor(model => model.Id)
+            </td>
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr style="height:30px;">
+            <td style="left:10px; position:relative">
+                @Html.Label("Name", new
+           {
+               @class = "form-label" @*style = "width:120px;font-weight: normal;"*@ })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Name, new
+           {
+               @class = "form-control" @*style = "height:25px;width:225px;font-weight: normal;"*@ })
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+            @*<td>
+                    @Html.HiddenFor(model => model.DependId, new { style = "height:25px;width:225px;font-weight: normal;" })
+                    @Html.ValidationMessageFor(model => model.DependId)
+                </td>*@
+
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr style="height:30px;">
+
+            <td style="left:10px; position:relative">
+                @Html.Label("Dependent Code", new
+           {
+               @id = "Orgname",
+               @class = "form-label" @*style = "width:120px;font-weight: normal;"*@ })
+            </td>
+            <td style="left:15px; position:relative">
+                @(Html.Kendo().DropDownList().Name("DependId")
+                                         .DataTextField("DependName")
+                                 .DataValueField("DependId")
+                 .HtmlAttributes(new { })
+                                 .DataSource(source => { source.Read(read => { read.Action("GetQcdMaster", "CreateMaster").Data("additionalinfo"); }).ServerFiltering(true); })
+                 .SelectedIndex(0)
+                        // .Events(e => e.Change("onChangeDropDown"))
+                )
+                @*@Html.ValidationMessageFor(model => model.DependId)*@
+                @*
+                    <select id="Master" name="Master" onchange="fetchMaster()" class="form-control"></select>*@
+            </td>
+
+
+
+        </tr>
+    </table>
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            //alert($("#MasterTypeId").text());
+            //alert($("#MasterTypeId").val());
+            // $("#Orgname").val($("#OrgMasterId").val());
+            var name = $("#Orgname").val();
+            var name1 = $("#OrgMasterId").val();
+            $("#Orgname").val("test");
+        })
+
+    </script>*@

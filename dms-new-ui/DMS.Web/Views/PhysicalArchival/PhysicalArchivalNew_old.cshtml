@@ -1,0 +1,1893 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.BasicReport_Model
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<style>
+    .col-md-12 {
+        padding-left: 0px !important;
+    }
+
+    .accordion_container {
+        width: 100%;
+    }
+
+    .accordion_head {
+        background-color: #337ab7;
+        color: white;
+        cursor: pointer;
+        font-family: arial;
+        font-size: 14px;
+        margin: 0 0 1px 0;
+        padding: 1px 3px;
+        font-weight: bold;
+    }
+
+    .accordion_body p {
+        padding: 18px 5px;
+        margin: 0px;
+    }
+
+    .plusminus {
+        float: right;
+    }
+
+    .ioniconplus {
+        width: 15px;
+        background-image: url('../images/minus-circled.png');
+        background-repeat: no-repeat;
+        background-position: -50px -128px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    /*.ob-right {
+        text-align: right;
+    }*/
+    .gj-unselectable {
+        margin-left: -10%;
+        overflow-y: auto !important;
+        height: 500px;
+    }
+
+    .cus-lbl {
+        font-weight: normal;
+    }
+
+    .panel-default {
+        border-color: #337ab7 !important;
+    }
+
+    .panel {
+        background-color: none;
+    }
+
+    /* .form-control {
+        height: 20px !important;
+        width: 90% !important;
+    }*/
+
+    div#kwindow_Filter {
+        overflow: hidden;
+    }
+
+    .foo {
+        outline: 1px solid #337ab7;
+    }
+
+    .k-grid .k-grid-header .k-header .k-link {
+        overflow: visible !important;
+    }
+
+    .foo .componentTitle {
+        position: absolute;
+        top: -25px;
+        background: #fff;
+        padding: 0 10px;
+    }
+</style>
+<link rel="stylesheet" href="styles/kendo.common.min.css" />
+<link rel="stylesheet" href="styles/kendo.default.min.css" />
+<link rel="stylesheet" href="styles/kendo.default.mobile.min.css" />
+
+<script src="js/jquery.min.js"></script>
+
+<script src="js/jszip.min.js"></script>
+
+<script src="js/kendo.all.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous">
+    </script>*@
+
+@*<script src="js/xlsx.core.min.js"></script>
+    <script src="js/FileSaver.js"></script>
+
+    <script src="js/jhxlsx.js"></script>*@
+
+<html>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" >
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Physical</h3>
+                        </div>
+                        <form method="post" class="form-horizontal" enctype="multipart/form-data" id="form" style="height:100%">
+                            <div>
+                                <div class="col-md-12" style="margin:auto;padding-left:-10px">
+                                    <div class="col-sm-2">
+                                        <label class="cus-lbl">Doc Name</label>
+                                        @(Html.Kendo().DropDownList()
+                                .Name("SubCateID")
+                                .DataTextField("SubCateName")
+                                .DataValueField("SubCateID")
+                                .Events(e => e.Change("onChangeDocName"))
+                                .HtmlAttributes(new { style = "height:25px;width:113%;font-weight: normal;" })
+                                .DataSource(source => { source.Read(read => { read.Action("GetBasicReportDetails", "BasicReport", new { Master = "DocName" }); }).ServerFiltering(true); }))
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cus-lbl">Doc Group</label>
+                                        @(Html.Kendo().DropDownList()
+                                .Name("CateID")
+                                .DataTextField("CateName")
+                                .DataValueField("CateID")
+                                .Events(e => e.Change("onChangeDocGroup"))
+                                .HtmlAttributes(new { style = "height:25px;width:113%;font-weight: normal;" })
+                                .DataSource(source => { source.Read(read => { read.Action("GetBasicReportDetails", "BasicReport", new { Master = "DocGroup" }); }).ServerFiltering(true); }))
+                                    </div>
+                                    @Html.Partial("BindOrglevels", new DMS.Model.DocGroupMaster_Model(), new ViewDataDictionary { { "Layout", "Horizontal" } })
+                                </div>
+                                <div class="col-md-12" style="width:85%">
+                                    <div class="col-sm-6" style="margin-top: 15px;">
+                                        <input type="radio" id="Archived" name="Archival" value="Arc">
+                                        <label for="Archived">Documents Archived</label>
+                                        <input type="radio" id="NArchived" name="Archival" value="NArc" checked style="margin-left:10px;">
+                                        <label for="NArchived">Documents Not Archived</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" id="btnAddAttrib" class="btn btn-yahoo pull-left" onclick="return AddAttributes();" style="margin-top: 10px;"><i class="fa fa-plus"></i>&nbsp; Add Filter</button>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" id="btnShowResult" class="btn btn-success pull-left" onclick="return ShowResult();" style="margin-top: 10px;"><i class="fa fa-search"></i>&nbsp; Show Result</button>
+                                    </div>
+                                    <div class="col-md-2" style="margin-top: 15px;">
+                                        <label>Active</label>
+                                        <input type="radio" value="Y" name="active_flag" id="rbY" checked style="margin-left:10px" /> Yes &nbsp;
+                                        <input type="radio" value="N" name="active_flag" id="rbN" /> No
+                                    </div>
+                                    @*<div class="col-sm-2">
+                                        <button type="button" name="btncancel" onclick="return SelectAll()" id="bntClear" class="btn btn-orange fa fa-check" style="width:120px;margin-top:10px"> Select All</button>
+                                    </div>*@
+                                </div>
+
+                                <div class="col-md-12" style="margin:auto;max-height:500px;max-width: 96%;padding-left: -10px;margin-left:15px;margin-top:10px">
+                                    <div class="col-md-12" style="width:102%;padding-left: 2px;padding-top: -11px;">
+                                        <div class="accordion_container">
+                                            <div class=" panel panel-primary" style="margin-bottom:5px;">
+                                                @*<div class="container">*@
+                                                <div class="accordion_head">Attribute Search <span class="plusminus">+</span> </div>
+                                                <div class="accordion_body">
+                                                    <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                                                        <div style="margin:auto;height:110px;overflow:auto;width:104%;">
+                                                            <div id="myTable1" style="border-top:groove thin;border-top-style:ridge;border-bottom:groove thin;border-bottom-style:ridge;"> </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<table id="myTable1" class="table order-list1" style="margin-left: 0%;"> </table>*@
+                                    </div>
+                                </div>
+
+                                <div style="color:green">
+                                    <table align="center">
+                                        <tr>
+                                            <td>
+                                                @if (@ViewBag.message == "File uploaded successfully")
+                                                {
+                                                    <span class="Success_show">@ViewBag.message</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div style="height:5px"></div>
+
+                                @*<div class=" panel panel-primary" style="height:335px;margin-bottom:5px;width: 98%;margin-left: 15px;">
+                                    <div class="panel-heading">Grid View</div>
+                                    <div class="panel-body" style="width:100%;max-height:100%;">
+                                        <div class="col-md-12" style="margin:auto;overflow:auto;width:100%;">
+                                            <div id="Maingrid" class="col-md-12" style="margin:auto;height:250px;width:100%;"> </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                                <table>
+                                    <tr style="height:2px"></tr>
+                                    <tr>
+                                        <td style="width:2%"></td>
+                                        <td><label style="font-weight:normal">Browse File</label></td>
+                                        <td style="width:2%"></td>
+                                        <td><input type="file" onchange="return flexcelfile_onchange()" class="form-control input-lg browse btn btn-primary input-lg" name="flexcelfile" id="flexcelfile" style="width:280px" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></td>
+                                        <td><label style="width:3px;color:red;font-size:larger">*</label> </td>
+                                        <td style="width:2%"></td>
+                                        <td><button type="button" name="btnsubmit" onclick="return Savefiles()" id="btn_uoload" value="submit" class="btn btn-orange fa fa-cloud-upload" style="width:120px"> Submit</button></td>
+                                        <td style="width:1%"></td>
+                                        <td><button type="button" name="btncreate" onclick="return ShowPopUp()" id="btncreate" value ="Create New"class="btn btn-orange fa fa-refresh" style="width:120px"> Create New</button></td>
+                                        <td style="width:2%"></td>
+                                        <td><button type="button" name="btncancel" onclick="return SelectAll()" id="bntClear" class="btn btn-orange fa fa-check" style="width:120px;"> Select All</button></td>
+                                    </tr>
+                                </table>
+
+
+                                <div class=" panel panel-primary" style="height:335px;margin-bottom:5px;width: 98%;margin-left: 15px;margin-top:10px">
+                                    <div class="panel-heading">Grid View</div>
+                                    <div class="panel-body" style="width:100%;max-height:100%;">
+                                        <div class="col-md-12" style="margin:auto;overflow:auto;width:100%;">
+                                            <div id="Maingrid" class="col-md-12" style="margin:auto;height:250px;width:100%;"> </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div><input type="hidden" id="SatrCount" value="0" /></div>
+                                <div>
+                                    <input type="hidden" id="Atrgid" value="0" />
+                                    <input type="hidden" id="action" value="" />
+                                </div>
+
+                            </div>
+                        </form>
+                    <div class="box-body" id="ForPartialView">  </div>
+                    <input type="hidden" id="hdn_mailtype" />
+                    <input type="hidden" id="hdn_filegid" />
+                    <input type="hidden" id="hdn_filelocation" />
+                </div>
+                </div>
+            </div>
+            @(Html.Kendo().Window()
+                    .Name("kwindow_Filter")
+                    .Title("Add Attribute") //set the title of the window
+                    .Events(eve => eve.Close("onClose_Popup"))
+                    .Content(@<text>
+                        <button type="button" style="margin-left: -0.7%;width: 10%;" id="btnAddAttrib" class="btn btn-danger pull-left" onclick="return AddAttributes();"><i class="fa fa-plus"></i>&nbsp; Add</button>
+                        <div class="row " style="width:99%;">
+                            <div class="col-sm-12 foo" style="height:220px;overflow-x:auto;margin-left: 1%;width: 99%;"><table id="myTable" class="table order-list" style="margin-left: 0%;"></table></div>
+                        </div>
+                        <div class="row" style="text-align:center;"><button type="button" class="btn btn-success pull-right" style="margin-top: 0%;width: 10%;margin-right: 0.9%;" onclick="return SaveAttributes();"><i class="fa fa-floppy-o"></i>&nbsp; Save Filters</button></div>
+                    </text>)
+                                                                                   .Draggable()
+                                                                                   .Resizable(re => re.Enabled(false))
+                                                                                   .Width(1010)
+                                                                                   .Height(300)
+                                                                                   .Modal(true)
+                                                                                   .Scrollable(false)
+                                                                                   .Visible(false))
+            <div id="ForAttributeDetailsPartialView"></div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <button type="button" id="btnExport" style="background-color:skyblue;display:none" class="Export btn btn-sm btn-info"><span class="glyphicon glyphicon-export"></span></button>
+</body>
+</html>
+
+<script type="text/javascript">
+    function onChangeunit(parent_code) {
+        debugger;
+        try {
+            var mastercode = this.value();
+            var master = ""
+            if (mastercode == "" || mastercode == null || mastercode == "undefined" || mastercode == 0) {
+                return false;
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("DocGroupNames", "DocGroupMaster")',
+                    type: "POST",
+                    datatype: "json",
+                    data: { 'parentcode': master,'dependcode': mastercode},
+                    success: function (data) {
+                        // $.getJSON("DocGroupNames/DocGroupMaster?parentcode=" + master + "&dependcode=" + mastercode, function (data) {
+                        debugger;
+                        var dept = data;
+
+
+                        //$("#Dept_Id").data("kendoDropDownList").dataSource.data(data[1]);
+                        if (dept.length > 1) {
+                            var ee = data[1].parent_code;
+                            //$("#" + ee).data("kendoDropDownList").dataSource.data(data);
+                            $("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+                            //$("#" + ee).data("kendoDropDownList").select(1)
+                            $("#" + ee).data("kendoDropDownList").trigger("change");
+
+                            $("#" + ee).data("kendoDropDownList").enable(false);
+                            //$("#Dept_Id").data("kendoDropDownList").refresh();
+                        }
+                        else {
+                            var ee = data[0].parent_code;
+                            //  $("#" + ee).data("kendoDropDownList").select(0)
+                        }
+                    }
+                });
+            }
+        } catch (er) {
+            hideProgress();
+        }
+    }
+</script>
+<script type="text/javascript">
+    var div1 = "";
+    var div2 = "";
+    var div3 = "";
+    var div4 = "";
+    var counter = 0;
+    var countdata = [];
+    var atrCheck = false;
+    var counter1 = 0;
+    var countdata1 = [];
+    var objDialog5;
+    var dbCondition = "";
+    var rbval = "";
+    //$("#btnExport").kendoButton({
+    //    click: function () {
+    //        debugger;
+    //        //$("#salesreport_grid").data("kendoGrid").saveAsExcel();
+    //        ExportButtonClick();
+    //    }
+    //});
+ function ExportButtonClick1() {
+        debugger;
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+        var dbCondition = "";
+        window.location.href = '../BasicReport/GetIndexedFileExportDetails?DGroup=' + docgroup + '&DName=' + docname + '&dbCondition=' + dbCondition + '&action=' + "export";
+    }
+    $(".accordion_head").click(function () {
+        if ($('.accordion_body').is(':visible')) {
+            $(".accordion_body").slideUp(300);
+            $(".plusminus").text('+');
+        }
+        if ($(this).next(".accordion_body").is(':visible')) {
+            $(this).next(".accordion_body").slideUp(300);
+            $(this).children(".plusminus").text('+');
+        } else {
+            $(this).next(".accordion_body").slideDown(300);
+            $(this).children(".plusminus").text('-');
+        }
+
+    });
+    var checkedIds = {};
+    var objDialog;
+    $(document).ready(function () {
+        debugger;
+
+        $("#CateID").data("kendoDropDownList").enable(false);
+        // $("#AttribID").data("kendoDropDownList").enable(false);
+        $("#btnAddAttrib").attr("disabled", true);
+        //$("#btnAddAttrib").removeAttr("disabled");
+
+        objDialog = $("[id$='ForPartialView']");
+        objDialog.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 550,
+            height: 400
+        });
+
+        objDialog5 = $("[id$='ForAttributeDetailsPartialView']");
+        objDialog5.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 1250,
+            height: 680
+        });
+
+        $('input[type=radio][name=Archival]').change(function () {
+            if (this.value == 'Arc') {
+                // ...
+                $("#example").remove();
+                rbval = "Arc";
+            }
+            else if (this.value == 'NArc') {
+                // ...
+                $("#example").remove();
+                rbval = "NArc";
+
+            }
+        });
+    });
+
+    function Refresh() {
+        debugger;
+        window.location.reload(1);
+    }
+
+
+    function ShowResult() {
+        debugger;
+        //var dpnm = $("#DeptID").val();
+        //var uname = $("#UnitID").val();
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+        dbCondition = "";
+        //var dbCondition = "";
+
+        if (rbval == "" || rbval == null || rbval == "undefined") {
+            $.alert({
+                title: ' ',
+                content: 'Please select Radio Button.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        else if (countdata1.length <= 0) {
+            $.alert({
+                title: ' ',
+                content: 'Please add filters.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        else{
+            for (i = 0; i < countdata1.length; i++) {
+                var j = 0; j = i + 1;
+                var brOpen = $("#hdnStart" + j).val();
+                var atrName = $("#txtAttribute" + j).val();
+                var atrCondition = $("#txtCondition" + j).val();
+                var atrDatatype = $("#hdnDatatype" + j).val();
+                var atrValue = $("#txtAttributeValue" + j).val();
+                var atrOperand = $("#txtOperand" + j).val();
+                var brClose = $("#hdnEnd" + j).val();
+                if (atrOperand == "OR") {
+                    // frame open bracket.
+                    if (brOpen.toLowerCase() == "yes") {
+                        dbCondition = dbCondition + '(';
+                    }
+
+                    //frame column name.
+                    if (atrDatatype.toLowerCase() == "datetime") {
+                        dbCondition = dbCondition + "str_to_date(replace(`" + atrName + "`,'/','-') ,'%d-%m-%Y')";
+                    }
+                    else {
+                        dbCondition = dbCondition + '`' + atrName + '`';
+                    }
+
+                    // frame condition.
+                    if (atrCondition.toLowerCase() == "is equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " = " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else if (atrDatatype.toLowerCase() == "numeric" || atrDatatype.toLowerCase() == "amount") {
+                            dbCondition = dbCondition + ' = ' + "" + atrValue + "";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' = ' + "'" + atrValue + "'";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is not equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " != " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else if (atrDatatype.toLowerCase() == "numeric" || atrDatatype.toLowerCase() == "amount") {
+                            dbCondition = dbCondition + ' = ' + "" + atrValue + "";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' != ' + "'" + atrValue + "'";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "start with") {
+                        dbCondition = dbCondition + ' like ' + "'" + atrValue + '%' + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "end with") {
+                        dbCondition = dbCondition + ' like ' + "'" + '%' + atrValue + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "contains") {
+                        dbCondition = dbCondition + ' like ' + "'" + '%' + atrValue + '%' + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "does not contains") {
+                        dbCondition = dbCondition + ' not like ' + "'" + '%' + atrValue + '%' + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "is greater than") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " > " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' > ' + "" + atrValue + "";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is less than") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " < " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' < ' + "" + atrValue + "";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is greater than or equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " >= " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' >= ' + "" + atrValue + "";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is less than or equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " <= " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' <= ' + "" + atrValue + "";
+                        }
+                    }
+
+                    // frame open bracket.
+                    if (brClose.toLowerCase() == "yes") {
+                        dbCondition = dbCondition + ')';
+                    }
+
+                    //frame operands.
+                    if (countdata1.length != j && countdata1.length > j) {
+                        dbCondition = dbCondition + ' ' + atrOperand + ' ';
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+
+            //for and operator
+            for (i = 0; i < countdata1.length; i++) {
+                var j = 0; j = i + 1;
+                var brOpen = $("#hdnStart" + j).val();
+                var atrName = $("#txtAttribute" + j).val();
+                var atrCondition = $("#txtCondition" + j).val();
+                var atrDatatype = $("#hdnDatatype" + j).val();
+                var atrValue = $("#txtAttributeValue" + j).val();
+                var atrOperand = $("#txtOperand" + j).val();
+                var brClose = $("#hdnEnd" + j).val();
+                if (atrOperand == "AND") {
+                    // frame open bracket.
+                    if (brOpen.toLowerCase() == "yes") {
+                        dbCondition = dbCondition + '(';
+                    }
+
+                    //frame column name.
+                    if (atrDatatype.toLowerCase() == "datetime") {
+                        dbCondition = dbCondition + "str_to_date(replace(`" + atrName + "`,'/','-') ,'%d-%m-%Y')";
+                    }
+                    else {
+                        dbCondition = dbCondition + '`' + atrName + '`';
+                    }
+
+                    // frame condition.
+                    if (atrCondition.toLowerCase() == "is equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " = " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else if (atrDatatype.toLowerCase() == "numeric" || atrDatatype.toLowerCase() == "amount") {
+                            dbCondition = dbCondition + ' = ' + "" + atrValue + "";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' = ' + "'" + atrValue + "'";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is not equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " != " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else if (atrDatatype.toLowerCase() == "numeric" || atrDatatype.toLowerCase() == "amount") {
+                            dbCondition = dbCondition + ' = ' + "" + atrValue + "";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' != ' + "'" + atrValue + "'";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "start with") {
+                        dbCondition = dbCondition + ' like ' + "'" + atrValue + '%' + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "end with") {
+                        dbCondition = dbCondition + ' like ' + "'" + '%' + atrValue + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "contains") {
+                        dbCondition = dbCondition + ' like ' + "'" + '%' + atrValue + '%' + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "does not contains") {
+                        dbCondition = dbCondition + ' not like ' + "'" + '%' + atrValue + '%' + "'";
+                    }
+                    else if (atrCondition.toLowerCase() == "is greater than") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " > " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' > ' + "" + atrValue + "";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is less than") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " < " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' < ' + "" + atrValue + "";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is greater than or equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " >= " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' >= ' + "" + atrValue + "";
+                        }
+                    }
+                    else if (atrCondition.toLowerCase() == "is less than or equal to") {
+                        if (atrDatatype.toLowerCase() == "datetime") {
+                            dbCondition = dbCondition + " <= " + "str_to_date(" + "'" + atrValue + "'" + " ,'%d-%m-%Y')";
+                        }
+                        else {
+                            dbCondition = dbCondition + ' <= ' + "" + atrValue + "";
+                        }
+                    }
+
+                    // frame open bracket.
+                    if (brClose.toLowerCase() == "yes") {
+                        dbCondition = dbCondition + ')';
+                    }
+
+                    //frame operands.
+                    if (countdata1.length != j && countdata1.length > j) {
+                        dbCondition = dbCondition + ' ' + atrOperand + ' ';
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+        GetSearch_Info( docgroup, docname, dbCondition);
+
+        /* else {
+           $.alert({
+                title: ' ',
+                content: 'Please add filters.!',
+                type: 'blue',
+            });
+            return false;
+        }*/ // ramya commentted on 22 Mar 22
+    }
+
+    function GetSearch_Info( dgroupID, dnameID, dbCon) {
+        debugger;
+        var activeflag = $("input[name='active_flag']:checked").val();
+        $.ajax({
+            url: '@Url.Action("GetIndexedDocuments", "PhysicalArchival")',
+            data: { 'Dgroup1': dgroupID, 'Dname1': dnameID, 'Dbcon': dbCon, 'Type': rbval, 'activeflag': activeflag },
+            success: function (result) {
+                debugger
+
+                var chkval = JSON.parse(result.Data1);
+                var arr = [];
+                $.each(chkval, function (i, e) {
+                    $.each(e, function (key, val) {
+                        arr.push(val);
+                    });
+                });
+
+                if (arr == "NoRecords") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No Records found..!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+
+                var columns = [];
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                var i = 0;
+
+                var entryIndex = "entries[" + i + "]";
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+                    columns.push({
+                        field: entryIndex,
+                        title: key,
+                        width: '150px',
+                        type: val,
+                    });
+
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+                }
+                if (rbval != 'Arc') {
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: "Select All",
+                       // headerTemplate: "<input type='checkbox' id='header-chb' class='k-checkbox k-checkbox-md k-rounded-md header-checkbox'>",
+                        //template: '<input type="checkbox" id="cb1"  OnClick="checkvalidone();" />',
+                        template: '<input type="checkbox" class="checkbox" id="cb1" />',
+                        filterable: false,
+                        sortable: true,
+                        width: '70px'
+                    });
+                } else {
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Edit',
+                        template: '<span class="btn btn-orange fa fa-edit" id="Edit" onclick="Edit()" ></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: '100px'
+                    });
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Delete',
+                        template: '<span class="btn btn-orange fa fa-trash-o" id="btndelete" onclick="Delete()" ></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: '100px'
+                    });
+                }
+
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+
+                        entryArray.push(val);
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+
+                var configuration = {
+                    editable: false,
+                    sortable: true,
+                    scrollable: true,
+                    filterable: true,
+                    pagable: true,
+                    resizable: true,
+                    selectable: 'row',
+                    pageable: {
+                        pageSize: 5,
+                        buttonCount: 4
+                    },
+                    columns: columns,
+                    rows: viewModel,
+                    //height: '100%',
+                    dataBound: function (e) {
+                        debugger;
+                        $(".checkbox").bind("change", function (e) {
+                            debugger;
+                            var grid = $("#grid").data("kendoGrid");
+                            var row = $(e.target).closest("tr");
+                            var item = grid.dataItem(row[0]);
+                            var GridID = item.entries[0];
+
+                            $.ajax({
+                                url: '@Url.Action("checkvalidone", "PhysicalArchival")',
+                                data: { 'GridID': GridID },
+                                success: function (data) {
+                                    debugger;
+                                    if (data == "Exist") {
+                                        $.alert({
+                                            title: 'DMS',
+                                            content: 'Selected item is already created.!!',
+                                            type: 'blue',
+                                        });
+                                        $(e.target).closest("tr").find("input[type='checkbox']").prop('checked', false);
+                                        //$("#grid tbody input:checkbox").removeAttr("checked");
+                                        return false;
+                                    }
+                                },
+                            });
+                        });
+                    },
+                };
+                $("#example").remove();
+                $('#Maingrid').append('<div id="example" style="position:relative" class="k-content"><table id="grid" data-bind="source: gridRows" style="position:relative;overflow:scroll;width:100%"></table></div>');
+                var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                kendo.bind($("#grid"), viewModel);
+                //autofit each column.
+                var grid = $("#grid").data("kendoGrid");
+                for (var i = 0; i < grid.columns.length; i++) {
+                    grid.autoFitColumn(i);
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred.!',
+                    type: 'red',
+                });
+            }
+        });
+    }
+    /*$("#Maingrid").kendoGrid({
+        toolbar: ["excel"],
+        excel: {
+            fileName: "Test.xlsx",
+            //proxyURL: "https://demos.telerik.com/kendo-ui/service/export",
+            filterable: true
+        }
+    });*/
+    function exportfunction(e, chkall, chkfilter, chktemp, twokendobox, gd) {
+        debugger;
+        e.preventDefault();
+        var sdata = {};
+        var detail = {};
+        if (chkall == true) {
+            if (sdata.griddata == "" || sdata.griddata == undefined) {
+                sdata.griddata = JSON.stringify(e.sender.dataSource._data);
+
+            }
+        }
+
+        //sdata.chkall = chkall;
+        //sdata.chkfilter = chkfilter;
+        //sdata.chktemp = chktemp;
+        //sdata.SubTreeId = SubTreeId;
+        //sdata.TreeId = TreeId;
+
+        if (gd._data.length == 0) {
+                kendoAlert('Sorry, no data found in the grid to Export');
+            return false;
+        }
+        else {
+            //var export_excel_data = ajaxcall_param("/Home/Export_Excel", JSON.stringify(sdata));
+            var export_excel_data = JSON.stringify(sdata);
+            if (export_excel_data != undefined) {
+                var exp_excel = JSON.parse(export_excel_data);
+                if (exp_excel.success == true) {
+                    var pathname = window.location.pathname;
+                    var url = window.location.href;
+                    url = url.split("#");
+                    url = url[0];
+                    url = url.replace(pathname, "");
+                    window.location.href = url + (exp_excel.path);
+                }
+
+                e.preventDefault();
+                return false;
+            }
+        }
+    }
+    //on click of the checkbox:
+    function selectRow() {
+        //alert(e.value);
+        debugger;
+        try {
+            //alert(this.value);
+            var gridid = this.value;
+            var grid1 = $('#' + gridid).data("kendoGrid");
+            var checked = this.checked,
+            row = $(this).closest("tr"),//$("input:checked", grid1.tbody).closest("tr");//$(this).closest("tr"),
+
+            gridss = $('#' + gridid).data("kendoGrid"),
+            dataItem = gridss.dataItem(row);
+
+            debugger;
+            var testArray = dataItem.entries[3] in checkedIds;
+            if (testArray) {
+                if (checked = false) {
+                    checkedIds[dataItem.entries[3]] = false;
+                } else {
+                    checked = false;
+                }
+            } else {
+                checkedIds[dataItem.entries[3]] = checked;
+            }
+            if (checked) {
+                //-select the row
+                //row.addClass("k-state-selected");
+                row.addClass("k-gridtest");
+            }
+            else {
+                //-remove selection
+                //row.removeClass("k-state-selected");
+                row.removeClass("k-gridtest");
+            }
+        } catch (e) {
+
+        }
+    }
+
+    //on dataBound event restore previous selected rows:
+    function onDataBound(e) {
+        debugger
+        var checked = [];
+        for (var i in checkedIds) {
+            if (checkedIds[i]) {
+                checked.push(i);
+                //row.addClass("k-state-selected");
+            }
+        }
+        debugger
+        var view = this.dataSource.view();
+        for (var i = 0; i < view.length; i++) {
+            if (checkedIds[view[i].entries[4]]) {
+                this.tbody.find("tr[data-uid='" + view[i].uid + "']")
+                //.addClass("k-state-selected")
+                .addClass("k-gridtest")
+                .find(".checkbox")
+                .attr("checked", "checked");
+            }
+        }
+
+
+    }
+
+    function View(type) {
+        debugger;
+        var grid;
+
+        grid = $("#"+type).data("kendoGrid");
+        model = grid.dataItem($(event.target).closest("tr"));
+        $("#hdn_filegid").val("");
+        //filegid = (model.entries[2]);
+        filegid = (model.entries[4]);
+        $("#hdn_filegid").val(filegid);
+        var mode = type;
+        objDialog5.load('../BasicReport/ViewIndexedDocDetails?filegid=' + filegid);
+        objDialog5.dialog({ title: 'Archival Details' });
+        objDialog5.dialog("open");
+
+        //var grid = $("#grid").data("kendoGrid");
+        //var model = grid.dataItem($(event.target).closest("tr"));
+        //var id = (model.entries[4]);
+        //var mode = 'V';
+        //window.location.href = '../SetDocAttributes/SetDocAttributes?id=' + id + '&Action=' + mode;
+    }
+
+    @*function View(type) {
+        debugger;
+        var grid;
+        grid = $("#grid").data("kendoGrid");
+        model = grid.dataItem($(event.target).closest("tr"));
+        $("#hdn_filegid").val("");
+        //filegid = (model.entries[2]);
+        filegid = (model.entries[4]);
+        $("#hdn_filegid").val(filegid);
+        var mode = type;
+
+        @*$.ajax({
+            url: '@Url.Action("Check_Document_Under_Modification", "TreeSearch")',
+            type: "POST",
+            datatype: "json",
+            data: { 'Doc_GID': filegid },
+            success: function (data) {
+                debugger;
+                if (data == 'Under Checker Queue') {
+                    $.alert({
+                        title: 'DMS',
+                        content: "This document is waiting for checker approval, Please review the checker queue.!",
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                else {
+                    objDialog5.load('../TreeSearch/ViewIndexedDocDetails?filegid=' + filegid);
+                    objDialog5.dialog({ title: 'Document Details' });
+                    objDialog5.dialog("open");
+                }
+            }
+        });*@
+    @*
+        if (filegid != undefined || filegid != "")
+            {
+        objDialog5.load('../TreeSearch/ViewIndexedDocDetails?filegid=' + filegid);
+        objDialog5.dialog({ title: 'Document Details' });
+        objDialog5.dialog("open");
+        }
+    }*@
+
+    function getFormated_filterDate(date) {   //get DD/MM/YYYY or MM/DD/YYYYY
+        debugger
+        if (date != "" || date != undefined) {
+            var d = date.split("/");
+            //return d[1] + "/" + d[0] + "/" + d[2];
+            return  date.replace(/(\d+[/])(\d+[/])/, '$2$1');
+            //return d[0] + "-" + d[1] + "-" + d[2];
+
+            /* const firstValentineOfTheDecade = new Date(2022, d[1], d[0]); // 1 for February
+             const enUSFormatter = new Intl.DateTimeFormat('en-US');
+             console.log("Date",d[2] + "-" + d[1] + "-" + d[0]);
+             console.log('enUSFormatter.format(firstValentineOfTheDecade)', enUSFormatter.format(firstValentineOfTheDecade));
+             return enUSFormatter.format(firstValentineOfTheDecade);*/
+        }
+    }
+
+    function onClose_Popup() {
+        debugger;
+        atrCheck = false;
+        $("#myTable").empty();
+        counter = 0
+        countdata = [];
+    }
+
+    function SaveAttributes() {
+        debugger;
+
+        if (countdata.length > 0) {
+
+            for (m = 0; m < countdata.length; m++) {
+                var n = 0; n = n + 1;
+                var aatrname = $("#drpAttribute" + n + ' :selected').text();
+                var aatrcond = $("#drpCondition" + n + ' :selected').text();
+                var aatrdatatype = aatrname.split('-');
+                if (aatrname == 'Select Attribute' || aatrname == null || aatrname == undefined || aatrname == "") {
+                    $.dialog({
+                        title: ' ',
+                        content: 'Please select the attribute.!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                else if (aatrcond == 'Select Condition' || aatrcond == null || aatrcond == undefined || aatrcond == "") {
+                    $.dialog({
+                        title: ' ',
+                        content: 'Please select the condition.!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                aatrdatatype = aatrdatatype[1].toString();
+                if (aatrdatatype.toLowerCase() == 'numeric' || aatrdatatype.toLowerCase() == 'alpha numeric' ||
+                    aatrdatatype.toLowerCase() == 'amount') {
+                    var str = $("#txtAtrVal" + n).val();
+                    if (str == "" || str == null || str == null) {
+                        $.dialog({
+                            title: ' ',
+                            content: 'Please enter the filter value.!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                    else if (aatrdatatype.toLowerCase() == "numeric" || aatrdatatype.toLowerCase() == "amount") {
+                        if (!isNaN(str) == false) {
+                            $.dialog({
+                                title: ' ',
+                                content: 'Please enter the valid numeric value.!',
+                                type: 'blue',
+                            });
+                            return false;
+                        }
+                    }
+                }
+                else if (aatrdatatype.toLowerCase() == 'lov name') {
+                    var ddval = $("#ddAtrVal" + n).val();
+                    if (ddval == "Select" || ddval == null || ddval == undefined || ddval == "0") {
+                        $.dialog({
+                            title: ' ',
+                            content: 'Please select the lov name.!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                }
+            }
+
+            for (i = 0; i < countdata.length; i++) {
+                var newRow1 = $("<tr  width='100%'>");
+                var newColumn1 = "";
+                var orderby1 = countdata1.length + 1;
+                var j = 0; j = i + 1;
+                if (j == 1) {
+                    newColumn1 += '<td style="width: 25%;"><input type="hidden" id="hdnStart' + orderby1 + '"/> <input type="text" id="txtAttribute' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 103% !important;"/></td>';
+                    newColumn1 += '<td style="width: 25%;"><input type="text" id="txtCondition' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 103% !important;"/> </td>';
+                    newColumn1 += '<td style="width: 25%;"><input type="text" id="txtAttributeValue' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 103% !important;"/><input type="hidden" id="hdnDatatype' + orderby1 + '"/> </td>';
+                    newColumn1 += '<td style="width: 25%;"><input type="text" id="txtOperand' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 50% !important;"/><input type="hidden" id="hdnEnd' + orderby1 + '"/></td>';
+                }
+                else {
+                    newColumn1 += '<td style="width: 25%;"><input type="hidden" id="hdnStart' + orderby1 + '"/><input type="text" id="txtAttribute' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 103% !important;margin-top: -5%;"/></td>';
+                    newColumn1 += '<td style="width: 25%;"><input type="text" id="txtCondition' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 103% !important;margin-top: -5%;"/> </td>';
+                    newColumn1 += '<td style="width: 25%;"><input type="text" id="txtAttributeValue' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 103% !important;margin-top: -5%;"/><input type="hidden" id="hdnDatatype' + orderby1 + '"/> </td>';
+                    newColumn1 += '<td style="width: 25%;"><input type="text" id="txtOperand' + orderby1 + '" class="form-control" disabled style="height: 30px !important;width: 50% !important;margin-top: -5%;"/><input type="hidden" id="hdnEnd' + orderby1 + '"/></td>';
+                }
+
+                newRow1.append(newColumn1);
+                $("#myTable1").append(newRow1);
+
+                if (j == 1 && countdata.length == j) {
+                    $("#hdnStart" + orderby1).val("Yes");
+                    $("#hdnEnd" + orderby1).val("Yes");
+                }
+                else if (j == 1 && countdata.length > j) {
+                    $("#hdnStart" + orderby1).val("Yes");
+                    $("#hdnEnd" + orderby1).val("No");
+                }
+                else if (countdata.length == j) {
+                    $("#hdnStart" + orderby1).val("No");
+                    $("#hdnEnd" + orderby1).val("Yes");
+                }
+                else {
+                    $("#hdnStart" + orderby1).val("No");
+                    $("#hdnEnd" + orderby1).val("No");
+                }
+
+                var atr_value = $("#drpAttribute" + j + ' :selected').text().split('-');
+                var atr_condition = "";
+                if (atr_value[0].toString().toLowerCase() != "select attribute") {
+                    atr_condition = atr_value[1].toString();
+                }
+
+                $("#txtAttribute" + orderby1).val(atr_value[0].toString());
+                $("#txtCondition" + orderby1).val($("#drpCondition" + j).val());
+                $("#hdnDatatype" + orderby1).val(atr_condition);
+                $("#txtOperand" + orderby1).val($("#drpOperand" + j).val());
+                if (atr_condition.toLowerCase() == "alpha numeric" || atr_condition.toLowerCase() == "numeric" || atr_condition.toLowerCase() == "amount") {
+                    $("#txtAttributeValue" + orderby1).val($("#txtAtrVal" + j).val());
+                }
+                else if (atr_condition.toLowerCase() == "datetime") {
+                    //var dtval = $("#dtpAtrVal" + j).val().toString().split('-');
+                    //dtval = dtval[2].toString() + '-' + dtval[1].toString() + '-' + dtval[0].toString();
+                    $("#txtAttributeValue" + orderby1).val($("#dtpAtrVal" + j).val());
+                }
+                else if (atr_condition.toLowerCase() == "lov name") {
+                    $("#txtAttributeValue" + orderby1).val($("#ddAtrVal" + j).val());
+                }
+                else if (atr_condition.toLowerCase() == "logical") {
+                    $("#txtAttributeValue" + orderby1).val($('input[id=rdoAtrVal' + j + ']:checked').val());
+                } else {
+                    $("#txtAttributeValue" + orderby1).val($("#txtAtrVal" + j).val());
+                }
+                debugger;
+                countdata1.push(orderby1);
+            }
+            var window = $("#kwindow_Filter").data("kendoWindow");
+            window.close();
+        }
+        else {
+            $.alert({
+                title: ' ',
+                content: 'Please add filters.!',
+                type: 'blue',
+            });
+            return false;
+        }
+    }
+
+    function AddAttributes() {
+        debugger;
+        //var dpnm = $("#DeptID").val();
+        //var uname = $("#UnitID").val();
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+
+        if ( docgroup == "0" || docname == "0") {
+            $.alert({
+                title: ' ',
+                content: 'Select Dropdowns.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        if (atrCheck == false) {
+            $.ajax({
+                url: '@Url.Action("checkconfigattrib", "ConfigureAttributes")',
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: {  'DgroupID': docgroup, 'DNameID': docname },
+                success: function (data) {
+                    debugger;
+                    if (data != null && data > 0) {
+                        var window = $("#kwindow_Filter").data("kendoWindow");
+                        window.open();
+                        window.center();
+                        atrCheck = true;
+                        AddNewRow();
+                    }
+                    else {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'There is no attributes found.!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                }
+            });
+        }
+        else {
+            AddNewRow();
+        }
+    }
+
+    function AddNewRow() {
+        debugger;
+        var newRow = $("<tr  width='100%' class='TableRow'>");
+        var newColumn = "";
+        var orderby = counter + 1;
+
+        newColumn += '<td style="display:none"><input type="hidden" class="nr" value=' + orderby + ' id="hddn' + orderby + '"/></td>';
+        newColumn += '<td style="width: 25%;"><select id="drpAttribute' + orderby + '" class="form-control" onchange="onChange_Attribute(' + orderby + ')"> </select></td>';
+        newColumn += '<td style="width: 25%;"><select id="drpCondition' + orderby + '" name="drpCondition' + orderby + '" class="form-control"> </select></td>';
+        newColumn += '<td style="width: 25%;"><input type="text" id="txtAtrVal' + orderby + '" onkeypress="return PreventSpecialChar(event);" class="form-control" /> <input type="text" id="dtpAtrVal' + orderby + '" name="dtpAtrVal' + orderby + '" class="form-control" style="display:none;"/> <select id="ddAtrVal' + orderby + '" style="display:none;" class="form-control"> </select> <label id = "lblAtrVal' + orderby + '" style="display:none;" class="cus-lbl">&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" checked="checked" name="rdoAtrVal' + orderby + '" id="rdoAtrVal' + orderby + '" value="Yes" /> &nbsp;&nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;&nbsp;<input type="radio"  name="rdoAtrVal' + orderby + '" id="rdoAtrVal' + orderby + '" value="No" />&nbsp;&nbsp;&nbsp;&nbsp;No</label></td>';
+        newColumn += '<td style="width: 8%;"><select id="drpOperand' + orderby + '" class="form-control"><option value="OR">OR</option><option value="AND">AND</option></select></td>';
+        newColumn += '<td><button type="button" class="ibtnDel btn btn-md btn-danger" style="margin-left: 10%;" ><span class="fa fa-trash"></span></button></td>';
+
+        countdata.push(orderby);
+        newRow.append(newColumn);
+        $("table.order-list").append(newRow);
+
+
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+
+        $.ajax({
+            url: '@Url.Action("GetAttributes", "BasicReport")',
+            type: "GET",
+            async: false,
+            data: { "inAction": 'Attribute',  "DGroup": docgroup, "DName": docname },
+            success: function (data) {
+                debugger;
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].AttribName, data[i].AttribID);
+                    var opt2 = new Option(data[0].AttribName, data[0].AttribID);
+                    $('#drpAttribute' + orderby).append(opt);
+                    $("#drpAttribute" + orderby).find('option').each(function (i, opt) {
+                        $(opt2).attr('selected', 'selected');
+                    });
+                }
+            }
+        });
+
+        counter++;
+        //$("#counter").val(counter);
+    }
+
+    function onChange_Attribute(indexval) {
+        debugger;
+
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+        var atr_value = $("#drpAttribute" + indexval + ' :selected').text().split('-');
+        var atr_condition = "";
+        var atr_lov = "";
+        if (atr_value[0].toString().toLowerCase() != "select attribute") {
+            atr_condition = atr_value[1].toString();
+            atr_lov = atr_value[2].toString()
+        }
+
+        $('#drpCondition' + indexval).empty();
+        $('#drpCondition' + indexval).append('<option value="' + "Select Condition" + '">' + 'Select Condition' + '</option>');
+        if (atr_condition.toLowerCase() == "alpha numeric") {
+            $('#drpCondition' + indexval).append('<option value="' + "Is equal to" + '">' + "Is equal to" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is not equal to" + '">' + "Is not equal to" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Start with" + '">' + "Start with" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "End with" + '">' + "End with" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Contains" + '">' + "Contains" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Does not contains" + '">' + "Does not contains" + '</option>');
+        }
+        else if (atr_condition.toLowerCase() == "numeric" || atr_condition.toLowerCase() == "amount" || atr_condition.toLowerCase() == "datetime") {
+            $('#drpCondition' + indexval).append('<option value="' + "Is equal to" + '">' + "Is equal to" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is not equal to" + '">' + "Is not equal to" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is greater than" + '">' + "Is greater than" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is less than" + '">' + "Is less than" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is greater than or equal to" + '">' + "Is greater than or equal to" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is less than or equal to" + '">' + "Is less than or equal to" + '</option>');
+        }
+        else if (atr_condition.toLowerCase() == "logical" || atr_condition.toLowerCase() == "lov name" || atr_condition.toLowerCase() == "autonumber") {
+            $('#drpCondition' + indexval).append('<option value="' + "Is equal to" + '">' + "Is equal to" + '</option>');
+            $('#drpCondition' + indexval).append('<option value="' + "Is not equal to" + '">' + "Is not equal to" + '</option>');
+        }
+        HideShow_Attributes(atr_condition.toLowerCase(), indexval, atr_lov)
+    }
+
+    function HideShow_Attributes(DataType, indexval, lovID) {
+        debugger;
+        if (DataType == "datetime") {
+            $("#txtAtrVal" + indexval).css('display', 'none');
+            $("#dtpAtrVal" + indexval).css('display', 'inline');
+            $("#ddAtrVal" + indexval).css('display', 'none');
+            $("#lblAtrVal" + indexval).css('display', 'none');
+            $('#dtpAtrVal' + indexval).datepicker({ dateFormat: "dd-mm-yy", changeMonth: true, changeYear: true })
+            $('#dtpAtrVal' + indexval).datepicker('setDate', 'today')
+        }
+        else if (DataType == "lov name") {
+            $("#txtAtrVal" + indexval).css('display', 'none');
+            $("#dtpAtrVal" + indexval).css('display', 'none');
+            $("#ddAtrVal" + indexval).css('display', 'inline');
+            $("#lblAtrVal" + indexval).css('display', 'none');
+
+            $('#ddAtrVal' + indexval).empty();
+            $.ajax({
+                url: '@Url.Action("GetAttributes", "BasicReport")',
+                type: "GET",
+                async: false,
+                data: { "inAction": 'LOV', "Department": lovID },
+                success: function (data) {
+                    debugger;
+                    for (var i = 0; i < data.length; i++) {
+                        var opt = new Option(data[i].LovName, data[i].LovName);
+                        var opt2 = new Option(data[0].LovName, data[0].LovName);
+                        $('#ddAtrVal' + indexval).append(opt);
+                        $("#ddAtrVal" + indexval).find('option').each(function (i, opt) {
+                            $(opt2).attr('selected', 'selected');
+                        });
+                    }
+                }
+            });
+
+        }
+        else if (DataType == "logical") {
+            $("#txtAtrVal" + indexval).css('display', 'none');
+            $("#dtpAtrVal" + indexval).css('display', 'none');
+            $("#ddAtrVal" + indexval).css('display', 'none');
+            $("#lblAtrVal" + indexval).css('display', 'inline');
+        }
+        else {
+            $("#txtAtrVal" + indexval).css('display', 'inline');
+            $("#dtpAtrVal" + indexval).css('display', 'none');
+            $("#ddAtrVal" + indexval).css('display', 'none');
+            $("#lblAtrVal" + indexval).css('display', 'none');
+        }
+    }
+
+    $("table.order-list").on("click", ".ibtnDel", function (event) {
+        debugger;
+        var value = $(this).closest('tr').find('td:eq(0)');
+
+        value = value.find(".nr").val();
+
+        if (value != counter) {
+            value = value - 1;
+        }
+        countdata.splice(value, 1);
+        $(this).closest("tr").remove();
+
+        counter -= 1
+        //$("#counter").val(counter);
+
+    });
+
+    function PreventSpecialChar(event) {
+        debugger;
+        var regex = new RegExp("^[a-zA-Z0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key) && key != " ") {
+            event.preventDefault();
+            return false;
+        }
+    }
+
+    function GetAttribParams() {
+        debugger;
+        return { Department: $("#DeptID").val(), Unit: $("#UnitID").val(), DGroup: $("#CateID").val(), DName: $("#SubCateID").val() }
+    }
+
+    function Downloadfile() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var FilePath = (model.entries[2]);
+        var FileName = (model.entries[1]);
+        $.ajax({
+            url: '@Url.Action("CheckFileExists", "BasicReport")',
+            contentType: 'application/json; charset=utf-8',
+            datatype: 'json',
+            data: { absolutePath: FilePath },
+            type: "GET",
+            success: function (data) {
+                debugger;
+                if (data == 'fileexists') {
+                    var url = '@Url.Action("DownloadFile", "BasicReport", new { filePath = "REPLACEME", filename = "REPLACEFILENAME" })';
+                    url = url.replace('REPLACEME', FilePath).replace('REPLACEFILENAME', FileName);
+                    window.location.href = url.replace(/amp;/g, '');
+                }
+                else {
+                    $.dialog({
+                        title: ' ',
+                        content: 'File not found.!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+            }
+        });
+    }
+
+
+    function ClearRecords() {
+        debugger;
+        $("#SubCateID").data("kendoDropDownList").select(0);
+        $("#CateID").data("kendoDropDownList").select(0);
+
+        $("#kgrid_report").data("kendoGrid").dataSource.data([]);
+    }
+
+    function GetParameters() {
+        debugger;
+        
+        var arrModel = {};
+
+        arrModel.CateID = $("#CateID").val();
+        arrModel.SubCateID = $("#SubCateID").val();
+        arrModel.Flag = "Search";
+        return { modelObj: arrModel };
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.dialog({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+    function IsDateKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31)
+            return false;
+        return true;
+    }
+
+    function onChangeDocName() {
+       // debugger;
+        var masteritemid = this.value();
+        var master = "GetDocName"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+               // debugger;
+
+                atrCheck = false;
+                $("#myTable").empty();
+                $("#myTable1").empty();
+                counter = 0
+                countdata = [];
+                counter1 = 0;
+                countdata1 = [];
+               // $("#example").remove();
+
+                var docgroupdropdown = $("#CateID").data("kendoDropDownList");
+
+
+                docgroupdropdown.dataSource.data(data.lst_docgroup);
+
+                //unitdropdown.dataSource.data(data.lst_unit);
+                //deptdropdown.dataSource.data(data.lst_dept);
+
+                //datasource for docgroup.
+                if (data.lst_docgroup.length == 2) {
+                    docgroupdropdown.select(1)
+                }
+                else {
+                    docgroupdropdown.select(0)
+                }
+               // docgroupdropdown.trigger("change");
+
+
+                if ( $("#CateID").val() != 0 && $("#SubCateID").val() != 0) {
+                    //$("#AttribID").data("kendoDropDownList").dataSource.read();
+
+                    $("#CateID").data("kendoDropDownList").enable(true);
+                    // $("#AttribID").data("kendoDropDownList").enable(true);
+                    $("#btnAddAttrib").removeAttr("disabled");
+                }
+                debugger;
+                if (data.lst_dept.length > 1) {
+                    //  $("#QCD_mst_tHR").val($("#QCD_mst_tHR option").eq(1).val());
+                    var MaxorglevelPos = $("#MaxorglevelPos").val();
+                    var orglevel3 = $("#orglevel" + MaxorglevelPos).val();
+                    $("#" + orglevel3).data("kendoDropDownList").value(data.lst_dept[1].mastercode);
+                    $("#" + orglevel3).data("kendoDropDownList").enable(false);
+                    var dropDownList = $("#" + orglevel3).getKendoDropDownList();
+                    dropDownList.trigger("change");
+                }
+            });
+        }
+    }
+
+    function onChangeDocGroup() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetDocGroup"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#SubCateID").data("kendoDropDownList");
+                //var unitdropdown = $("#UnitID").data("kendoDropDownList");
+                //var deptdropdown = $("#DeptID").data("kendoDropDownList");
+
+                if ($("#SubCateID").val() == "0" || $("#SubCateID").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+                //unitdropdown.dataSource.data(data.lst_unit);
+                //deptdropdown.dataSource.data(data.lst_dept);
+
+                ////datasource for unit.
+                //if (data.lst_unit.length == 2) {
+                //    unitdropdown.select(1)
+                //}
+                //else {
+                //    unitdropdown.select(0)
+                //}
+                //unitdropdown.trigger("change");
+
+                ////datasource for department.
+                //if (data.lst_dept.length == 2) {
+                //    deptdropdown.select(1)
+                //}
+                //else {
+                //    deptdropdown.select(0)
+                //}
+                //deptdropdown.trigger("change");
+            });
+
+            //if ($("#DeptID").val() != 0 && $("#UnitID").val() != 0 && $("#CateID").val() != 0 && $("#SubCateID").val() != 0) {
+            //    $("#AttribID").data("kendoDropDownList").dataSource.read();
+            //}
+
+        }
+    }
+
+    function onChangeUnit() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetUnit"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#SubCateID").data("kendoDropDownList");
+                var docgroupdropdown = $("#CateID").data("kendoDropDownList");
+                var deptdropdown = $("#DeptID").data("kendoDropDownList");
+
+                if ($("#SubCateID").val() == "0" || $("#SubCateID").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+
+                if ($("#CateID").val() == "0" || $("#CateID").val() == null) {
+                    docgroupdropdown.dataSource.data(data.lst_docgroup);
+                    //datasource for unit.
+                    if (data.lst_docgroup.length == 2) {
+                        docgroupdropdown.select(1)
+                    }
+                    else {
+                        docgroupdropdown.select(0)
+                    }
+                    docgroupdropdown.trigger("change");
+                }
+
+                deptdropdown.dataSource.data(data.lst_dept);
+                //datasource for department.
+                if (data.lst_dept.length == 2) {
+                    deptdropdown.select(1)
+                }
+                else {
+                    deptdropdown.select(0)
+                }
+                deptdropdown.trigger("change");
+            });
+
+            //if ($("#DeptID").val() != 0 && $("#UnitID").val() != 0 && $("#CateID").val() != 0 && $("#SubCateID").val() != 0) {
+            //    $("#AttribID").data("kendoDropDownList").dataSource.read();
+            //}
+
+        }
+    }
+
+    function onChangeDept() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetDept";
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#SubCateID").data("kendoDropDownList");
+                var docgroupdropdown = $("#CateID").data("kendoDropDownList");
+                var unitdropdown = $("#UnitID").data("kendoDropDownList");
+
+                if ($("#SubCateID").val() == "0" || $("#SubCateID").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+
+                if ($("#CateID").val() == "0" || $("#CateID").val() == null) {
+                    docgroupdropdown.dataSource.data(data.lst_docgroup);
+                    //datasource for unit.
+                    if (data.lst_docgroup.length == 2) {
+                        docgroupdropdown.select(1)
+                    }
+                    else {
+                        docgroupdropdown.select(0)
+                    }
+                    docgroupdropdown.trigger("change");
+                }
+
+                if ($("#UnitID").val() == "0" || $("#UnitID").val() == null) {
+                    unitdropdown.dataSource.data(data.lst_unit);
+                    //datasource for unit.
+                    if (data.lst_unit.length == 2) {
+                        unitdropdown.select(1)
+                    }
+                    else {
+                        unitdropdown.select(0)
+                    }
+                    unitdropdown.trigger("change");
+                }
+            });
+
+        }
+    }
+
+    function excelexportnew() {
+        debugger;
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+        var dbCondition = "";
+       // alert('ok');
+        window.location.href = '../BasicReport/GetIndexedFileExportDetails?DGroup=' + docgroup + '&DName=' + docname + '&dbCondition=' + dbCondition + '&action=' + "export";
+    }
+
+    function ShowPopUp() {
+        debugger;
+    //    var deptid = $("#DeptID").val();
+     //   var unit = $("#Unit").val();
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+
+        // Get checked row by getting the input and then the row containing the input
+        var row = $("input:checked", grid.tbody).closest("tr");
+        if (row.length == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select records.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        //var gid = (model.entries[0]);
+        //$("#Atrgid").val(gid);
+        $("#action").val("Insert");
+        var Aaction = "Insert";
+        //var attribgid = gid;
+        var attribgid = '0';
+
+        objDialog.load('../PhysicalArchival/ShowPopUpWindow?docgroup=' + docgroup + '&docname=' + docname + '&Aaction=' + Aaction + '&attribgid=' + attribgid);
+        objDialog.dialog({ title: 'Create' });
+        objDialog.dialog("open");
+        var count = $("#SatrCount").val();
+        return false;
+    }
+
+    function Edit() {
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var gid = (model.entries[0]);
+
+        $.ajax({
+            url: '@Url.Action("checkvalidone", "PhysicalArchival")',
+            data: { 'GridID': gid },
+            success: function (data) {
+                debugger;
+                if (data == "Not Exist") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please create physical Attributes than edit.!!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                else {
+                    $("#Atrgid").val(gid);
+                    $("#action").val("Edit");
+                    $("#btn_save").val("Update")
+                    var Aaction = "Edit";
+                    var attribgid = gid;
+                    objDialog.load('../PhysicalArchival/ShowPopUpWindow?docgroup=' + docgroup + '&docname=' + docname + '&Aaction=' + Aaction + '&attribgid=' + attribgid);
+                    objDialog.dialog({ title: 'Edit' });
+                    objDialog.dialog("open");
+                    var count = $("#SatrCount").val();
+                    return false;
+                }
+            },
+        });
+    }
+
+    function Delete() {
+        debugger;
+        var docgroup = $("#CateID").val();
+        var docname = $("#SubCateID").val();
+
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var gid = (model.entries[0]);
+
+        $.ajax({
+            url: '@Url.Action("checkvalidone", "PhysicalArchival")',
+            data: { 'GridID': gid },
+            success: function (data) {
+                debugger;
+                if (data == "Not Exist") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please create physical Attributes than Delete.!!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                else {
+                    $("#Atrgid").val(gid);
+                    $("#action").val("Delete");
+                    $("#btn_save").val("Delete")
+                    var Aaction = "Delete";
+                    var attribgid = gid;
+                    objDialog.load('../PhysicalArchival/ShowPopUpWindow?docgroup=' + docgroup + '&docname=' + docname + '&Aaction=' + Aaction + '&attribgid=' + attribgid);
+                    objDialog.dialog({ title: 'Delete' });
+                    objDialog.dialog("open");
+                    var count = $("#SatrCount").val();
+                    return false;
+                }
+            },
+        });
+    }
+
+    function flexcelfile_onchange() {
+        debugger;
+        var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none"></iframe>');
+        $("body").append(iframe);
+        var form = $('#form1');
+        var up = $('#flexcelfile').val();
+        form.attr("action", "../PhysicalArchival/flexcelfile_onchange");
+        form.attr("method", "post");
+        form.attr("encodeing", "multipart/form-data");
+        form.attr("enctype", "multipart/form-data");
+        form.attr("target", "postiframe");
+        form.attr("file", $('#flexcelfile').val());
+        form.submit();
+    }
+
+    function Savefiles() {
+        debugger;
+        var Docgroup = $("#CateID").val();
+        var Docname = $("#SubCateID").val();
+        if (Docname == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Doc Name.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        if (Docgroup == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Doc Group.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        var attributeexcel = $('#flexcelfile').val();
+
+        if (attributeexcel == "" || attributeexcel == null) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Attributes Excel File.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        $.ajax({
+            url: '@Url.Action("Validation", "PhysicalArchival")',
+            type: "POST",
+            data: { 'Docgroup': Docgroup, 'Docname': Docname },
+            success: function (data) {
+                if (data == "Success") {
+
+                    $.alert({
+                        title: 'DMS',
+                        content: "File Uploaded Succesfully..!",
+                        type: 'green',
+                    });
+                    setTimeout(function () {
+                        debugger;
+                        window.location.href = '../PhysicalArchival/PhysicalArchival';
+                    }, 2500);
+                }
+                else {
+                    $.alert({
+                        title: 'DMS',
+                        content: data,
+                        type: 'red',
+                    });
+                    setTimeout(function () {
+                        debugger;
+                        window.location.href = '../PhysicalArchival/PhysicalArchival';
+                    }, 2500);
+                }
+            },
+            error: {
+
+            }
+        })
+    }
+
+    function SelectAll() {
+            debugger;
+            var checked = true;
+            $('.checkbox').each(function (idx, item) {
+                if (checked) {
+                    if (!($(item).closest('tr').is('.k-selected'))) {
+                        $(item).click();
+                    }
+                } else {
+                    if ($(item).closest('tr').is('.k-selected')) {
+                        $(item).click();
+                    }
+                }
+            });
+    }
+</script>

@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1yxbb0w",
+  "CachePdfKey": "1yxbb0w/1yxbb0w-md9rl0.pdf",
+  "CacheXpzKey": "1yxbb0w/1yxbb0w-1ezyfxh.xpz",
+  "CacheInfoKey": "1yxbb0w/1yxbb0w-1ezyfxh.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\Hariharan\\UploadandDownloadFiles\\UploadandDownloadFiles\\image010.jpg",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "image010.jpg",
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1yxbb0w",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

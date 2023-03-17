@@ -1,0 +1,168 @@
+﻿﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.EmployeeMaster_Model
+
+<style>
+    /*div.k-window {
+        display: inline-block;
+        position: absolute;
+        z-index: 10001;
+        border-style: solid;
+        border-width: 1px;
+        padding-top: 1em;
+        width: 750px;
+        font-weight: normal;
+    }
+
+    .k-edit-form-container {
+        position: relative;
+        width: 100%;
+    }*/
+</style>
+
+<div style="width:100% !important;" id="dii">
+
+    <table style="width:100% !important;position:relative">
+
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">
+                @Html.Label("User Id", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EmployeeCode, new { style = "height:25px;width:225px;font-weight: normal;", @id = "userid"})
+                @Html.ValidationMessageFor(model => model.EmployeeCode)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Name", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EmployeeName, new { style = "height:25px;width:225px;font-weight: normal;", @id = "EmpName" })
+                @Html.ValidationMessageFor(model => model.EmployeeName)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Password", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="position:relative">
+                @Html.PasswordFor(model => model.Password, new { @style = "height:25px;width:225px;font-weight: normal;", @id = "emppass" })
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Email ID", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EmailID, new { style = "height:25px;width:225px;font-weight: normal;", id = "EmpMail" })
+                @Html.ValidationMessageFor(model => model.EmailID)
+            </td>
+        </tr>
+
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Mobile No", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="position:relative">
+                @Html.EditorFor(model => model.MobileNo, new { htmlAttributes = new { style = "height:25px;width:225px;font-weight: normal;", id = "EmpMob", maxlength="10" } })
+                @Html.ValidationMessageFor(model => model.MobileNo)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Status", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="position:relative">
+                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @style = "height:25px;width:225px;font-weight: normal;", disabled = true, id = "Empstatus", } })
+                @Html.ValidationMessageFor(model => model.Status)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Role", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="position:relative">
+                @(Html.Kendo().DropDownList()
+                    .Name("TypeID")
+                    .DataTextField("TypeName")
+                    .DataValueField("TypeID")
+                    .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "E" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.TypeID)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("User Group", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="position:relative">
+                @(Html.Kendo().DropDownList()
+                 .Name("UserGroupID")
+                 .DataTextField("UserGroup")
+                 .DataValueField("UserGroupID")
+                 .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                 .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "UG" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.UserGroupID)
+            </td>
+            @Html.HiddenFor(model => model.EmployeeID, new { style = "height:25px;width:225px;font-weight: normal;", id = "empid" })
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        @Html.Partial("BindOrgLevels", new DMS.Model.DocGroupMaster_Model())
+    </table>
+</div>
+
+<script>
+    // kendo.culture("en-GB");
+    //$(document).ready(function () {
+       
+        //  var department = $("#Dept_Id").data("kendoMultiSelect");
+        // department.wrapper.attr("id", "customers-wrapper");
+
+        @*var empid = $("#empid").val();
+        alert(empid);
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            url: '@Url.Action("GetEmpOrglvls", "EmployeeMaster")',
+            data: "{}",
+            success: function (data) {
+                debugger;
+                try {
+                    var cocatval = data.OrgLevelMax;
+                    alert(cocatval);
+                } catch (e) {
+
+                }
+            },
+            error: function (data) {
+                debugger
+                $.alert({
+                    title: 'DMS',
+                    content: 'some error occured.!',
+                    type: 'red',
+                });
+            }
+        });*@
+        
+   // });
+</script>

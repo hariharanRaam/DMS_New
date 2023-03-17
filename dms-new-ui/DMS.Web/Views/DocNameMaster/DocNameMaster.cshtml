@@ -1,0 +1,1290 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.DocNameMaster_Model
+
+<style>
+    /*.k-dropdown-wrap.k-state-default {
+        background-clip: padding-box;
+        display: block;
+        height: 90%;
+        width: initial;
+        padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+        -moz-padding-start: calc(0.875rem - 3px);
+        font-size: 0.7075rem;
+        font-weight: 400;
+        line-height: 1.15;
+        color: #697a8d;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        background-position: right 0.875rem center;
+        background-size: 17px 12px;
+        border: 1px solid #d9dee3;
+        border-radius: 0.375rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }*/
+
+    .k-dropdown-wrap.k-state-default {
+        background-clip: padding-box;
+        display: block;
+        width: initial;
+        height: 90%;
+        padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+        -moz-padding-start: calc(0.875rem - 3px);
+        font-size: 0.7375rem;
+        font-weight: 400;
+        line-height: 1.53;
+        color: #697a8d;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        background-position: right 0.875rem center;
+        background-size: 17px 12px;
+        border: 1px solid #d9dee3;
+        border-radius: 0.375rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .k-input {
+        font-size: 0.7375rem;
+    }
+
+    .k-icon {
+        background-color: #fff;
+        background-image: url(../Assets/images/dropdownarrow.png);
+        background-repeat: no-repeat;
+        position: relative;
+        top: 8px;
+        right: 2px;
+    }
+
+    .k-popup.k-list-container /*, .k-popup.k-calendar-container*/ {
+        padding: 0px;
+        border-width: 0px;
+        border-style: none;
+    }
+
+    .k-list .k-state-hover {
+        border-radius: 0px;
+    }
+
+    .k-popup .k-list .k-state-focused, .k-popup .k-list .k-state-selected {
+        background-color: #007bff;
+        border-style: none;
+    }
+
+    .k-list .k-state-hover, .k-list .k-state-focused, .k-list .k-state-highlight, .k-list .k-state-selected, .k-fieldselector .k-list .k-item, .k-list-optionlabel, .k-dropzone {
+        border-radius: 0px;
+    }
+
+    .k-i-arrow-s {
+        background-position: 0 !important;
+    }
+
+    .k-item {
+        font-size: 0.7375rem;
+        background-color: #fff;
+        background-position: right 0.875rem center;
+        color: #697a8d;
+    }
+
+    .k-popup .k-list .k-state-hover {
+        padding: 0px;
+        border-width: 0px;
+        border-style: none;
+    }
+
+    .k-list > .k-state-hover {
+        color: #fff;
+        background-color: #007bff;
+        border-color: transparent;
+    }
+    /*li.k-item {
+
+    }*/
+
+    .k-content {
+        width: 100%;
+    }
+
+    .k-button {
+        background-color: transparent;
+        color: blue;
+        border: aliceblue;
+    }
+
+    .k-grid {
+        color: #697a8d;
+        background-color: #fff;
+    }
+
+    .k-header {
+        background-color: #fff;
+    }
+
+    .k-footer {
+        background-color: #fff;
+    }
+
+    .k-widget {
+        background-color: #fff;
+    }
+
+    /*.k-picker-wrap{
+
+            display: block;
+    width: 100%;
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.53;
+    color: #697a8d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d9dee3;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }*/
+</style>
+
+<div class="content-wrapper">
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="card-body" style="margin-top:-9px;">
+            <h5 class="mobile-card-header">Trainer Master</h5>
+            <form id="formAccountSettings" method="POST" onsubmit="return false">
+                <div class="row" id="header">
+                    <div class="mb-3 col-md-5">
+                        <div class="row">
+                            <div class="mb-3 col-md-4">
+                                <select onchange="mode_change(this)" id="mode" class="form-select">
+                                    <option value="I" selected>Create</option>
+                                    <option value="U">Modify</option>
+                                    <option value="V">View</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                @*<input class="form-control"
+                                    type="text"
+                                    id="Docgid"
+                                    name="Docgid"
+                                    value="Document Type ID"
+                                    readonly
+                                    style="text-align:center" />*@
+                                @Html.TextBoxFor(m => m.DNameID, new { id = "hdDocNameID", @class = "form-control", style = "text-align:center;", @readonly = true })
+
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <input class="form-control"
+                                       type="text"
+                                       id="Docstat"
+                                       name="Docstat"
+                                       value="Active"
+                                       style="text-align:center;font-size: 11px !important;"
+                                       readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                    </div>
+                    <div class="mb-3 col-md-3">
+
+                    </div>
+                </div>
+                <div class="row" id="header">
+                    <div class="col-sm-3">
+                        <label class="form-label" for="subvertical">Document Type&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                        <div class="input-group input-group-merge" id="dn_div">
+                            @if (ViewBag.mode == "V")
+                            {
+                                @Html.TextBoxFor(m => m.DocName, new { @class = "form-control", id = "txtDocName", @disabled = true })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.DocName, new { @class = "form-control", id = "txtDocName" })
+                            }
+                            @Html.ValidationMessageFor(m => m.DocName)
+                            <span class="input-group-text" id="docsearch" hidden>
+                                <i data-bs-toggle="modal" data-bs-target="#searchcourse" class="bx bx-search cursor-pointer" onclick="loaddynamiccolumns1()"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="subvertical">Document Group&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                        @if (ViewBag.mode == "V")
+                        {
+                            @(Html.Kendo().DropDownList()
+               .Name("DgroupID")
+               .DataTextField("DgroupName")
+               .DataValueField("DgroupID")
+               .Events(e => e.Change("onChangeDocGroup"))
+.HtmlAttributes(new { @disabled = true })
+               .DataSource(source => { source.Read(read => { read.Action("GetmasterDorpdowns", "DocNameMaster", new { CommonVal = "G" }); }).ServerFiltering(true); }))
+                        }
+                        else
+                        {
+                            @(Html.Kendo().DropDownList()
+               .Name("DgroupID")
+               .DataTextField("DgroupName")
+               .DataValueField("DgroupID")
+               .Events(e => e.Change("onChangeDocGroup"))
+                                //.HtmlAttributes(new { style = "height:25px;width:230px;font-weight: normal;" })
+               .DataSource(source => { source.Read(read => { read.Action("GetmasterDorpdowns", "DocNameMaster", new { CommonVal = "G" }); }).ServerFiltering(true); }))
+                        }
+                        @Html.ValidationMessageFor(model => model.DgroupID)
+                    </div>
+                    @Html.Partial("BindOrgLevels", new DMS.Model.DocGroupMaster_Model())
+
+
+                </div>
+                <div class="row" style="margin-top:35px;">
+                    <div class="col-sm-3" style="margin-top:25px;">
+                        <label class="switch form-label" style="font-size:13px;">
+                            Specify Active Period&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span>&nbsp;&nbsp;
+                            @if (ViewBag.mode == "V")
+                            {
+                                <input type="checkbox" name="DocPeriod" class="switch-input allDay-switch" id="rbY" value="Y" disabled />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="DocPeriod" class="switch-input allDay-switch" id="rbY" value="Y" />
+                            }
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="AP">Active Period (Yrs)&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                        @if (ViewBag.mode == "V")
+                        {
+                            @Html.TextBoxFor(m => m.AP, new { id = "AP", @class = "number form-control", @maxlength = "2", @disabled = true })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.AP, new { id = "AP", @class = "number form-control", @maxlength = "2" })
+                        }
+                        @*@(Html.Kendo().DropDownList()
+                                                .Name("AP")
+                                            .DataTextField("master_name")
+                                            .DataValueField("master_code")
+                                            .Events(e => e.Change("onChangeunit"))
+                                                .HtmlAttributes(new { id = "AP" })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("Peroid", "DocNameMaster", new { parentcode = "AP", dependcode = "" });
+                                }).ServerFiltering(true);
+                            }))*@
+                    </div>
+                </div>
+                <hr style="margin-top: 10px;margin-bottom: 7px;">
+                <div style="margin-bottom:-14px;">
+                    <center>
+                        @if (ViewBag.mode != "V")
+                        {
+                            <button type="button" name="btnsubmit" value="Submit" id="btnsearch" class="btn btn-sm btn-primary me-2" onclick="return SaveDocName()">Save</button>
+                        }
+                    </center>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @*<tr style="height:30px;">
+            <td style="left:15px; position:absolute">
+                <label style="width:100px;font-weight: normal;margin-left:15px">Doc Period Applicability</label>
+            </td>
+            <td>
+                <input type="radio" name="DocPeriod" id="rbY" value="Y">
+                Yes &nbsp;
+                <input type="radio" name="DocPeriod" id="rbN" value="N" checked="checked">
+                No
+            </td>
+        </tr>*@
+    @*<table hidden id="peroidtable">
+            <tr style="height:10px;"><td colspan="2"></td></tr>
+            <tr>
+                <td>
+                    @Html.Label("Active Peroid", new { style = "width:100px;font-weight: normal;margin-left:15px" })
+                </td>
+                <td>
+
+                    @Html.TextBoxFor(m => m.AP, new { style = "height:25px;width:225px;font-weight: normal;", id = "AP", @class = "number", @maxlength = "2" })
+                </td>
+            </tr>
+            <tr style="height:10px;"><td colspan="2"></td></tr>
+            <tr hidden>
+                <td>
+                    @Html.Label("Passive Peroid", new { style = "width:100px;font-weight: normal;margin-left:15px" })
+                </td>
+                <td>
+                    @(Html.Kendo().DropDownList()
+                                      .Name("PassivePeroid")
+                                  .DataTextField("master_name")
+                                  .DataValueField("master_code")
+                                  .Events(e => e.Change("onChangeunit"))
+                                      .HtmlAttributes(new { style = "width:230px;font-weight: normal;margin-left:5px", id = "PP" })
+                  .DataSource(source =>
+                  {
+                      source.Read(read =>
+                      {
+                          read.Action("Peroid", "DocNameMaster", new { parentcode = "AP", dependcode = "" });
+                      }).ServerFiltering(true);
+                  }))
+                </td>
+            </tr>
+            <tr style="height:10px;"><td colspan="2"></td></tr>
+        </table>*@
+    @*<div>
+            <input type="button" name="btnsubmit" value="Submit" id="btnsearch" onclick="return SaveDocName()" class="btn btn-orange pull-right" style="width:60px" />
+        </div>*@
+</div>
+<script type="text/javascript">
+    var showresult1flag = 'Y';
+    $(document).ready(function () {
+        //  var slno = 0;
+
+        debugger;
+        // $("#navhead").text("Auto Numbering");
+
+    })
+
+
+</script>
+<script>
+    var mode = "";
+    var Dnameid = "0";
+    var DPval = "";
+    var orglevelcode1 = "";
+    var orglevelcode2 = "";
+    var orglevelcode3 = "";
+    var orglevelcode4 = "";
+    var modeval = "I";
+    var maxorglvl = 0;
+    var slno = 0;
+
+    $(document).ready(function () {
+        debugger;
+        loaddynamiccolumns();
+        if ("@ViewBag.mode" == null || "@ViewBag.mode" == "" || "@ViewBag.mode" == "undefined" || "@ViewBag.mode" == "null") {
+            modeval = "I";
+        } else {
+            modeval = "@ViewBag.mode";
+        }
+        $("#mode").val(modeval);
+        if (modeval != "I") {
+            $('#docsearch').removeAttr('hidden');
+            var dropdownlist = $("#DgroupID").data("kendoDropDownList");
+            dropdownlist.trigger("change");
+
+            if ("@Model.DocPeriodAviavablity" == 'Y') {
+                $("#rbY").prop("checked", true);
+            }
+
+        } else {
+            $('#docsearch').prop('hidden', true);
+            $('#dn_div').removeClass('input-group input-group-merge');
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetBasicReportDetails", "BasicReport")',
+            type: "GET",
+            data: { 'Master': "DocName" },
+            success: function (data) {
+                debugger;
+                var value1 = data;
+                for (var i = 0; i < value1.length; i++) {
+                    var opt = new Option(value1[i].SubCateName, value1[i].SubCateID);
+                    var opt2 = new Option(value1[0].SubCateName, value1[0].SubCateID);
+                    $('#subCatgery').append(opt);
+                }
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetBasicReportDetails", "BasicReport")',
+            type: "GET",
+            data: { 'Master': "DocGroup" },
+            success: function (data) {
+                debugger;
+                var value1 = data;
+                for (var i = 0; i < value1.length; i++) {
+                    var opt = new Option(value1[i].CateName, value1[i].CateID);
+                    var opt2 = new Option(value1[0].CateName, value1[0].CateID);
+                    $('#Catgery').append(opt);
+
+                    //$("#subCatgery").find('option').each(function (i, opt) {
+                    //    $(opt2).attr('selected', 'selected');
+                    //});
+                }
+            }
+        });
+
+
+
+
+        $("#showcoursetable").click(function () {
+            var subCatgery = $("#subCatgery").val();
+            var Catgery = $("#Catgery").val();
+            var orglvl4val = $("#orglvl4val").val();
+            var orglvl3val = $("#orglvl3val").val();
+            var orglvl2val = $("#orglvl2val").val();
+            var orglvl1val = $("#orglvl1val").val();
+
+            if (subCatgery != 0 && Catgery != 0 && subCatgery != "" && subCatgery != "undefined" && Catgery != "" && Catgery != "undefined") {
+
+                var subCatgeryname = $("#subCatgery option:selected").text();
+                var Catgeryname = $("#Catgery option:selected").text();
+                var orglvl4valname = $("#orglvl4val option:selected").text();
+                var orglvl3valname = $("#orglvl3val option:selected").text();
+                var orglvl2valname = $("#orglvl2val option:selected").text();
+                var orglvl1valname = $("#orglvl1val option:selected").text();
+
+                slno++;
+                var newRow = $("<tr>");
+                var cols = "";
+                cols = '<td style="background-color: #eceef1;">' + slno + '</td>';
+                cols += '<td style="background-color: #eceef1;">' + subCatgeryname + '</td>';
+                cols += '<td style="background-color: #eceef1;">' + Catgeryname + '</td>';
+                if (orglvl4val != null && orglvl4val != "" && orglvl4val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl4valname + '</td>';
+                }
+                if (orglvl3val != null && orglvl3val != "" && orglvl3val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl3valname + '</td>';
+                }
+                if (orglvl2val != null && orglvl2val != "" && orglvl2val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl2valname + '</td>';
+                }
+                if (orglvl1val != null && orglvl1val != "" && orglvl1val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl1valname + '</td>';
+                }
+                cols += '<td align="center"><input name="default-radio-1" class="form-check-input" type="radio" value="" id="defaultRadio1" /></td>';
+
+                newRow.append(cols);
+                $("#tbodydtl").append(newRow);
+            } else {
+                debugger;
+
+                if (orglvl4val == "" || orglvl4val == null || orglvl4val == "undefined") {
+                    orglvl4val = 0;
+                }
+                if (orglvl3val == "" || orglvl3val == null || orglvl3val == "undefined") {
+                    orglvl3val = 0;
+                }
+                if (orglvl2val == "" || orglvl2val == null || orglvl2val == "undefined") {
+                    orglvl2val = 0;
+                }
+                if (orglvl1val == "" || orglvl1val == null || orglvl1val == "undefined") {
+                    orglvl1val = 0;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("Headerfetch", "DocArchival")',
+                    type: "GET",
+                    data: { 'orglvl4val': orglvl4val, "orglvl3val": orglvl3val, "orglvl2val": orglvl2val, "orglvl1val": orglvl4val },
+                    success: function (data) {
+                        debugger;
+                        var value1 = data;
+                        for (var i = 0; i < value1.length; i++) {
+
+                            var subCatgeryname = value1[i].SubCategory_name;
+                            var Catgeryname = value1[i].Category_name;
+                            var orglvl4valname = value1[i].Orglvl4name;
+                            var orglvl3valname = value1[i].Orglvl3name;
+                            var orglvl2valname = value1[i].Orglvl2name;
+                            var orglvl1valname = value1[i].Orglvl1name;
+
+                            slno++;
+                            var newRow = $("<tr>");
+                            var cols = "";
+                            cols = '<td style="background-color: #eceef1;">' + slno + '</td>';
+                            cols += '<td style="background-color: #eceef1;">' + subCatgeryname + '</td>';
+                            cols += '<td style="background-color: #eceef1;">' + Catgeryname + '</td>';
+                            if (orglvl4val != null && orglvl4val != "" && orglvl4val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl4valname + '</td>';
+                            }
+                            if (orglvl3val != null && orglvl3val != "" && orglvl3val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl3valname + '</td>';
+                            }
+                            if (orglvl2val != null && orglvl2val != "" && orglvl2val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl2valname + '</td>';
+                            }
+                            if (orglvl1val != null && orglvl1val != "" && orglvl1val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl1valname + '</td>';
+                            }
+                            cols += '<td align="center"><input name="default-radio-1" class="form-check-input" type="radio" value="" id="defaultRadio1" /></td>';
+
+                            newRow.append(cols);
+                            $("#tbodydtl").append(newRow);
+                        }
+                    }
+                });
+            }
+
+        });
+
+        $("#btn_transfer").click(function () {
+            var subCatgery = $("#subCatgery").val();
+            var Catgery = $("#Catgery").val();
+            var orglvl4val = $("#orglvl4val").val();
+            var orglvl3val = $("#orglvl3val").val();
+            var orglvl2val = $("#orglvl2val").val();
+            var orglvl1val = $("#orglvl1val").val();
+
+            window.location.href = '/DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=' + subCatgery + '';
+
+            //var subCatgeryname = $("#subCatgery option:selected").text();
+            //var Catgeryname = $("#Catgery option:selected").text();
+            //var orglvl4valname = $("#orglvl4val option:selected").text();
+            //var orglvl3valname = $("#orglvl3val option:selected").text();
+            //var orglvl2valname = $("#orglvl2val option:selected").text();
+            //var orglvl1valname = $("#orglvl1val option:selected").text();
+
+            //$("#doctype").val(subCatgeryname);
+            //$("#doctypecode").val(subCatgery);
+            //$("#subdoctype").val(Catgeryname);
+            //$("#subdoctypecode").val(Catgery);
+            //$("#orglvl4valh").val(orglvl4valname);
+            //$("#orglvl3valh").val(orglvl3valname);
+            //$("#orglvl2valh").val(orglvl2valname);
+            //$("#orglvl1valh").val(orglvl1valname);
+        });
+
+        $("#transfer").click(function () {
+            $("#filter").show();
+        });
+        $("#btnShowResult").click(function () {
+            $("#showresult").show();
+            $("#showresult1").show();
+        });
+
+        getScreenAccess(13, "Doc Name");
+    });
+    function onChangeDocGroup() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "DocGr"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            /*$.getJSON("DocGroupDropDown/DocNameMaster?masteritemid=" + masteritemid + "&master=" + master, function (data) {
+                debugger;
+                var unit = data.unitdropdownlist;
+                var dept = data.deptdropdownlist;
+                $("#UnitID").data("kendoDropDownList").dataSource.data(unit);
+                $("#Dept_Id").data("kendoDropDownList").dataSource.data(dept);
+                if (unit.length == 2) {
+                    $("#UnitID").data("kendoDropDownList").select(1)
+                    $("#UnitID").data("kendoDropDownList").trigger("change");
+                }
+                else {
+                    $("#UnitID").data("kendoDropDownList").select(0)
+                }
+                if (dept.length == 2) {
+                    $("#Dept_Id").data("kendoDropDownList").select(1)
+                    $("#Dept_Id").data("kendoDropDownList").trigger("change");
+                }
+                else {
+                    $("#Dept_Id").data("kendoDropDownList").select(0)
+                }
+
+            });*/
+            var url = '@Url.Action("DocGroupNames", "DocGroupMaster")?parentcode=' + master + '&dependcode=' + masteritemid;
+            $.getJSON(url, function (data) {
+                debugger;
+                var dept = data;
+                if (dept.length > 1) {
+                    var ee = data[1].parent_code;
+                    $("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+                    $("#" + ee).data("kendoDropDownList").trigger("change");
+                }
+                else {
+                    var ee = data[0].parent_code;
+                    //   $("#" + ee).data("kendoDropDownList").select(0);
+                }
+
+            });
+        }
+    }
+    function loaddynamiccolumns() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        // orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        // orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        //orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        //orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+    function RefreshDatasource_Exemption() {
+        debugger;
+        //$("#grid").data("kendoGrid").dataSource.read();
+        //var wdw = $("#myDocNameWin").data("kendoWindow"); //get the Window widget's instance
+        //wdw.close();
+        BindDocNameGrid();
+    }
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+
+    function loaddynamiccolumns1() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    maxorglvl = data.length;
+                    if (maxorglvl > 2) {
+                        $("#sct1").show();
+                        $("#sct2").hide();
+                    } else {
+                        $("#sct2").show();
+                        $("#sct1").hide();
+                    }
+                    //  alert(maxorglvl);
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        var org1val = data[0].orghierarchy_name;
+                        if (orglevelcode1 != null && orglevelcode1 != "" && orglevelcode1 != "undefined") {
+                            $("#orglvl1lbl").text(org1val);
+                            //orglevelval1 = $("#" + orglevelcode1).val();
+                            $("#orgcol1").show();
+                            $("#thlbl1").text(org1val);
+                            $("#thlbl1").show();
+
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode1, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl1val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        var org1va2 = data[1].orghierarchy_name;
+                        if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                            $("#orglvl2lbl").text(org1va2);
+                            //   orglevelval2 = $("#" + orglevelcode2).val();
+                            $("#orgcol2").show();
+                            $("#thlbl2").text(org1va2);
+                            $("#thlbl2").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode2, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl2val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        var org1va3 = data[2].orghierarchy_name;
+                        if (orglevelcode3 != null && orglevelcode3 != "" && orglevelcode3 != "undefined") {
+                            $("#orglvl3lbl").text(org1va3);
+                            // orglevelval3 = $("#" + orglevelcode3).val();
+                            $("#orgcol3").show();
+                            $("#thlbl3").text(org1va3);
+                            $("#thlbl3").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode3, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl3val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        var org1va4 = data[3].orghierarchy_name;
+                        if (orglevelcode4 != null && orglevelcode4 != "" && orglevelcode4 != "undefined") {
+                            $("#orglvl4lbl").text(org1va4);
+                            //orglevelval4 = $("#" + orglevelcode4).val();
+                            $("#orgcol4").show();
+                            $("#thlbl4").text(org1va4);
+                            $("#thlbl4").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode4, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl4val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+
+    function SaveDocName() {
+        debugger;
+        var orglevelval1 = "";
+        var orglevelval2 = "";
+        var orglevelval3 = "";
+        var orglevelval4 = "";
+        var Docuname = "";
+        var Docgrpval = "";
+        var Shortname = "";
+        var apval = "";
+        var ppval = "0";
+        DPval = $('input[name="DocPeriod"]:checked').val();
+        // alert(DPval);
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            url: '@Url.Action("getlabellist", "DocGroupMaster")',
+            data: "{}",
+            success: function (data) {
+                debugger;
+                // var orglevelcode1 = data[0].orghierarchy_code;
+                if (data.length >= 1) {
+                    orglevelcode1 = data[0].orghierarchy_code;
+                    orglevelval1 = $("#" + orglevelcode1).val();
+                }
+                if (data.length >= 2) {
+                    orglevelcode2 = data[1].orghierarchy_code;
+                    orglevelval2 = $("#" + orglevelcode2).val();
+                }
+                if (data.length >= 3) {
+                    orglevelcode3 = data[2].orghierarchy_code;
+                    orglevelval3 = $("#" + orglevelcode3).val();
+                }
+                if (data.length == 4) {
+                    orglevelcode4 = data[3].orghierarchy_code;
+                    orglevelval4 = $("#" + orglevelcode4).val();
+                }
+
+                Docgrpval = $("#DgroupID").val();
+                Docuname = $("#txtDocName").val();
+                Shortname = $("#txtDocShName").val();
+                Shortname = "doc";
+                apval = $("#AP").val();
+                //  ppval = $("#PP").val();
+                ppval = "0";
+                //  alert(Docuname);
+                if (Docuname == "" || Docuname == null || Docuname == "undefined" || Docuname == 0) {
+                    // alert("Document Name Cannot be Empty");
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        // theme: 'dark',
+                        content: 'Document Name Cannot be Empty!',
+                        type: 'yellow',
+                        animationSpeed: 700,
+                    });
+                    return false;
+                } else if (Shortname == "" || Shortname == null || Shortname == "undefined" || Shortname == 0) {
+                    // alert("ShortName Cannot be Empty");
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        // theme: 'dark',
+                        content: 'ShortName Cannot be Empty!',
+                        type: 'yellow',
+                        animationSpeed: 700,
+                    });
+                    return false;
+                }
+                else if (Docgrpval == "" || Docgrpval == null || Docgrpval == "undefined" || Docgrpval == 0) {
+                    // alert("Docgroup Name Cannot be Empty");
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        // theme: 'dark',
+                        content: 'Docgroup Name Cannot be Empty!',
+                        type: 'yellow',
+                        animationSpeed: 700,
+                    });
+                    return false;
+                }
+                else if (DPval == "" || DPval == null || DPval == "undefined" || DPval == 0) {
+                    // alert("Doc Period Applicability Cannot be Empty");
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        // theme: 'dark',
+                        content: 'Doc Period Applicability Cannot be Empty!',
+                        type: 'yellow',
+                        animationSpeed: 700,
+                    });
+                    return false;
+                }
+                else if (DPval == "Y" && (apval == "" || apval == "0" || apval == "Select")) {
+                    //  alert("Active Period Cannot be Empty");
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        // theme: 'dark',
+                        content: 'Active Period Cannot be Empty!',
+                        type: 'yellow',
+                        animationSpeed: 700,
+                    });
+                    return false;
+                }
+                    //else if (DPval == "Y" && (ppval == "" || ppval == "0" || ppval == "Select")) {
+                    //    //alert("Passive Period Cannot be Empty");
+                    //    $.alert({
+                    //        icon: 'fa fa-success',
+                    //        title: 'DMS',
+                    //        // theme: 'dark',
+                    //        content: 'Passive Period Cannot be Empty!',
+                    //        type: 'yellow',
+                    //        animationSpeed: 700,
+                    //    });
+                    //    return false;
+                    //}
+                else if ((orglevelcode1 != "" && orglevelcode1 != "" && orglevelcode1 != "undefined") && (orglevelval1 == "" || orglevelval1 == null || orglevelval1 == "undefined" || orglevelval1 == 0)) {
+                    alert(orglevelcode1 + " Cannot be Empty");
+                    return false;
+                }
+                else if ((orglevelcode2 != "" && orglevelcode2 != "" && orglevelcode2 != "undefined") && (orglevelval2 == "" || orglevelval2 == null || orglevelval2 == "undefined" || orglevelval2 == 0)) {
+                    alert(orglevelcode2 + " Cannot be Empty");
+                    return false;
+                }
+                else if ((orglevelcode3 != "" && orglevelcode3 != "" && orglevelcode3 != "undefined") && (orglevelval3 == "" || orglevelval3 == null || orglevelval3 == "undefined" || orglevelval3 == 0)) {
+                    alert(orglevelcode3 + " Cannot be Empty");
+                    return false;
+                }
+                else if ((orglevelcode4 != "" && orglevelcode4 != "" && orglevelcode4 != "undefined") && (orglevelval4 == "" || orglevelval4 == null || orglevelval4 == "undefined" || orglevelval4 == 0)) {
+                    alert(orglevelcode4 + " Cannot be Empty");
+                    return false;
+                }
+                else {
+                    // if (mode == "I") {
+                    //   alert("insert");
+                    // Create.Action("DocGroupGrid_Save", "DocGroupMaster").Data("setparams"));
+                    if (orglevelval4 == "undefined" || orglevelval4 == null) {
+                        orglevelval4 = "";
+                    }
+                    if (orglevelval3 == "undefined" || orglevelval3 == null) {
+                        orglevelval3 = "";
+                    }
+                    if (orglevelval2 == "undefined" || orglevelval2 == null) {
+                        orglevelval2 = "";
+                    }
+                    if (orglevelval1 == "undefined" || orglevelval1 == null) {
+                        orglevelval1 = "";
+                    }
+
+                    if (modeval == "U") {
+                        Dnameid = $("#hdDocNameID").val();
+                    }
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("SaveDocName", "DocNameMaster")?DnameId=' + Dnameid + '&DocGrpID=' + Docgrpval + '&DocName=' + Docuname + '&ShortName=' + Shortname + '&mode=' + modeval + '&dpval=' + DPval + '&AP=' + apval + '&PP=' + ppval,
+                        data: "{}",
+                        success: function (data) {
+                            var out = "";
+                            if (modeval == "U") {
+                                out = "Doc Name has been Edited successfully!"
+                            } else {
+                                out = "Doc Name has been Created successfully!"
+                            }
+                            debugger;
+                            $.dialog({
+                                title: 'DMS',
+                                content: out,
+                                type: 'green',
+                            });
+                            // window.location.href = '/DocNameMaster/DocNameMasterPartialPopUp';
+                            //closeopup();
+                        }, error: function (result) {
+                            // alert("Error" + result.Data1);
+                            $.alert({
+                                title: 'DMS',
+                                content: "Error" + result,
+                                type: 'red',
+                            });
+                            // closeopup();
+                        }
+                    });
+                    //} else {
+                    //    alert("update");
+                    //}
+                }
+
+                // alert(orglevelcode1);
+                //setTimeout(function () {
+                //    window.location.reload(1);
+                //}, 2500);
+            },
+        });
+    }
+
+    function onChangeunit1() {
+        debugger;
+        var masteritemid = this.value();
+        //var master = "Unit"
+        var master = ""
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            /*     $.getJSON("UnitDropDown/DocNameMaster?masteritemid=" + masteritemid + "&master=" + master, function (data) {
+                     debugger;
+                     var dept = data;
+                     $("#Dept_Id").data("kendoDropDownList").dataSource.data(dept);
+
+                     if (dept.length == 2) {
+                         $("#Dept_Id").data("kendoDropDownList").select(1)
+                     }
+                     else {
+                         $("#Dept_Id").data("kendoDropDownList").select(0)
+                     }
+
+                 });*/
+            var url = '@Url.Action("DocGroupNames", "DocGroupMaster")?parentcode=' + master + '&dependcode=' + masteritemid;
+            $.getJSON(url, function (data) {
+                debugger;
+                var dept = data;
+                if (dept.length > 1) {
+                    var ee = data[1].parent_code;
+                    $("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+                    $("#" + ee).data("kendoDropDownList").trigger("change");
+                }
+                else {
+                    //var ee = data[0].parent_code;
+                    //$("#" + ee).data("kendoDropDownList").select(0);
+                }
+
+            });
+        }
+    }
+
+    function mode_change(sel) {
+        debugger;
+        modeval = sel.value;
+        if (modeval == "U") {
+            window.location.href = '../DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=' + Dnameid;
+        } else if (modeval == "V") {
+            window.location.href = '../DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=' + Dnameid;
+        } else {
+            window.location.href = '../DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=0';
+        }
+    }
+    function fetchDocGroup() {
+        debugger;
+        var DocGroupID = $("#Catgery").val();
+        if (DocGroupID == "" || DocGroupID == null || DocGroupID == "undefined" || DocGroupID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocGroup", "ConfigureAttributes")',
+                data: { 'DocGroupID': DocGroupID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept2;
+                    var value2 = data.Get_unit2;
+                    var value3 = data.Get_docname2;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    //if (CheckDocNameId == "0") {
+                    $('#subCatgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                        var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                        $('#subCatgery').append(opt);
+                    }
+                    if (length3 == 2) {
+                        $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                    }
+                    //}
+
+                }
+            });
+        }
+    }
+
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "ConfigureAttributes")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                    var value1 = data.Get_dept3;
+                    var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docgroup3;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                        var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+                    }
+                    if (length3 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+
+
+                    if (length2 == 2) {
+                        //  $("#QCD_mst_tHR").val($("#QCD_mst_tHR option").eq(1).val());
+                        var orglvlid = "";
+                        if (maxorglvl == 4) {
+                            orglvlid = "orglvl4val";
+                        } else if (maxorglvl == 3) {
+                            orglvlid = "orglvl3val";
+                        } else if (maxorglvl == 2) {
+                            orglvlid = "orglvl2val";
+                        } else if (maxorglvl == 1) {
+                            orglvlid = "orglvl1val";
+                        }
+
+
+                        $("#" + orglvlid).empty();
+                        var optsel = new Option("select", "select");
+
+                        $("#" + orglvlid).append(optsel);
+                        var opt = new Option(value2[1].master_name, value2[1].master_code);
+
+                        $("#" + orglvlid).append(opt);
+                        $("#" + orglvlid).val($("#" + orglvlid + " option").eq(1).val()).change();
+                        //var orglevel3 = $("#orglevel" + MaxorglevelPos).val();
+                        //$("#" + orglevel3).data("kendoDropDownList").value(value2[1].master_code);
+                        //var dropDownList = $("#" + orglevel3).getKendoDropDownList();
+                        //dropDownList.trigger("change");
+                    }
+
+                    // $("#QCD_mst_tHR" + ee).data("kendoDropDownList").value(data[1].master_code);
+                }
+            });
+        }
+    }
+    function mode_change(sel) {
+        debugger;
+        modeval = sel.value;
+        if (modeval == "U") {
+            window.location.href = '/DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=' + Dnameid;
+        } else if (modeval == "V") {
+            window.location.href = '/DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=' + Dnameid;
+        } else {
+            window.location.href = '/DocNameMaster/DocNameMasterPartialPopUp?modeflag=' + modeval + '&dnameid=0';
+        }
+    }
+    function getScreenAccess(screenID, screenName) {
+        debugger;
+        var result_;
+        $.ajax({
+            // type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //   async: false,
+            url: '@Url.Action("getScreenData", "UserGroupsMapping")',
+            data: { 'screen_id': screenID, 'screen_name': screenName },
+            success: function (data) {
+                debugger;
+                //  var grid = $("#kdropdownwindow").data("kendoGrid");
+
+                var data1 = JSON.parse(data.Data1);
+                if (data1[0].add_perm == "1" || data1[0].mod_perm == "1") {
+                    if (data1[0].add_perm == "1" && data1[0].mod_perm == "0") {
+                        $("#mode option[value='U']").remove();
+                        $("#mode option[value='V']").remove();
+                    } else if (data1[0].add_perm == "0" && data1[0].mod_perm == "1") {
+                        $("#mode option[value='V']").remove();
+                        $("#mode option[value='I']").remove();
+                        $('#docsearch').removeAttr('hidden');
+                        $('#dn_div').addClass('input-group input-group-merge');
+                        modeval = "U";
+                    } else {
+                        $("#mode option[value='V']").remove();
+                    }
+                }
+                else if (data1[0].inactivate_perm == "1") {
+                    $("#mode").attr('disabled', true);
+                    $("#btnsearch").attr('disabled', true);
+                }
+
+                else if (data1[0].view_perm == "1") {
+                    //showresult1flag = 'N';
+                    $("#btnsearch").attr('disabled', true);
+                    $("#mode option[value='U']").remove();
+                    $("#mode option[value='I']").remove();
+                    $('#docsearch').removeAttr('hidden');
+                    $('#dn_div').addClass('input-group input-group-merge');
+                    modeval = "V";
+                }
+
+                else if (data1[0].deny_perm == "1") {
+                    showresult1flag = 'N';
+                    $("#mode").attr('disabled', true);
+                    $("#btnsearch").attr('disabled', true);
+                }
+                else {
+                    $("#mode").attr('disabled', true);
+                    $("#btnsearch").attr('disabled', true);
+                }
+                // Getsummary();
+                //for (var i = 0; i < grid.columns.length; i++) {
+                //    if (i != grid.columns.length) {
+                //        grid.autoFitColumn(i);  //autofit each column.
+
+                //    }
+                //}
+            },
+            error: function (data) {
+
+
+            }
+        });
+    }
+</script>

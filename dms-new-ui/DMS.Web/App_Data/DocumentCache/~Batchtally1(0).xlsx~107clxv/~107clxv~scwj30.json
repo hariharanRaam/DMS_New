@@ -1,0 +1,37 @@
+{
+  "CacheSourceKey": "107clxv",
+  "CachePdfKey": "107clxv/107clxv-b3umsz.pdf",
+  "CacheXpzKey": "107clxv/107clxv-scwj30.xpz",
+  "CacheInfoKey": "107clxv/107clxv-scwj30.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Batchtally1(0).xlsx",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "Batchtally1(0).xlsx",
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.SpreadsheetInputOptions, GleamTech.DocumentUltimate",
+    "OutputSheetRange": "visible",
+    "RenderColumnsFitToPages": 1,
+    "RenderRowsFitToPages": 0,
+    "RenderHeadings": false,
+    "RenderGridlines": false,
+    "RenderTitleColumns": null,
+    "RenderTitleRows": null,
+    "RenderArea": null,
+    "RenderBlackAndWhite": false,
+    "RenderCenterHorizontally": false,
+    "RenderCenterVertically": false,
+    "Format": "Xlsx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "107clxv",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

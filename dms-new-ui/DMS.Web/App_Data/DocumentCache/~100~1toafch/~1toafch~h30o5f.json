@@ -1,0 +1,27 @@
+{
+  "CacheSourceKey": "1toafch",
+  "CachePdfKey": "1toafch/1toafch-rswvk8.pdf",
+  "CacheXpzKey": "1toafch/1toafch-h30o5f.xpz",
+  "CacheInfoKey": "1toafch/1toafch-h30o5f.json",
+  "CacheCopyKey": "1toafch/1toafch.txt",
+  "Document": null,
+  "DocumentHandlerType": null,
+  "DocumentFileName": "DOWNLOAD.txt",
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "DOWNLOAD.txt",
+    "Format": "Txt",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1toafch",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

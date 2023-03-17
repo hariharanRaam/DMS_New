@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "m2osst",
+  "CachePdfKey": "m2osst/m2osst-1k3kk2s.pdf",
+  "CacheXpzKey": "m2osst/m2osst-10sxfxi.xpz",
+  "CacheInfoKey": "m2osst/m2osst-10sxfxi.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Invoice\\Supplier Invoice\\210000487(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "210000487(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "m2osst",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

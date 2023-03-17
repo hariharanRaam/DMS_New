@@ -1,0 +1,210 @@
+﻿@model DMS.Model.ViewDocuments_Model
+
+
+<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+    label {
+        font-size: medium;
+        font-family: Cambria;
+    }
+</style>
+<!-- Bootstrap 3.3.7 -->
+<link href="~/Content/css/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<link href="~/Content/css/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Ionicons -->
+<link href="~/Content/css/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box-body">
+            <div class="row">
+                <table>
+                    @*<tr>
+                            <td> <label style="font-weight:normal">From</label></td>
+                            <td style="width:25px"></td>
+                            <td>
+                                @Html.TextBoxFor(m => m.MailFrom, new { @class = "form-control", style = "height:25px;width:400px;font-weight: normal;font-size:medium;font-family:Cambria;" })
+                                <span class="errormessage" id="erridmsg"></span>
+                            </td>
+                        </tr>
+                        <tr style="height:10px"></tr>*@
+                    <tr>
+                        <td><label style="font-weight:normal">To</label></td>
+                        <td style="width:25px"></td>
+                        <td>
+                            @Html.TextBoxFor(m => m.MailTo, new { @class = "form-control", style = "height:25px;width:400px;font-weight: normal;font-size:medium;font-family:Cambria;", @placeholder = "Email Id" })
+                        </td>
+                    </tr>
+                    <tr style="height:10px"></tr>
+                    <tr>
+                        <td><label style="font-weight:normal">Subject</label></td>
+                        <td style="width:25px"></td>
+                        <td>
+                            @Html.TextBoxFor(m => m.MailSubject, new { @class = "form-control", style = "height:25px;width:400px;font-weight: normal;font-size:medium;font-family:Cambria;", @placeholder = "Subject" })
+                            <span class="errormessage" id="erridmsg"></span>
+                        </td>
+                    </tr>
+                    <tr style="height:10px"></tr>
+                    <tr>
+                        <td><label style="font-weight:normal">Attached File</label></td>
+                        <td style="width:25px"></td>
+                        <td>
+                            <div class="input-group">
+                                @Html.TextBoxFor(m => m.MailAttachement, new { @class = "form-control", style = "height:30px;width:330px;font-weight: normal;font-size:medium;font-family:Cambria;", @readonly = "true" })
+                                <button type="button" class="btn btn-orange fa" id="btn_dwldfile" onclick="return downloadfile()">View</button>
+                            </div>
+                            @*@Html.TextBoxFor(m => m.MailAttachement, new { @class = "form-control", style = "height:25px;width:400px;font-weight: normal;font-size:medium;font-family:Cambria;" })
+                                <span class="errormessage" id="erridmsg"></span>*@
+                        </td>
+                    </tr>
+                    <tr style="height:10px"></tr>
+                </table>
+                @*@Html.TextBoxFor(m => m.MailContent, new { @class = "form-control", style = "height:25px;width:515px;font-weight: normal;font-size:medium;" })*@
+                @Html.TextArea("MailContent", null, new { @class = "form-control", style = "height:250px;width:515px;font-weight: normal;font-size:medium;font-family:Cambria;", @placeholder = "Body of the Content" })
+            </div>
+        </div>
+
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <div class="row text-center mt20">
+                <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange fa fa-download" />
+                <input type="button" name="btnsubmit" value="Send" id="btn_sendmail" class="btn btn-orange fa fa-download" onclick="return SendMail();" />
+            </div>
+
+            <div class="row text-center mt20">
+                <span class="errormessage"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var Indexed_gid = $("#hdn_attachid").val();
+        var type = $("#hdn_linkorinterfile").val();
+        $.ajax({
+            url: '@Url.Action("Getgetfromidandattachfile", "Search")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'Indexed_gid': Indexed_gid, 'type': type },
+            success: function (data) {
+                debugger;
+                $("#MailFrom").val(data.Frommailaddress);
+                $("#MailAttachement").val(data.Attachementfile);
+                $("#hdn_filelocation").val(data.attachementlocation);
+            },
+            error: function () {
+                alert("failed to create.")
+                return false;
+            }
+        });
+    });
+
+    function Close() {
+        debugger;
+        objDialog.dialog("close");
+    }
+
+    function downloadfile() {
+        debugger;
+
+        @*$.ajax({
+            url: '@Url.Action("Download", "ViewDocuments")',
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: fileData,
+        }).done(function (data) {
+            //get the file name for download
+            if (data.attacheid != "") {
+                //use window.location.href for redirect to download action for download the file
+                window.location.href = "@Url.RouteUrl(new { Controller = "ViewDocuments", Action = "DownloadFile" })/?attacheid=" + data.attacheid;
+            }
+        });*@
+
+
+
+        var downloadpath = $("#hdn_filelocation").val();
+        $.ajax({
+            url: '@Url.Action("Downloadmailfile", "Search")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'downloadpath': downloadpath},
+        }).done(function (data) {
+            debugger;
+            //get the file name for download
+            if (data.downloadpath != "") {
+                //use window.location.href for redirect to download action for download the file
+                window.location.href = "@Url.RouteUrl(new { Controller = "ViewDocuments", Action = "DownloadMailFile1" })/?downloadpath=" + data.downloadpath;
+            }
+        });
+
+
+    }
+    function SendMail() {
+        debugger;
+        // var mailfrom = $("#MailFrom").val();
+        var mailto = $("#MailTo").val();
+        if (mailto == "") {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter email address..!!',
+                icon: 'fa fa-success',
+                type: 'green',
+            });
+            return false;
+        }
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (!emailReg.test(mailto)) {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter valid email address..!!',
+                icon: 'fa fa-success',
+                type: 'red',
+            });
+            return false;
+        }
+
+        var subject = $("#MailSubject").val();
+        var content = $("#MailContent").val();
+        var filelocation = $("#hdn_filelocation").val();
+        $.ajax({
+            url: '@Url.Action("SendMail", "Search")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'mailto': mailto, 'subject': subject, 'content': content, 'filelocation': filelocation },
+            success: function (data) {
+                debugger;
+                if (data == "success") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Mail sent successfully!',
+                        icon: 'fa fa-success',
+                        type: 'blue', 
+                    });
+                    setTimeout(function () {
+                        //window.location.reload(1);
+                        objDialog.dialog("close");
+                    }, 2500);
+                }
+                else {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Mail could not be sent!!',
+                        icon: 'fa fa-success',
+                        type: 'orange',
+                    });
+                }
+            },
+        });
+    }
+</script>

@@ -1,0 +1,247 @@
+﻿@using System.Configuration;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DMS</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link href="~/Content/css/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="~/Content/css/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link href="~/Content/css/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/Content/css/dist/css/AdminLTE.min.css" rel="stylesheet" />
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link href="~/Content/css/dist/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <!-- Morris chart -->
+    <!-- jvectormap -->
+    <!-- Date Picker -->
+    <link href="~/Content/css/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <!-- Daterange picker -->
+    <link href="~/Content/css/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link href="~/Content/css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+    <link href="~/Content/css/dist/css/dms.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/Content/css/jquery-ui-datepicker.css")" rel="stylesheet" type="text/css" />
+    @*<link href="@Url.Content("~/Content/jquery-ui.css")" rel="stylesheet" type="text/css" />*@
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-datepicker.js")" type="text/javascript"></script>
+    @*<script src="~/Content/css/dist/js/pages/dashboard.js"></script>*@
+    @*<script src="~/Scripts/bootstrap.js"></script>*@
+    @*@Scripts.Render("~/bundles/app")*@
+
+    @*side doggle bar script*@
+    <script src="~/Content/css/dist/js/adminlte.min.js"></script>
+
+    @*Css and Js for Jquery alert box*@
+    <script src="~/Scripts/jquery-confirm.min.js"></script>
+    <link href="~/Content/css/jquery-confirm.min.css" rel="stylesheet" />
+</head>
+
+@Scripts.Render("~/bundles/bootstrap", "~/Content/css", "~/bundles/app")
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                @*<span class="logo-mini"><img src="~/Content/css/dist/images/logoicon.jpg" class="img-responsive"></span>*@
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b><span style="color:#C0C0C0;">flexi</span><span style="color:#00ccff;">docs</span></span>
+                @*<span class="logo-mini"><img src="~/Content/css/dist/images/flexidocslogo.png" class="img-responsive"></span>
+                <span class="logo-lg"><img src="~/Content/css/dist/images/flexidocslogo.png" class="img-responsive"></span>*@
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="user-menu">
+                            <a>
+                                <img src="~/Content/css/dist/images/user-admin.png" class="user-image" alt="User Image">Welcome @Session["Employee_Name"]
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" class="sign-out-btn" data-target="#Newcust1" onclick="Editcustdetails();">Profile</a>
+                        </li>
+
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#changepwd" onclick="showchangepasswordscreen();">Change Password</a>
+                        </li>
+
+                        <li>
+                            <a href="#" data-toggle="modal" class="sign-out-btn" data-target="#Signout" onclick="return Signout();">Sign out</a>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                @Html.Partial("Menu")
+                @*<ul class="sidebar-menu" data-widget="tree">
+
+                        <li class="active treeview">
+                            <a href="#">
+                                <i class="fa fa-dashboard"></i> <span>DMS</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+
+
+                                @if (Session["Employee_Type"] != null)
+                                {
+                                    string Emp_Type = Session["Employee_Type"].ToString();
+                                    string Emp_Role = Session["EmployeeRole_Id"].ToString();
+                                    if (Emp_Type == "1" || Emp_Type == "2")
+                                    {
+
+                                        <li>
+                                            <a style="bottom:5px; position:relative">Setup</a>
+                                            <a style="left:5px; bottom:10px; position:relative" href="../ConfigureAttributes/ConfigureAttributes"><i class="fa fa-circle-o"></i>Define Attributes</a>
+                                            <a style="left:5px;  bottom:20px; position:relative" href="../LOVMaster/LOVMaster"><i class="fa fa-circle-o"></i>Add LOV Master</a>
+                                            <a style="left:5px;  bottom:30px; position:relative" href="../EmployeeMaster/EmployeeMaster"><i class="fa fa-circle-o"></i>Employee Master</a>
+                                            <a style="left:5px;  bottom:40px; position:relative" href="../DepartmentMaster/DepartmentMaster"><i class="fa fa-circle-o"></i>Department Master</a>
+                                            <a style="left:5px;  bottom:50px; position:relative" href="../UnitMaster/UnitMaster"><i class="fa fa-circle-o"></i>Unit Master</a>
+                                            <a style="left:5px;  bottom:60px; position:relative" href="../DocGroupMaster/DocGroupMaster/"><i class="fa fa-circle-o"></i>DocGroup Master</a>
+                                            <a style="left:5px;  bottom:70px; position:relative" href="../DocNameMaster/DocNameMaster"><i class="fa fa-circle-o"></i>DocName Master</a>
+                                        </li>
+
+                                        <li>
+                                            <a style="bottom:70px; position:relative">Transaction</a>
+                                            <a style="left:5px; bottom:75px; position:relative" href="../DocArchival/DocArchival_Single"><i class="fa fa-circle-o"></i> SingleFile-Archival</a>
+                                            <a style="left:5px; bottom:85px; position:relative" href="../DocArchival/DocArchival_Multiple"><i class="fa fa-circle-o"></i> MultipleFile-Archival</a>
+                                            <a style="left:5px; bottom:95px; position:relative" href="../GetAllDocuments/GetAllDocuments"><i class="fa fa-circle-o"></i> Indexing</a>
+                                            <a style="left:5px; bottom:105px; position:relative" href="../ViewDocuments/ViewDocuments"><i class="fa fa-circle-o"></i>Search</a>
+                                            <a style="left:5px; bottom:115px; position:relative" href="../DocumentLinking/DocumentLinking"><i class="fa fa-circle-o"></i>Document Linking</a>
+                                            <a style="left:5px; bottom:125px; position:relative" href="../InterFiling/InterFiling"><i class="fa fa-circle-o"></i>InterFiling</a>
+                                            <a style="left:5px; bottom:135px; position:relative" href="../EditIndexedDocument/EditIndexedDocument"><i class="fa fa-circle-o"></i>Edit/Delete Indexed Document</a>
+                                            <a style="left:5px; bottom:145px; position:relative" href="../GetEditedIndexedDoc/GetEditedIndexedDoc"><i class="fa fa-circle-o"></i>GetEdited Indexed Document</a>
+                                            <a style="left:5px; bottom:155px; position:relative" href="../GetDeletedIndexedDocuments/GetDeletedIndexedDocuments"><i class="fa fa-circle-o"></i>Delete Indexed Document</a>
+                                            <a style="left:5px; bottom:165px; position:relative" href="../UserGroupsMapping/UserGroupsMapping"><i class="fa fa-circle-o"></i>User Groups</a>
+                                        </li>
+
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+                    </ul>*@
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <div id="Newcust1" class="modal fade" role="dialog" style="">
+            @Html.Hidden("RedirectTo", Url.Action("Login", "Login"));
+        </div>
+
+        <footer class="main-footer" style="text-align:center">
+            <strong style="text-align:center">Copyright &copy; 2018 Flexicode Technologies Pvt Ltd.</strong>
+        </footer>
+
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+
+        </aside>
+
+        <div class="control-sidebar-bg"></div>
+
+        @RenderBody()
+
+    </div>
+
+    <script>
+        function Editcustdetails() {
+            debugger;
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "html",
+                url: '@Url.Action("EmpProfilePartialView", "_Layout")',
+                success: function (data) {
+                    debugger;
+                    $("#Newcust1").html(data);
+                },
+                error: function (data) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Error' + data,
+                        type: 'red',
+                    });
+                }
+            });
+        }
+
+
+        function Signout() {
+            debugger;
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "html",
+                url: '@Url.Action("Signout", "Login")',
+                success: function (data) {
+                    var url = '@Url.Action("Login", "Login")'
+                    //var url = $("#RedirectTo").val();
+                    window.location.href = url;
+                },
+                error: function (data) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Error' + data,
+                        type: 'red',
+                    });
+                }
+            });
+        }
+
+        function showchangepasswordscreen() {
+            debugger;
+            var url = '@Url.Action("ChangePassword", "Login")'
+            window.location.href = url;
+        }
+    </script>
+
+</body>
+</html>

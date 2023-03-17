@@ -1,0 +1,334 @@
+﻿@using Kendo.Mvc.UI;
+@model DMS.Model.ApproveEditedIndexedDoc_Model
+
+@using GleamTech.AspNet.Mvc
+@using GleamTech.DocumentUltimate
+@using GleamTech.DocumentUltimate.AspNet
+@using GleamTech.DocumentUltimate.AspNet.UI
+@using System.Web.UI.WebControls;
+@{
+    int i = 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title></title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        .error {
+            color: blue;
+        }
+
+        .div1 {
+            border: 1px solid;
+            padding: 10px;
+            box-shadow: 5px 10px;
+        }
+
+        .asterisk_input:after {
+            content: " *";
+            color: #e32;
+            position: absolute;
+            margin: 0px 0px 0px -20px;
+            font-size: xx-large;
+            padding: 0 5px 0 0;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-left with-border" style="height:30px">
+                            <h3 class="box-title" style="font-size:20px">Approve Edited Indexed Documents</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        @using (Html.BeginForm("ApproveEditedIndexedDoc", "ApproveEditedIndexedDoc", FormMethod.Post, new { @id = "form1" }))
+                        {
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div style="width:380px;border:groove thin;height:150px">
+                                            <table>
+                                                <tr style="height:10px;">
+
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Doc Name", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.SubCateName, new Dictionary<string, object>() { { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" }, { "Id", "SubCateName" }, { "disabled", "disabled" } })
+                                                    </td>
+                                                </tr>
+
+
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Doc Group", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.CateName, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;font-weight: normal;" }, { "Id", "CateName" } })
+                                                    </td>
+                                                </tr>
+
+
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Unit", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.UnitName, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;font-weight: normal;" }, { "Id", "UnitName" } })
+                                                    </td>
+                                                </tr>
+
+
+                                                <tr style="height:30px;">
+
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Department", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.DeptName, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;font-weight: normal;" }, { "Id", "DeptName" } })
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                        <div style="height:15px"></div>
+                                        <div style="height:175px;overflow:auto;overflow-x: hidden;width:380px;border:groove thin;">
+                                            <table>
+                                                <tr style="height:5px;"></tr>
+
+                                                @foreach (var category in Model.dept)
+                                                {
+                                                    <tr style="height:30px;">
+
+                                                        <td style="left:15px; position:relative">
+                                                            <label style="width:120px;font-weight: normal;">@category.attrbname </label>
+                                                        </td>
+                                                        <td style="width:120px">
+                                                            @Html.TextBox("ctl" + i, @category.attrbdesc, new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;", disabled = "disabled" })
+                                                        </td>
+                                                        @if (category.attrbMand == "Y")
+                                                        {
+                                                            <td><label style="width:5px;color:red;font-size:larger">*</label> </td>
+                                                        }
+                                                    </tr>
+                                                        i++;
+
+                                                }
+                                                <tr></tr>
+                                            </table>
+                                        </div>
+
+                                        <div style="height:15px"></div>
+
+                                        <div style="width:380px;border:groove thin;height:170px">
+                                            <table>
+                                                <tr style="height:10px;"></tr>
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("File Name", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.FileName, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+
+                                                    </td>
+
+                                                </tr>
+                                                <tr style="height:30px">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("File Type", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.FileType, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                                    </td>
+                                                </tr>
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Version Name", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+
+                                                        @Html.TextBoxFor(m => m.VersionName, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                                    </td>
+                                                </tr>
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Version Date", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.VersionDate, new { htmlAttributes = new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;", disabled = "disabled", @readonly = "readonly" } })
+                                                    </td>
+                                                </tr>
+                                                <tr style="height:30px;">
+                                                    <td style="left:15px; position:relative">
+                                                        @Html.Label("Signature", new { style = "width:120px;font-weight: normal;" })
+                                                    </td>
+                                                    <td>
+
+                                                        @Html.TextBoxFor(m => m.Signature, new Dictionary<string, object>() { { "disabled", "disabled" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        @Html.HiddenFor(m => m.HideDocArchId, new { @class = "form-control", style = "height:25px;" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(m => m.Filepathfrom, new { @class = "form-control", style = "height:25px;" })
+                                                    </td>
+
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div style="height:5px"></div>
+                                        <div style="width:380px;height:55px">
+                                            <table align="center">
+                                                <tr style="height:8px"></tr>
+                                                <tr>
+                                                    <td>
+                                                        <button type="button" value="Cancel" id="btn_Cancel" class="btn btn-orange pull-right" onclick="return Cancel()">Cancel</button>
+                                                    </td>
+                                                    <td width="5px"></td>
+                                                    <td>
+                                                        <input type="button" value="Approve" id="btn_approve" onclick="return Approve()" class="btn btn-success glyphicon glyphicon-thumbs-up" />
+                                                    </td>
+                                                    <td width="5px"></td>
+                                                    <td>
+                                                        <input type="button" value="Reject" id="btn_reject" onclick="return Reject()" class="btn btn-warning glyphicon glyphicon-thumbs-down" style="width:80px" />
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr style="height:8px"></tr>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6" style="margin-left:40px;">
+                                        <table>
+                                            @{
+                            var documentViewer = new DocumentViewer
+        {
+            Width = 700,
+            Height = 570,
+            Document = ViewBag.FilePath
+        };
+                                            }
+                                            @this.RenderBody(documentViewer)
+                                            @this.RenderHead(documentViewer)
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
+
+
+<script>
+
+    function Approve() {
+        debugger;
+        var DocID = $("#HideDocArchId").val();
+        $.ajax({
+            url: '@Url.Action("Approvetoupdatefile", "ApproveEditedIndexedDoc")',
+            type: 'Post',
+            datatype: 'json',
+            async: false,
+            data: { 'DocID': DocID },
+            success: function (data) {
+                debugger;
+                if (data.status == 1) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Edit Approved successfully.!',
+                        type: 'green',
+                    });
+                    window.location.href = data.redirectUrl;
+                }
+                if (data.status == 2) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Delete Approved successfully.!',
+                        type: 'blue',
+                    });
+                    window.location.href = data.redirectUrl1;
+                }
+            },
+            error: function (data) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Erro.!',
+                    type: 'blue',
+                });
+            }
+        });
+    }
+
+    function Reject() {
+        debugger;
+        var DocID = $("#HideDocArchId").val();
+        $.ajax({
+            url: '@Url.Action("Rejectneedtoupdatefile", "ApproveEditedIndexedDoc")',
+            type: 'Post',
+            datatype: 'json',
+            async: false,
+            data: { 'DocID': DocID },
+            success: function (data) {
+                debugger;
+                if (data.status == 1) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Edit rejected successfully.!',
+                        type: 'green',
+                    });
+                    window.location.href = data.redirectUrl;
+                }
+                if (data.status == 2) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Delete rejected successfully.!',
+                        type: 'green',
+                    });
+                    window.location.href = data.redirectUrl1;
+                }
+            },
+            error: function (data) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Error.!',
+                    type: 'blue',
+                });
+            }
+        });
+    }
+
+    function Cancel()
+    {
+        var url = '@Url.Action("GetEditedIndexedDoc", "GetEditedIndexedDoc")';
+        window.location.href = url;
+    }
+
+</script>

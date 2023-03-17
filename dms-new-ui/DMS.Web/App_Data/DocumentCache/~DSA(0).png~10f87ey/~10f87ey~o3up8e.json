@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "10f87ey",
+  "CachePdfKey": "10f87ey/10f87ey-1nrwo2i.pdf",
+  "CacheXpzKey": "10f87ey/10f87ey-o3up8e.xpz",
+  "CacheInfoKey": "10f87ey/10f87ey-o3up8e.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\DSA(0).png",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "DSA(0).png",
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "10f87ey",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

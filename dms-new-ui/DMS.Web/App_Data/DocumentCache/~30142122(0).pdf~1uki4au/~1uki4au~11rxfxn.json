@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1uki4au",
+  "CachePdfKey": "1uki4au/1uki4au-1k3kk2s.pdf",
+  "CacheXpzKey": "1uki4au/1uki4au-11rxfxn.xpz",
+  "CacheInfoKey": "1uki4au/1uki4au-11rxfxn.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Invoice\\Supplier Invoice\\30142122(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "30142122(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1uki4au",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

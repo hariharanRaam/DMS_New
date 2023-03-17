@@ -1,0 +1,48 @@
+﻿@{
+    List<DMS.Model.UserGroups_Model.menu> menuList = new List<DMS.Model.UserGroups_Model.menu>();
+    //menuList = DMS.Service.UserGroups_Service.GetMenu();
+    menuList = DMS.Service.UserGroups_Service.GetMenu(Session["UserGroup_ID"].ToString());
+
+}
+<ul class="sidebar-menu" data-widget="tree" style="">
+    @foreach (var mp in menuList.Where(p => p.parent_menu_gid == 0))
+    {
+        @*<li class="active treeview">*@
+        <li class="menu-item">
+            @if (menuList.Count(p => p.parent_menu_gid == mp.menu_gid) > 0)
+            {
+                <a href="@mp.menu_url">@mp.menu_name<i class="menu-link menu-toggle"></i></a>
+
+    <ul class="menu-sub" style="display:none;">
+        @RenderMenuItem(menuList, mp)
+    </ul>
+            }
+            else
+            {
+                <a href="@mp.menu_url">@mp.menu_name</a>
+            }
+        </li>
+    }
+</ul>
+@helper RenderMenuItem(List<DMS.Model.UserGroups_Model.menu> menuList, DMS.Model.UserGroups_Model.menu mi)
+{
+    foreach (var cp in menuList.Where(p => p.parent_menu_gid == mi.menu_gid))
+    {
+        <li class="dropdown">
+            @if (menuList.Count(p => p.parent_menu_gid == cp.menu_gid) > 0)
+            {
+                <a href="@cp.menu_url" class="menu-link menu-toggle" >@cp.menu_name<i class="menu-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@cp.menu_name"></i></a>
+    <ul data-i18n="menu-sub" style="display:none;">
+        @RenderMenuItem(menuList, cp)
+    </ul>
+            }
+            else
+            {
+                <a style="max-height:32px;position:relative;" href="@cp.menu_url">@cp.menu_name</a>
+            }
+
+        </li>
+    }
+
+}
+

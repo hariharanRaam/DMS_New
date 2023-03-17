@@ -1,0 +1,972 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+
+    <style>
+        .k-content {
+            font-weight: normal;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini fixed" id="viewdoc">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Inter-Filing</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form method="post" class="form-horizontal" enctype="multipart/form-data" id="form" style="height:100%">
+                            <div>
+                                <table>
+                                    <tr style="height:10px;"></tr>
+                                    <tr>
+                                        <td><label class="col-md-6 control-label" style="width:100px;font-weight:normal;">Doc Name</label></td>
+                                        <td><select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>
+
+                                        <td><label class="col-md-6 control-label" style="width:100px;font-weight:normal;">Doc Group</label></td>
+                                        <td><select id="Catgery" name="Catgery" onchange="fetchDocGroup()" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>
+
+                                            @Html.Partial("BindOrglevels", new DMS.Model.DocGroupMaster_Model(), new ViewDataDictionary { { "Layout", "Horizontal" } })
+
+                                        @*<td><label class="col-md-6 control-label" style="width:auto;font-weight:normal;">Unit</label></td>
+                                        <td><select id="Unit" name="Unit" onchange="fetchUnit()" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>
+
+                                        <td><label class="col-md-6 control-label" style="width:auto;font-weight:normal;">Department</label></td>
+                                        <td><select id="DeptID" name="DeptID" onchange="fetchDept()" class=" form-control" style="width:150px;height:30px;font-weight:normal;"></select> </td>*@
+                                    </tr>
+                                    <tr style="height:05px;"></tr>
+                                </table>
+
+                                <div class=" panel panel-primary" style="margin-bottom:5px;">
+                                    <div class="panel-heading">Attributes</div>
+                                    <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%; ">
+                                        <div class="col-md-9" style="margin:auto;overflow:auto;width:104%;">
+                                            <div id="viewPlaceHolder" class="col-md-9" style="margin:auto;height:60px;top:05px;width:100%;"> </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table>
+                                    <tr style="height:2px"></tr>
+                                    <tr>
+                                        <td style="width:2%"></td>
+                                        <td><label style="font-weight:normal">Browse File</label></td>
+                                        <td style="width:2%"></td>
+                                        <td><input type="file" class="form-control input-lg browse btn btn-primary input-lg" name="File" id="File" style="width:400px"></td>
+                                        <td style="width:6%"></td>
+                                        <td><button type="button" name="btnattach" onclick="return attach()" id="btnattach" class="btn btn-orange fa fa-cloud-upload" style="width:120px"> Attach</button></td>
+                                        <td style="width:1%"></td>
+                                        <td><button type="button" name="btnsubmit" onclick="return CheckUserInputs()" id="btnsearch" class="btn btn-orange fa fa-search" style="width:120px"> Search</button></td>
+                                        <td style="width:1%"></td>
+                                        <td><button type="button" name="btncancel" onclick="return Cancel()" id="bntClear" class="btn btn-orange fa fa-refresh" style="width:120px"> Clear</button></td>
+                                    </tr>
+                                </table>
+                                <div style="color:green">
+                                    <table align="center">
+                                        <tr>
+                                            <td>
+                                                @if (@ViewBag.message == "File uploaded successfully")
+                                                {
+                                                    <span class="Success_show">@ViewBag.message</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div style="height:5px"></div>
+
+                                <div class=" panel panel-primary" style="height:335px;margin-bottom:5px;">
+                                    <div class="panel-heading">Grid View</div>
+                                    <div class="panel-body" style="width:100%;max-height:100%;">
+                                        <div class="col-md-9" style="margin:auto;overflow:auto;width:100%;">
+                                            <div id="Maingrid" class="col-md-9" style="margin:auto;height:250px;top:05px;width:100%;"> </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+</body>
+</html>
+
+<!-- Fill All  Dropdown in Page Load-->
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        @*var custid = 0;
+        var type = "department";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "InterFiling")',
+            type: "GET",
+            datatype: "json",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dept_Name, data[i].Dept_Id);
+                    var opt2 = new Option(data[0].Dept_Name, data[0].Dept_Id);
+                    $('#DeptID').append(opt);
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "unit";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "InterFiling")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].unit_name, data[i].unit_id);
+                    var opt2 = new Option(data[0].unit_name, data[0].unit_id);
+                    $('#Unit').append(opt);
+
+                }
+            }
+        });*@
+
+
+        var custid = 0;
+        var type = "CateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "InterFiling")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dgroup_Name, data[i].Dgroup_Id);
+                    var opt2 = new Option(data[0].Dgroup_Name, data[0].Dgroup_Id);
+                    $('#Catgery').append(opt);
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "SubCateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "InterFiling")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dname_Name, data[i].Dname_Id);
+                    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                    $('#subCatgery').append(opt);
+
+                }
+            }
+        });
+
+    });
+
+</script>
+
+<!-- Based on Dropdown Change-->
+<script>
+    function onChangeunit(parent_code) {
+        debugger;
+        try {
+            var mastercode = this.value();
+            var master = ""
+            if (mastercode == "" || mastercode == null || mastercode == "undefined" || mastercode == 0) {
+                return false;
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("DocGroupNames", "DocGroupMaster")',
+                    type: "POST",
+                    datatype: "json",
+                    data: { 'parentcode': master, 'dependcode': mastercode },
+                    success: function (data) {
+                        // $.getJSON("DocGroupNames/DocGroupMaster?parentcode=" + master + "&dependcode=" + mastercode, function (data) {
+                        debugger;
+                        var dept = data;
+
+
+                        //$("#Dept_Id").data("kendoDropDownList").dataSource.data(data[1]);
+                        if (dept.length > 1) {
+                            var ee = data[1].parent_code;
+                            //$("#" + ee).data("kendoDropDownList").dataSource.data(data);
+                            $("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+                            //$("#" + ee).data("kendoDropDownList").select(1)
+                            $("#" + ee).data("kendoDropDownList").trigger("change");
+                            //$("#Dept_Id").data("kendoDropDownList").refresh();
+                        }
+                        else {
+                            var ee = data[0].parent_code;
+                            //  $("#" + ee).data("kendoDropDownList").select(0)
+                        }
+                    }
+                });
+            }
+        } catch (er) {
+            hideProgress();
+        }
+    }
+    function onChangeUnit() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetUnit"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#subCatgery").data("kendoDropDownList");
+                var docgroupdropdown = $("#Catgery").data("kendoDropDownList");
+                var deptdropdown = $("#DeptID").data("kendoDropDownList");
+
+                if ($("#subCatgery").val() == "0" || $("#subCatgery").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+
+                if ($("#Catgery").val() == "0" || $("#Catgery").val() == null) {
+                    docgroupdropdown.dataSource.data(data.lst_docgroup);
+                    //datasource for unit.
+                    if (data.lst_docgroup.length == 2) {
+                        docgroupdropdown.select(1)
+                    }
+                    else {
+                        docgroupdropdown.select(0)
+                    }
+                    docgroupdropdown.trigger("change");
+                }
+
+                deptdropdown.dataSource.data(data.lst_dept);
+                //datasource for department.
+                if (data.lst_dept.length == 2) {
+                    deptdropdown.select(1)
+                }
+                else {
+                    deptdropdown.select(0)
+                }
+                deptdropdown.trigger("change");
+            });
+
+            //if ($("#DeptID").val() != 0 && $("#UnitID").val() != 0 && $("#CateID").val() != 0 && $("#SubCateID").val() != 0) {
+            //    $("#AttribID").data("kendoDropDownList").dataSource.read();
+            //}
+
+        }
+    }
+
+    function fetchDept() {
+        debugger;
+        var DeptID = $("#DeptID").val();
+        if (DeptID == "" || DeptID == null || DeptID == "undefined" || DeptID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDept", "InterFiling")',
+
+                data: { 'DeptID': DeptID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_unit;
+                    var value2 = data.Get_docgroup;
+                    var value3 = data.Get_docname;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckUnitId = $("#Unit").val();
+                    //if (CheckUnitId == "0") {
+                    $('#Unit').empty();
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].unit_name, value1[i].unit_id);
+                        var opt2 = new Option(value1[0].unit_name, value1[0].unit_id);
+
+                        $('#Unit').append(opt);
+
+                    }
+                    if (length1 == 2) {
+                        $("#Unit").val($("#Unit option").eq(1).val());
+                    }
+                    //}
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value2.length; i++) {
+                        var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                        var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+                    }
+                    if (length2 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+                    //}
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    //if (CheckDocNameId == "0") {
+                    $('#subCatgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                        var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                        $('#subCatgery').append(opt);
+
+                    }
+                    if (length3 == 2) {
+                        $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                    }
+                    //}
+
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+                        debugger;
+                        $("#viewPlaceHolder").load("../ViewDocuments/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+
+                    }
+
+                }
+            });
+        }
+    }
+
+
+    function fetchUnit() {
+        debugger;
+        var UnitID = $("#Unit").val();
+        if (UnitID == "" || UnitID == null || UnitID == "undefined" || UnitID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetUnit", "InterFiling")',
+
+                data: { 'UnitID': UnitID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept1;
+                    var value2 = data.Get_docgroup1;
+                    var value3 = data.Get_docname1;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptID = $("#DeptID").val();
+                    //if (CheckDeptID == "0") {
+                    $('#DeptID').empty();
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                        var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                        $('#DeptID').append(opt);
+
+                    }
+                    if (length1 == 2) {
+                        $("#DeptID").val($("#DeptID option").eq(1).val());
+                    }
+                    //}
+
+                    var CheckDocGroupID = $("#Catgery").val();
+                    //if (CheckDocGroupID == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value2.length; i++) {
+                        var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                        var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+
+                    }
+                    if (length2 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+                    //}
+
+                    var CheckDocNameID = $("#subCatgery").val();
+                    //if (CheckDocNameID == "0") {
+                    $('#subCatgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                        var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                        $('#subCatgery').append(opt);
+
+                    }
+                    if (length3 == 2) {
+                        $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                    }
+                    //}
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+                        debugger;
+                        $("#viewPlaceHolder").load("../ViewDocuments/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+
+                    }
+
+                }
+            });
+        }
+    }
+
+
+
+    function fetchDocGroup() {
+        debugger;
+        var DocGroupID = $("#Catgery").val();
+        if (DocGroupID == "" || DocGroupID == null || DocGroupID == "undefined" || DocGroupID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocGroup", "InterFiling")',
+
+                data: { 'DocGroupID': DocGroupID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept2;
+                    var value2 = data.Get_unit2;
+                    var value3 = data.Get_docname2;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    //var CheckDeptId = $("#DeptID").val();
+                    ////if (CheckDeptId == "0") {
+                    //$('#DeptID').empty();
+                    //for (var i = 0; i < value1.length; i++) {
+                    //    var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                    //    var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                    //    $('#DeptID').append(opt);
+
+                    //}
+                    //if (length1 == 2) {
+                    //    $("#DeptID").val($("#DeptID option").eq(1).val());
+                    //}
+                    ////}
+
+                    //var CheckUnitId = $("#Unit").val();
+                    ////if (CheckUnitId == "0") {
+                    //$('#Unit').empty();
+                    //for (var i = 0; i < value2.length; i++) {
+                    //    var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                    //    var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                    //    $('#Unit').append(opt);
+
+                    //}
+                    //if (length2 == 2) {
+                    //    $("#Unit").val($("#Unit option").eq(1).val());
+                    //}
+                    //}
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    //if (CheckDocNameId == "0") {
+                    $('#subCatgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                        var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                        $('#subCatgery').append(opt);
+
+                    }
+                    if (length3 == 2) {
+                        $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                    }
+                    //}
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+                        debugger;
+                        $("#viewPlaceHolder").load("../ViewDocuments/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+
+                    }
+                }
+            });
+        }
+    }
+
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "InterFiling")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                    var value1 = data.Get_dept3;
+                    var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docgroup3;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    //var CheckDeptId = $("#DeptID").val();
+
+                    ////if (CheckDeptId == "0") {
+                    //$('#DeptID').empty();
+                    //for (var i = 0; i < value1.length; i++) {
+                    //    var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                    //    var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                    //    $('#DeptID').append(opt);
+
+                    //}
+                    //if (length1 == 2) {
+                    //    $("#DeptID").val($("#DeptID option").eq(1).val());
+                    //}
+                    ////}
+
+                    //var CheckUnitId = $("#Unit").val();
+                    ////if (CheckUnitId == "0") {
+                    //$('#Unit').empty();
+                    //for (var i = 0; i < value2.length; i++) {
+                    //    var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                    //    var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                    //    $('#Unit').append(opt);
+
+                    //}
+                    //if (length2 == 2) {
+                    //    $("#Unit").val($("#Unit option").eq(1).val());
+                    //}
+                    //}
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                        var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+
+                    }
+                    if (length3 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+
+                    if (length2 == 2) {
+                        //  $("#QCD_mst_tHR").val($("#QCD_mst_tHR option").eq(1).val());
+                        var MaxorglevelPos = $("#MaxorglevelPos").val();
+                        var orglevel3 = $("#orglevel" + MaxorglevelPos).val();
+                        $("#" + orglevel3).data("kendoDropDownList").value(value2[1].master_code);
+                        var dropDownList = $("#" + orglevel3).getKendoDropDownList();
+                        dropDownList.trigger("change");
+                    }
+                    //}
+
+                //    var DeptID1 = $("#DeptID").val();
+                //    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (Dgroup1 !== "0" && Dname1 !== "0") {
+
+                        debugger;
+                        $("#viewPlaceHolder").load("../ViewDocuments/GetDynamicFields",
+                               {'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+
+                    }
+
+                }
+            });
+        }
+    }
+
+</script>
+
+<script>
+    function Cancel() {
+        debugger;
+        window.location.reload();
+    }
+
+    function attach() {
+        var filesize = $('#File').val();
+        if (filesize == "" || filesize == null) {
+            $.alert({
+                title: 'DMS',
+                content: 'Choose File.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        var Filsize = $('#File')[0].files[0].size;
+
+        if (Filsize > 5242880) {
+            $.alert({
+                title: 'DMS',
+                content: 'File size should be below in 5 MB.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        var grid = $("#grid").data("kendoGrid");
+        var row = $("input:checked", grid.tbody).closest("tr");
+        var item = grid.dataItem(row);
+        if (item == null) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select preview button in grid.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        var attached = item.entries[0]
+        var fileData = new FormData();
+        var fileUpload = $("#File").get(0);
+        var files = fileUpload.files;
+        // Looping over all files and add it to FormData object
+        for (var i = 0; i < files.length; i++) {
+            fileData.append(files[i].name, files[i]);
+        }
+
+        fileData.append('attacheid', attached);
+
+        $.ajax({
+            url: '@Url.Action("InterFiling", "InterFiling")',
+            type: "POST",
+            contentType: false,
+            processData: false,
+
+            data: fileData,
+            success: function (response) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'File attached successfully.!',
+                    type: 'green',
+                });
+                return false;
+            },
+            error: function (error) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Error.!',
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+    function CheckUserInputs() {
+        debugger;
+     //   var DeptID1 = $("#DeptID").val();
+     //   var Unit1 = $("#Unit").val();
+        var Dgroup1 = $("#Catgery").val();
+        var Dname1 = $("#subCatgery").val();
+
+        //Framing where clause condition.
+        var count = $('#ctlcount').val();;
+        var concatval;
+        //creating array variable.
+        var Dyntextvalues = [];
+        for (var i = 0; i < count; i++) {
+
+            var Attributetypes = $('#Attribtype' + i).val();
+            var Attributename = $.trim($('#Attribname' + i).val());
+
+            if (Attributetypes == "Logical") {
+                var gettxtdesval = $('input[id=ctl' + i + ']:checked').val()
+                if (gettxtdesval == undefined || gettxtdesval == "") {
+                }
+                else {
+                    //concatval = "`" + Attributename + "`" + "=" + "'" + gettxtdesval + "'"
+                    concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(concatval);
+                }
+            }
+            else if (Attributetypes == "Lov Name") {
+                var gettxtdesval = $('#ctl' + i).val();
+                if (gettxtdesval == "" || gettxtdesval == "-Select-" || gettxtdesval == "0" || gettxtdesval == 0) {
+                }
+                else {
+                    //concatval = "`" + Attributename + "`" + "=" + "'" + gettxtdesval + "'"
+                    concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(concatval);
+                }
+            }
+            else {
+                var gettxtdesval = $('#ctl' + i).val();
+                if (gettxtdesval == "" || gettxtdesval == "-Select-") {
+                }
+                else {
+                    //concatval = "`" + Attributename + "`" + "=" + "'" + gettxtdesval + "'"
+                    concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(concatval);
+                }
+            }
+        }
+
+        var postData = ""
+        $.each(Dyntextvalues, function (index, item) {
+            debugger;
+            //if (index == 0) {
+            //    debugger;
+            //    postData = postData + " " + "and" + " " + Dyntextvalues[index];
+            //} else {
+            //    postData = postData + " " + "or" + " " + Dyntextvalues[index];
+            postData = postData + " " + "and" + " " + Dyntextvalues[index];
+            //}
+        });
+        postData = postData;
+        //End framing data
+
+
+
+        if (Dgroup1 !== "0" && Dname1 !== "0") {
+
+            //var CHANGE = 'change',
+            //      $grid = $('#grid');
+
+            //// Unbind existing refreshHandler in order to re-create with different column set
+            //if ($grid.length > 0 && $grid.data().kendoGrid) {
+            //    var thisKendoGrid = $grid.data().kendoGrid;
+
+            //    if (thisKendoGrid.dataSource && thisKendoGrid._refreshHandler) {
+            //        thisKendoGrid.dataSource.unbind(CHANGE, thisKendoGrid._refreshHandler);
+            //        $grid.removeData('kendoGrid');
+            //        $grid.empty();
+
+            //        $(".k-grid-header").hide();
+            //        $(".k-grid-pager").hide();
+            //        $("#example .k-grid-header").css('padding', '0px');
+            //        $("#example .k-grid-content").css('overflow-y', 'visible');
+            //    }
+            //}
+
+            $.ajax({
+
+                url: '@Url.Action("GetDocuments", "InterFiling")',
+                data: { 'Dgroup1': Dgroup1, 'Dname1': Dname1, 'form': postData },
+                success: function (result) {
+
+                    var chkval = JSON.parse(result.Data1);
+                    var arr = [];
+                    $.each(chkval, function (i, e) {
+                        $.each(e, function (key, val) {
+                            arr.push(val);
+                        });
+                    });
+                    if (arr.length == 0) {
+
+                        $.alert({
+                            title: 'DMS',
+                            content: 'There is no record found.!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                    //if (arr == "NoRecords") {
+                    //    $.alert({
+                    //        title: 'DMS',
+                    //        content: 'There is no record found.!',
+                    //        type: 'blue',
+                    //    });
+                    //    return false;
+                    //}
+
+                    var columns = [];
+                    var data = JSON.parse(result.Data1);
+                    var data2 = JSON.parse(result.Data2);
+                    var i = 0;
+                    var entryIndex = "entries[" + i + "]";
+
+                    for (var key in data[0]) {
+                        var val = data2[0][key];
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            type: val,
+                            //editable :false
+                        });
+
+                        i = i + 1;
+                        entryIndex = "entries[" + i + "]";
+                    }
+
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: "Action ",
+                        template: '<input type="radio" value="Yes" name="rbtnCount" /> Yes',
+                        filterable: false,
+                        sortable: true,
+                        width: 20,
+
+                    });
+
+                    var rows = [];
+                    var data1 = JSON.parse(result.Data1);
+
+                    $.each(data1, function (i, e) {
+                        var entryArray = [];
+                        $.each(e, function (key, val) {
+                            entryArray.push(val);
+                        });
+                        rows.push(kendo.observable({
+                            entries: entryArray
+                        }));
+                    });
+
+                    var viewModel = kendo.observable({
+                        gridRows: rows
+                    });
+
+                    var configuration = {
+                        editable: false,
+                        sortable: true,
+                        scrollable: true,
+                        filterable: true,
+                        pagable: true,
+                        resizable: true,
+                        pageable: {
+                            pageSize: 10,
+                            buttonCount: 4
+                        },
+                        columns: columns,
+                        rows: viewModel,
+                    };
+
+                    $("#example").remove();
+                    $('#Maingrid').append('<div id="example" style="position:relative" class="k-content"><table id="grid" data-bind="source: gridRows" style="position:relative;overflow:scroll;width:100%"></table></div>');
+                    var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+
+                    kendo.bind($("#grid"), viewModel);
+
+                    var grid = $("#grid").data("kendoGrid");
+                    grid.hideColumn(3);
+                    //grid.hideColumn(4);
+                    //grid.hideColumn(5);
+                    for (var i = 0; i < grid.columns.length; i++) {
+                        if (i != grid.columns.length) {
+                            grid.autoFitColumn(i); //autofit each column.
+
+                        }
+                    }
+                },
+                error: function () {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Some error has occurred.!',
+                        type: 'red',
+                    });
+                }
+            })
+
+        }
+        else {
+            $.alert({
+                title: 'DMS',
+                content: 'Fill all search criteria.!',
+                type: 'blue',
+            });
+            return false;
+        }
+    }
+
+</script>

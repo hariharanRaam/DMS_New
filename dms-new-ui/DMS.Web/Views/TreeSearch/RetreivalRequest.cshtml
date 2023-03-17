@@ -1,0 +1,797 @@
+﻿@model DMS.Model.ViewDocuments_Model
+
+<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+ 
+ .k-dropdown-wrap.k-state-default{
+            background-clip: padding-box;
+           
+    display: block;
+    height:90%;
+    width:initial;
+    padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+    -moz-padding-start: calc(0.875rem - 3px);
+    font-size: 0.7075rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #697a8d;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 17px 12px;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+        .k-item{
+             background-color: #fff;
+             background-position: right 0.875rem center;
+             
+             
+        }
+        .k-content{
+            width:100%;
+        }
+        /*.k-button{
+             background-color: transparent;
+              color: blue;
+              border: aliceblue;
+
+        }*/
+        .k-grid{
+             color: #697a8d;
+    background-color: #fff;
+        }
+        .k-grid-header th.k-header{
+            text-overflow: ellipsis;
+    text-align: center;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+        }
+        .k-pager-info {
+    float: right;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 0 1.333em;
+}
+        .k-pager-sizes {
+    display: inline-block;
+    padding-top: 1px;
+    text-transform: none;
+    font-size: 0.90rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+         .k-footer{
+             background-color: #fff;
+        }
+ .k-widget{
+      background-color: #fff;
+ }
+        .k-header {
+        background-color: #fff;
+        }
+        .k-grid td {
+    white-space: nowrap;
+    background-color: #eceef1;
+    border-color: inherit;
+    /* text-align: center; */
+}
+        
+    .k-state-selected {
+        color: #000;
+        border-color: inherit;
+    }
+
+    /*.panel {
+        margin-bottom: 5px;
+    }*/
+
+    /*.row {
+        top: 90px !important;
+    }*/
+</style>
+<input type="hidden" id="RequestFrom" value="@ViewBag.Employeeid" />
+<input type="hidden" id="Requestno" value="0" />
+<input type="hidden" id="hdnattribute" />
+<title>Retreival Request</title>
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="card-body" style="margin-top:-9px;">
+            <h5 class="mobile-card-header">Trainer Master</h5>
+            <form id="formAccountSettings" method="POST" onsubmit="return false">
+                <div class="row" id="header">
+                    <div class="mb-3 col-md-5">
+                        <div class="row">
+                            <div class="mb-3 col-md-4">
+                                <input class="form-control"
+                                       type="text"
+                                       id="courseIds"
+                                       name="courseId"
+                                       value="0"
+                                       readonly
+                                       style="text-align:center" />
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <input class="form-control"
+                                       type="text"
+                                       id="active_"
+                                       name="active_"
+                                       value="Active"
+                                       style="text-align:center;font-size: 11px !important;"
+                                       readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                    </div>
+                    <div class="mb-3 col-md-3">
+
+                    </div>
+                </div>
+                <div class="row" id="header">
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="dname">Document Type</label>
+                        <input type="text" class="form-control" placeholder="" value="@ViewBag.Dname" id="dname" readonly>
+                        <input type="hidden" class="form-control" placeholder="" value="@ViewBag.Dname_ID" readonly>
+                    </div>
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="dgroup">Document Group</label>
+                        <input type="text" class="form-control" placeholder="" value="@ViewBag.Dgroup_Name" id="dgroup" readonly>
+                        <input type="hidden" class="form-control" placeholder="" value="@ViewBag.Dgroup_ID" readonly>
+                    </div>
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="RequestDate">Request Date&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                        @Html.EditorFor(m => m.RequestDate, new { htmlAttributes = new { @class = "form-control", @placeholder = "Request Date", disabled = "disabled", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="Request_From">Request By</label>
+                        @Html.TextBoxFor(m => m.Request_From, new { @Value = ViewBag.Employeename, @class = "form-control", @placeholder = "Request From", disabled = "disabled", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="row" style="margin-top:30px;">
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="NOofDoc">No.of Documents</label>
+                        @Html.TextBoxFor(m => m.NOofDoc, new { @class = "form-control", @placeholder = "Documnet No", disabled = "disabled", @readonly = "readonly" })
+                    </div>
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="requestType">Request Type</label>
+                        <select id="requestType" class="form-select">
+                            <option value="1">--Select--</option>
+                            <option value="2">Original Document</option>
+                            <option value="3">Xerox Copy</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="width: 23.5%;">
+                        <label class="form-label" for="RequiredDate">Required Date&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                        @*@Html.EditorFor(m => m.RequiredDate, new {@type = "date", @class = "form-control", @placeholder = "Required Date", autocomplete = "off" })*@
+                        <input type="date" class="form-control" id="RequiredDate" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11" style="width: 94.5%;">
+                        <label class="form-label" for="Request_Note">Request Note</label>
+                        @Html.TextAreaFor(m => m.Request_Note, new { @class = "form-control", @placeholder = "Description", @rows = "1" })
+                    </div>
+                    <div class="col-sm-1" style="width:5%">
+                        <img src="/Assets/images/brush.png" style="margin-top:25px;">
+                    </div>
+                </div>
+                 <div class="nav-align-top mb-3 mt-3">
+                     <ul class="nav nav-pills mb-2" role="tablist">
+                         <li class="nav-item">
+                             <button type="button"
+                                     class="nav-link active"
+                                     role="tab"
+                                     data-bs-toggle="tab"
+                                     data-bs-target="#navs-pills-top-trainers"
+                                     aria-controls="navs-pills-top-trainers"
+                                     aria-selected="true">
+                                 Primary Grid
+                             </button>
+                         </li>
+                         <li class="nav-item">
+                             <button type="button"
+                                     class="nav-link"
+                                     role="tab"
+                                     data-bs-toggle="tab"
+                                     data-bs-target="#navs-pills-top-english"
+                                     aria-controls="navs-pills-top-english"
+                                     aria-selected="true"
+                                    >
+                                 Request History
+                             </button>
+                         </li>
+                     </ul>
+                     <div class="tab-content">
+                         <div class="tab-pane fade show active" id="navs-pills-top-trainers" role="tabpanel">
+                             <!-- Bordered Table -->
+                             <div id="Maingrid" class="col-md-12" style="margin:auto;height:auto;top:10px;">
+
+                             </div>
+                         </div>
+                         <div class="tab-pane fade" id="navs-pills-top-english" role="tabpanel">
+                             <div id="Maingrid1" class="col-md-12" style="margin:auto;height:auto;top:10px;">
+
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                <div class="row">
+                    <div class="col-sm-12" style="margin-top: 10px">
+                        <center><button type="submit" name="btnsubmit" onclick="return SubmitRequestRetrival();" id="btn_Save" class="btn btn-sm btn-primary me-2">Submit</button></center>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+
+        $("#navhead").text("Request Retreival");
+
+        //var grid = $("#grid").data("kendoGrid");
+        //var checkedrows = $("#attributecheckbox:checked", grid.tbody).closest("tr");
+        //if (checkedrows.length == 0) {
+        //    $.alert({
+        //        title: 'DMS',
+        //        content: 'Select atleast one record in MainGrid to Send Request.!',
+        //        type: 'blue',
+
+        //    });
+        //    Close_RequestRetrival();
+        //    return false;
+
+        //}
+        //debugger;
+        //var Attribid = [];
+        //var Attribid1 = 0;
+        //for (var i = 0; i < checkedrows.length; i++) {
+        //    var item = grid.dataItem(checkedrows[i]);
+        //    var GridID = item.entries[4];
+        //    Attribid.push(GridID);
+        //}
+        // Attribid1 = Attribid.join(",");
+        var Attribid1 = "@ViewBag.Attrib_id";
+        var Attribid = Attribid1.split(',');
+        var count = Attribid.length;
+        $('#NOofDoc').val(count);
+        $('#hdnattribute').val(Attribid1);
+
+        $("#RequestDate").datepicker({
+            dateFormat: "dd-mm-yy",
+            changeMonth: true,
+            changeYear: true,
+
+        });
+        $('#RequestDate').datepicker('setDate', 'today')
+        //$("#RequiredDate").datepicker({
+        //    dateFormat: "dd-mm-yy",
+        //    changeMonth: true,
+        //    changeYear: true
+        //});
+
+        //Request Retrival Kendo grid
+        fetchgridhistory();
+        fetchgridnew();
+
+    });
+
+    function customDateTimePickerEditor(container, options) {
+        debugger;
+        $('<input required name="' + options.field + '"/>')
+          .appendTo(container)
+          .kendoDateTimePicker({});
+    }
+    function onDataBound() {
+        var grid = $("#usergrp_list").data("kendoGrid");
+       // grid.autoFitColumn(1);
+       // grid.autoFitColumn(2);
+    }
+
+    function SubmitRequestRetrival() {
+        debugger;
+        var RequestDate = $('#RequestDate').val();
+        var Requestno = $("#Requestno").val();
+        var NoofDoc = $('#NOofDoc').val();
+        var Employeeid = $('#RequestFrom').val();
+        var Requireddate = $('#RequiredDate').val();
+        var Description = $('#Request_Note').val();
+        var Attributeid = $('#hdnattribute').val();
+        var RequestType = $('#requestType').val();
+
+        if (Requireddate == "") {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter Required Date',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        if (RequestType == "" || RequestType == "Select" || RequestType == "undefined" || RequestType == "0") {
+            $.alert({
+                title: 'DMS',
+                content: 'Please Select Proper Request type..!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        if (RequestDate > Requireddate) {
+            $.alert({
+                title: 'DMS',
+                content: 'Required Date should be greater than Request Date',
+                type: 'blue',
+            });
+            return false;
+        }
+        var params = { Requestdate: RequestDate, Requestno: Requestno, noofdcoc: NoofDoc, Employeeid: Employeeid, Requireddate: Requireddate, Description: Description, atttributeid: Attributeid, RequestType: RequestType };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(params),
+            dataType: "json",
+            url: '@Url.Action("SaveRequestRetival", "TreeSearch")',
+            success: function (data) {
+                debugger;
+                $.alert({
+                    title: 'DMS',
+                    content: 'Request Raised Successfully',
+                    type: 'green',
+                });
+                document.getElementById('RequiredDate').value = "";
+                document.getElementById('Request_Note').value = "";
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function Close_RequestRetrival() {
+        debugger;
+        objDialogRR.dialog("close");
+    }
+    function fetchgridnew() {
+       // var dgroupID;
+       // var dnameID;
+        debugger;
+        $.ajax({
+            url: '@Url.Action("GetIndexedRetrivals", "PhysicalArchival")',
+            type: "post",
+            data: { 'Dgroup1': "@ViewBag.Dgroup_ID", 'Dname1': "@ViewBag.Dname_ID", 'attrib_ids': "@ViewBag.Attrib_id" },
+            success: function (result) {
+                debugger;
+
+                var chkval = JSON.parse(result.Data1);
+                var arr = [];
+                $.each(chkval, function (i, e) {
+                    $.each(e, function (key, val) {
+                        arr.push(val);
+                    });
+                });
+
+                if (arr == "NoRecords") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No Records found..!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+
+                var columns = [];
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                var i = 0;
+
+                var entryIndex = "entries[" + i + "]";
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+                    if (val == "DateTime" || val == "date" || val == "Date" || val == "datetime") {
+
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: '150px',
+                            type: val,
+                            //parseFormats: "{0:MM-dd-yyyy}",
+                            format: "{0: dd-MM-yyyy}",
+                            width: '100px',
+                        });
+                    }
+                    else {
+
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: '150px',
+                            type: val,
+                        });
+                    }
+
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+                }
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+
+                        entryArray.push(val);
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+
+                var configuration = {
+                    //editable: false,
+                    sortable: true,
+                    scrollable: true,
+                    filterable: true,
+                    pagable: true,
+                    resizable: true,
+                    //selectable: 'row',
+                    pageable: {
+                        pageSize: 5,
+                        buttonCount: 4
+                    },
+                    columns: columns,
+                    rows: viewModel,
+                    //height: '100%',
+                    dataBound: function (e) {
+                        debugger;
+                        @*$(".checkbox").bind("change", function (e) {
+                            debugger;
+                            var grid = $("#grid").data("kendoGrid");
+                            var row = $(e.target).closest("tr");
+                            var item = grid.dataItem(row[0]);
+                            var GridID = item.entries[0];
+
+                            $.ajax({
+                                url: '@Url.Action("checkvalidone", "PhysicalArchival")',
+                                data: { 'GridID': GridID },
+                                success: function (data) {
+                                    debugger;
+                                    if (data == "Exist") {
+                                        $.alert({
+                                            title: 'DMS',
+                                            content: 'Selected item is already created.!!',
+                                            type: 'blue',
+                                        });
+                                        $(e.target).closest("tr").find("input[type='checkbox']").prop('checked', false);
+                                        //$("#grid tbody input:checkbox").removeAttr("checked");
+                                        return false;
+                                    }
+                                },
+                            });
+                        });*@
+                    },
+                };
+                $("#example").remove();
+                $('#Maingrid').append('<div id="example" class="table-responsive text-nowrap" id="chk1"><table id="grid" data-bind="source: gridRows" class="table table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px;"></table></div>');
+                var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                kendo.bind($("#grid"), viewModel);
+                //autofit each column.
+                var grid = $("#grid").data("kendoGrid");
+                //for (var i = 0; i < grid.columns.length; i++) {
+                //    grid.autoFitColumn(i);
+                //}
+                grid.hideColumn(0);
+            },
+            error: function (result) {
+                $.alert({
+                    title: ' ',
+                    content: "Failed to fetch.!",
+                    type: 'red',
+                });
+            }
+        });
+    }
+    function fetchgridhistory(){
+        debugger;
+
+        $.ajax({
+            url: '@Url.Action("GetRequestRetival", "TreeSearch")',
+            type: "post",
+            data: {},
+            success: function (result) {
+                debugger;
+
+                var chkval = JSON.parse(result.Data1);
+                var arr = [];
+                $.each(chkval, function (i, e) {
+                    $.each(e, function (key, val) {
+                        arr.push(val);
+                    });
+                });
+
+                if (arr == "NoRecords") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No Records found..!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+
+                var columns = [];
+                var data = JSON.parse(result.Data1);
+                //var data2 = JSON.parse(result.Data2);
+                var i = 0;
+
+                var entryIndex = "entries[" + i + "]";
+
+                for (var key in data[0]) {
+                  //  var val = data2[0][key];
+                    if (key == "RequestDate" || key == "RequiredDate") {
+
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: '150px',
+                            type: "date",
+                           parseFormats: "{0:yyyy-MM-dd}",
+                            format: "{0: dd-MM-yyyy}",
+                            width: '100px',
+                        });
+                    } else if (key == "NOofDoc") {
+
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: '150px',
+                            type: "number",
+                            width: '100px',
+                        });
+                    }
+                    else {
+
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: '150px',
+                            type: 'string',
+                        });
+                    }
+
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+                }
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+
+                        entryArray.push(val);
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+
+                var configuration = {
+                 //   editable: false,
+                    sortable: true,
+                    scrollable: true,
+                    filterable: true,
+                    pagable: true,
+                    resizable: true,
+                    //selectable: 'row',
+                    pageable: {
+                        pageSize: 5,
+                        buttonCount: 4
+                    },
+                    columns: columns,
+                    rows: viewModel,
+                    //height: '100%',
+                    dataBound: function (e) {
+                        debugger;
+                        },
+                };
+                $("#example1").remove();
+                $('#Maingrid1').append('<div id="example1" class="table-responsive text-nowrap" id="chk2"><table id="grid1" data-bind="source: gridRows" class="table table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px;"></table></div>');
+                var timeEditGrid = $("#grid1").kendoGrid(configuration).data("kendoGrid");
+                kendo.bind($("#grid1"), viewModel);
+                //autofit each column.
+                var grid = $("#grid1").data("kendoGrid");
+                //for (var i = 0; i < grid.columns.length; i++) {
+                //    grid.autoFitColumn(i);
+                //}
+                //grid.hideColumn(0);
+            },
+            error: function (result) {
+                $.alert({
+                    title: ' ',
+                    content: "Failed to fetch.!",
+                    type: 'red',
+                });
+            }
+        });
+
+        /*
+        var uri = "../TreeSearch/GetRequestRetival";
+        $("#usergrp_list").kendoGrid({
+            //selectable: "true",
+            allowCopy: true,
+            dataBound: onDataBound,
+            dataSource: {
+                transport: {
+                    read: {
+                        type: "POST",
+                        dataType: "json",
+                        url: uri,
+                        contentType: "application/json; charset=utf-8"
+                    },
+                    parameterMap: function (options, operation) {
+                        debugger;
+                        if (operation == "read") {
+                            return kendo.stringify(options);
+                        }
+                        else {
+                            return kendo.stringify(options);
+                        }
+                    },
+                },
+                requestEnd: function (e) {
+                    var response = e.response;
+                    var type = e.type;
+                    if (e.type !== "read") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'response',
+                            type: 'blue',
+                        });
+                        $.alert({
+                            title: 'DMS',
+                            content: e.response.out_msg,
+                            type: 'blue',
+                        });
+
+                    }
+                },
+                //schema: {
+                //    model: {
+                //        id: "Request_gid",
+                //        fields: {
+                //            Request_gid: {
+                //               // editable: false,
+                //                nullable: true,
+                //                visible: false
+                //            },
+                //            Request_No: {
+                //               // editable: true,
+                //                nullable: true
+                //            },
+                //            RequestDate: {
+                //                //editable: true,
+                //                nullable: true
+                //            },
+
+                //            Noof_Doc: {
+                //                //editable: true,
+                //                nullable: true
+                //            },
+
+                //            Request_From: {
+                //               // editable: true,
+                //                nullable: true
+                //            },
+
+                //            RequiredDate: {
+                //               // editable: true,
+                //                nullable: true
+                //            },
+                //            Request_Note: {
+                //               // editable: true,
+                //                nullable: true
+                //            },
+
+
+                //        }
+                //    }
+                //},
+                pageSize: 5
+            },
+
+            editable: false,
+            sortable: true,
+            //scrollable: false,
+            filterable: true,
+            pagable: true,
+            resizable: true,
+
+            pageable: {
+                pageSize: 5,
+                buttonCount: 4
+            },
+           // height: '95%',
+
+            columns: [
+
+                {
+                    field: "Request_gid",
+                    title: "Request Id",
+                    hidden: true
+                },
+                {
+                    field: "Request_No",
+                    title: "Request No",
+                    width: "15%",
+                    type:"string",
+                },
+
+                  {
+                      field: "RequestDate",
+                      title: "Request Date",
+                      width: "20%",
+                      template: "#= kendo.toString(kendo.parseDate(RequestDate, 'yyyy-MM-dd'), 'dd-MM-yyyy') #"
+                      //parseFormats: "{0:MM-dd-yyyy}",
+                      //format: "{0: dd-MM-yyyy}",
+                  },
+
+                 {
+                     field: "NOofDoc",
+                     title: "No of Doc",
+                     width: "20%",
+                     type:"number"
+                 },
+                 {
+                     field: "Request_From",
+                     title: "Employee id",
+                     width: "15%",
+                     type: "string",
+                 },
+                  {
+                      field: "RequiredDate",
+                      title: "Date Required",
+                      width: "20%",
+                      type:"date",
+                      template: "#= kendo.toString(kendo.parseDate(RequiredDate, 'yyyy-MM-dd'), 'dd-MM-yyyy') #"
+                      //parseFormats: "{0:MM-dd-yyyy}",
+                      //format: "{0: dd-MM-yyyy}",
+                  },
+
+                    {
+                        field: "Request_Note",
+                        title: "Description",
+                        width: "30%",
+                        type: "string",
+                    },
+            ],
+        })
+        */
+    }
+</script>

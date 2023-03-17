@@ -1,0 +1,399 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@using Kendo.Mvc.Resources;
+@model  DMS.Model.EmployeeMaster_Model
+
+<!Doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+
+        .k-state-active {
+            display: none;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:600px">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Employee</h3>
+                        </div>
+                        @using (Html.BeginForm("EmployeeMaster", "EmployeeMaster", FormMethod.Post, new { @id = "form1" }))
+                        {
+                            <div>
+                                @(Html.Kendo().Grid<DMS.Model.EmployeeMaster_Model>().Name("Employees")
+                                .HtmlAttributes(new { style = "width:100%;line-height:2em;font-weight:normal" })
+                                .ToolBar(toolbar => toolbar.Create().Text("Add New Employee"))
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(m => m.EmployeeID).Width(20);
+                                    columns.Bound(m => m.EmployeeCode).Width(80);
+                                    columns.Bound(m => m.EmployeeName).Width(100);
+                                //    columns.Bound(m => m.Title).Width(80);
+                                //    columns.Bound(m => m.City).Width(80);
+                                //    columns.Bound(m => m.State).Width(100);
+                                    columns.Bound(m => m.MobileNo).Width(100);
+                                    columns.Bound(m => m.EmailID).Width(150);
+                                    columns.Bound(m => m.UserGroup).Width(100);
+                                    columns.Bound(m => m.Status).Width(100);
+                                    columns.Command(cmd => { cmd.Edit(); }).Title("Edit").Width(50);
+                                    columns.Template(p => { }).ClientTemplate("<button type='button' onclick='return myDeleteJs()'><i class='fa fa-trash-o' aria-hidden='true'></i>Delete</button>").Width(80).Title("Delete");
+                                })
+
+                            .Editable(editable =>
+                             { editable.Mode(GridEditMode.PopUp).TemplateName("EmployeeMasterDropdown"); })
+                             .Pageable(pageable => pageable
+                                        .Refresh(true)
+                                        .PageSizes(true)
+                                        .ButtonCount(5))
+                            .Filterable()
+                             .Sortable()
+                             .Resizable(resize => resize.Columns(true))
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .PageSize(10)
+                                 //.Events(events => events.Error("error_handler").RequestStart("onRequestStart"))
+                             .Events(events => events.Error("error_handler"))
+                             .Model(model => model.Id(p => p.EmployeeID))
+                             .Create(Create => Create.Action("SaveEmployee", "EmployeeMaster").Data("setparams"))
+                             .Read(read => read.Action("EmployeeGrid_Read", "EmployeeMaster"))
+                             .Update(update => update.Action("EmployeeGrid_Update", "EmployeeMaster").Data("setparams"))
+                             ))
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var orglevelcode1 = "";
+    var orglevelcode2 = "";
+    var orglevelcode3 = "";
+    var orglevelcode4 = "";
+    var maxorglvl = 0;
+    function loaddynamiccolumns() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    maxorglvl = data.length;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        // orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        // orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        //orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        //orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'red',
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        debugger;
+        loaddynamiccolumns();
+        $("#Employees").data("kendoGrid").dataSource.bind("requestEnd", onRequestEnd);
+        var grid = $("#Employees").data("kendoGrid");
+        //function for changing kendo popup title.
+        grid.bind("edit", function (event) {
+            debugger;
+            event.container.parent().find('.k-window-title').text(event.model.isNew() ? "New" : "Edit");
+            var empid = $("#empid").val();
+          //  alert(empid);
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("GetEmpOrglvls", "EmployeeMaster")',
+                data: "{empid:" + empid + "}",
+                success: function (data) {
+                    debugger;
+                    try {
+                        var cocatval = data.OrgLevelMax;
+                  //      alert(cocatval);
+                        try {
+                            var orgs = cocatval.split(",");
+                            if (orgs.length == 4) {
+                                $("#" + orglevelcode4).data("kendoDropDownList").value(orgs[3]);
+                                $("#" + orglevelcode4).data("kendoDropDownList").trigger("change");
+                            } else if (orgs.length == 3) {
+                                $("#" + orglevelcode3).data("kendoDropDownList").value(orgs[2]);
+                                $("#" + orglevelcode3).data("kendoDropDownList").trigger("change");
+                            } else if (orgs.length == 2) {
+                                $("#" + orglevelcode2).data("kendoDropDownList").value(orgs[1]);
+                                $("#" + orglevelcode2).data("kendoDropDownList").trigger("change");
+                            } else if (orgs.length == 1) {
+                                $("#" + orglevelcode1).data("kendoDropDownList").value(orgs[0]);
+                                $("#" + orglevelcode1).data("kendoDropDownList").trigger("change");
+                            }
+                        } catch (e) {
+                          //  alert(e);
+                        }
+                    } catch (e) {
+                      //  alert(e);
+                    }
+                },
+                error: function (data) {
+                    debugger
+                    $.alert({
+                        title: 'DMS',
+                        content: 'some error occured.!',
+                        type: 'red',
+                    });
+                }
+            });
+
+         //   $('#Empstatus').change(function () {
+         //       alert('Changed!');
+                var tempval = $('#Empstatus').val();
+                if (tempval == "" || tempval == null || tempval == "undefined") {
+                    $('#Empstatus').val("Active");
+                }
+         //   });
+        });
+
+        
+
+    })
+
+    function onRequestEnd(e) {
+        debugger;
+        //Check request type
+        if (e.type == "create") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Employee has been created successfully!',
+                    type: 'green',
+                });
+                setTimeout(function () {
+                    debugger;
+                    window.location.reload(1);
+                }, 2000);
+
+            }
+        }
+        if (e.type == "update") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Employee has been Edited successfully!',
+                    type: 'green',
+                })
+                setTimeout(function () {
+                    debugger;
+                    window.location.reload(1);
+                }, 2000);
+            }
+        }
+    }
+
+    function onChangeunit() {
+        debugger;
+        var masteritemid = this.value();
+        //var master = "Unit"
+        var master = ""
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+
+            var url = '@Url.Action("DocGroupNames", "DocGroupMaster")?parentcode=' + master + '&dependcode=' + masteritemid;
+            $.getJSON(url, function (data) {
+                debugger;
+                var dept = data;
+                if (dept.length > 1) {
+                    var ee = data[1].parent_code;
+                    $("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+                    $("#" + ee).data("kendoDropDownList").trigger("change");
+                }
+                else {
+                    //var ee = data[0].parent_code;
+                    //$("#" + ee).data("kendoDropDownList").select(0);
+                }
+
+            });
+        }
+    }
+
+    function myDeleteJs() {
+        debugger;
+        var grid = $("#Employees").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var EmployeeID = (model.EmployeeID);
+
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+            theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure do you want to delete this record!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("DeletingEmployee", "EmployeeMaster")',
+                        data: "{ EmployeeID:'" + EmployeeID + "'}",
+                        success: function (data) {
+                            debugger;
+                            if (data == 'Success') {
+                                $.alert({
+                                    icon: 'fa fa-success',
+                                    title: 'DMS',
+                                    theme: 'dark',
+                                    content: 'Record deleted.!',
+                                    type: 'green',
+                                    animationSpeed: 700,
+                                });
+                            }
+                            setTimeout(function () {
+                                window.location.reload(1);
+                            }, 2500);
+                        },
+                    });
+                },
+                cancel: function () {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        theme: 'dark',
+                        content: 'Delete Canceled.!',
+                        type: 'blue',
+                        animationSpeed: 700,
+                    });
+                },
+            }
+        });
+    }
+
+    function setparams() {
+
+        /*
+    var MasterTypeId = $("#MasterTypeId").val();
+
+        //alert(MasterTypeId);
+        if (MasterTypeId == null || MasterTypeId.length==0)
+        {
+            MasterTypeId = "QCD_mst_tdepartment";
+        }
+        else
+        {
+            MasterTypeId = $("#MasterTypeId").val();
+        }
+        alert(MasterTypeId);
+        //Session["MasterType"]=MasterTypeId;
+        */
+        debugger
+        var orglevelval1 = "";
+        var orglevelval2 = "";
+        var orglevelval3 = "";
+        var orglevelval4 = "";
+        var concatval = "";
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            url: '@Url.Action("getlabellist", "DocGroupMaster")',
+            data: "{}",
+            success: function (data) {
+                debugger;
+                // var orglevelcode1 = data[0].orghierarchy_code;
+                if (data.length >= 1) {
+                    var orglevelcode1 = data[0].orghierarchy_code;
+                    orglevelval1 = $("#" + orglevelcode1).val();
+                }
+                if (data.length >= 2) {
+                    var orglevelcode2 = data[1].orghierarchy_code;
+                    orglevelval2 = $("#" + orglevelcode2).val();
+                }
+                if (data.length >= 3) {
+                    var orglevelcode3 = data[2].orghierarchy_code;
+                    orglevelval3 = $("#" + orglevelcode3).val();
+                }
+                if (data.length == 4) {
+                    var orglevelcode4 = data[3].orghierarchy_code;
+                    orglevelval4 = $("#" + orglevelcode4).val();
+                }
+
+                if (maxorglvl == 4) {
+                    concatval = orglevelval1 + "," + orglevelval2 + "," + orglevelval3 + "," + orglevelval4;
+                }
+                else if (maxorglvl == 3) {
+                    concatval = orglevelval1 + "," + orglevelval2 + "," + orglevelval3;
+                }
+                else if (maxorglvl == 2) {
+                    concatval = orglevelval1 + "," + orglevelval2;
+                }
+                else if (maxorglvl == 1) {
+                    concatval = orglevelval1;
+                }
+                // alert(orglevelcode1);
+                //setTimeout(function () {
+                //    window.location.reload(1);
+                //}, 2500);
+            },
+        });
+
+        return { orglvlmax: concatval };
+    }
+</script>  

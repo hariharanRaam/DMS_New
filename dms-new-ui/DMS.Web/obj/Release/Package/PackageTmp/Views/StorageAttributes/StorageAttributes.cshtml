@@ -1,0 +1,894 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        div.ex1 {
+            background-color: white;
+            height: 170px;
+            width: 1000px;
+            overflow-y: auto;
+            column-span: all;
+        }
+
+        .Name1 {
+            right: 350px;
+            width: 800px;
+            display: inline-block;
+            text-align: right;
+            position: relative;
+            color: #FF0000;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Storage Hierarchy</h3>
+                        </div>
+                        <form class="form-horizontal" id="form" method="post" enctype="multipart/form-data" style="height:450px">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label">Doc Name</label>
+                                            <div class="col-md-6">
+                                                <select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-control"></select>
+                                                <span class="errormessage" id="erridmsg"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label">Doc Group</label>
+                                            <div class="col-md-6">
+                                                <select id="Catgery" name="Catgery" onchange="fetchDocGroup()" class="form-control"></select>
+                                                <span class="errormessage" id="erridmsg"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label">Unit</label>
+                                            <div class="col-md-6">
+                                                <select id="Unit" name="Unit" onchange="fetchUnit()" class="form-control"></select>
+                                                <span class="errormessage" id="erridmsg"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label">Department</label>
+                                            <div class="col-md-6">
+                                                <select id="DeptID" name="DeptID" onchange="fetchDept()" class="form-control"></select>
+                                                <span class="errormessage" id="erridmsg"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+
+                                        <div style="left:200px;position:relative">
+
+                                            <table width="75%">
+                                                <tr>
+                                                    <td width="15%">
+                                                        <label>Storage Type </label>
+                                                    </td>
+                                                    <td style="width:15%; left:5px;position:relative">
+                                                        <label>Data Type</label>
+                                                    </td>
+
+                                                    <td style="width:15%;left:15px;position:relative">
+                                                        <label>Length</label>
+                                                    </td>
+
+                                                    <td style="width:15%;left:15px;position:relative">
+                                                        <label class="Lbl">Mandatory</label>
+                                                    </td>
+                                                    <td class="col-sm-1" width="15%" style="">
+                                                        <button style="right:50px;position:relative" type="button" class="btn btn bg-green " id="addrow" data-dismiss="modal">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                    </td>
+
+                                                </tr>
+                                            </table>
+
+                                        </div>
+
+                                        <div class="ex1">
+                                            <table id="myTable" class=" table order-list"></table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="box-footer">
+                                    <table align="center">
+                                        <tr>
+                                            <td width="230px"></td>
+                                            <td>
+                                                <button type="submit" class="btn btn-danger pull-right">Cancel</button>
+                                            </td>
+                                            <td>
+                                                <input type="button" name="btnsubmit" value="submit" id="btnsubmit" class="btn btn-orange pull-right" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="color:green">
+                                        <table align="center">
+                                            <tr>
+                                                <td>
+                                                    @if (@ViewBag.Message == "File uploaded successfully")
+                                                    {
+                                                        <span class="Success_show">@ViewBag.Message</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
+
+<script>
+
+    var counter = 0;
+    $(document).ready(function () {
+
+        $("#addrow").on("click", function () {
+            debugger;
+            var dpnm = $("#DeptID").val();
+            var uname = $("#Unit").val();
+            var docgroup = $("#Catgery").val();
+            var docname = $("#subCatgery").val();
+
+            if (dpnm == "0" || uname == "0" || docgroup == "0" || docname == "0") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Dropdowns.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+
+            var retval = null;
+            $.ajax({
+                url: '@Url.Action("CheckStorageattribute", "StorageAttributes")',
+                @*url: '@Url.Action("checkconfigattrib", "ConfigureAttributes")',*@
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: { 'DeptID': dpnm, 'UnitID': uname, 'DgroupID': docgroup, 'DNameID': docname },
+                success: function (data) {
+
+                    retval = data;
+                }
+            });
+
+            if (retval == "0") {
+                $("#btnsubmit").prop('disabled', false);
+                var newRow = $("<tr  width='100%'>");
+                var cols = "";
+                var radname = "mandatory" + counter;
+
+                cols += '<td style="left:180px; position:relative;width:15%"><input style="width:100%;" type="text"  name="name' + counter + '" id="name' + counter + '"/></td>';
+                cols += '<td style="left:180px; position:relative;width:15%"><select style="width:100%;height:25px" onchange="test(' + counter + ')"  id="drpvalue' + counter + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+                cols += '<td style="left:180px; position:relative;width:15%"><select  id="tdlov' + counter + '" style="form-control;display:none;onkeypress = "return NumersOnly(event)""><option value="0">Select Master</option></select><input style="width:100%;"  type="text" onchange="test1()" style="width:60%;" onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + counter + '" id="Length' + counter + '"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                cols += '<td style="left:180px; position:relative;width:15%"><input type="radio"  name="mandatory' + counter + '" id="mandatory' + counter + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mandatory' + counter + '" id="mandatory' + counter + '" value="N"/>&nbsp;&nbsp;No</td>'
+                cols += '<td style="left:128px; position:relative;width:15%"><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td>';
+
+                newRow.append(cols);
+                $("table.order-list").append(newRow);
+                counter++;
+                $("#counter").val(counter);
+            }
+            else {
+                $.alert({
+                    title: 'DMS',
+                    content: 'This combination of attributes is already available.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+
+        $("table.order-list").on("click", ".ibtnDel", function (event) {
+            $(this).closest("tr").remove();
+            counter -= 1
+            $("#counter").val(counter);
+        });
+
+        $("#btnsubmit").on("click", function () {
+            debugger;
+            if (counter == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please add the attribute row.!',
+                    type: 'blue',
+                });
+                $("#btnsubmit").prop('disabled', true);
+                return false;
+            }
+
+            var dpnm = $("#DeptID").val();
+            var uname = $("#Unit").val();
+            var docgroup = $("#Catgery").val();
+            var docname = $("#subCatgery").val();
+            if (dpnm == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Department.!',
+                    type: 'blue',
+                });
+                $("#erridmsg").show();
+                return false;
+            }
+            if (uname == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Unit.!',
+                    type: 'blue',
+                });
+                $("#erridmsg").show();
+                return false;
+            } if (docgroup == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Doc Group.!',
+                    type: 'blue',
+                });
+                $("#erridmsg").show();
+                return false;
+            } if (docname == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Doc Name.!',
+                    type: 'blue',
+                });
+                $("#erridmsg").show();
+                return false;
+            }
+
+            //Loop through the Table rows and build a JSON array.
+            var DeptID = $("#DeptID").val();
+            var UnitID = $("#Unit").val();
+            var DgroupID = $("#Catgery").val();
+            var DNameID = $("#subCatgery").val();
+            var attributes1 = new Array();
+            var attributes2 = new Array();
+            var attributes3 = new Array();
+            var attributes4 = new Array();
+            //var attributes5 = new Array();
+            //alert(counter);
+            for (i = 0; i < counter; i++) {
+
+                if ($("#name" + i).val() == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - name.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+                if ($("#drpvalue" + i).val() == "0") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+                if ($("#drpvalue" + i).val() == "Alpha Numeric") {
+                    if ($("#Length" + i).val() == "0") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'enter the length greater then zero.!',
+                            type: 'blue',
+                        });
+                        document.getElementById(ctrl.id).value = "";
+                        return;
+                    }
+                }
+                var Check = $("#drpvalue" + i).val();
+                if (Check == "Alpha Numeric") {
+                    if ($("#Length" + i).val() == "") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please fill all the values in the attribute row/Delete the empty row - length.!',
+                            type: 'blue',
+                        });
+                        return;
+                    }
+                }
+
+                if ($('input[id=mandatory' + i + ']:checked').val() == undefined) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - mandatory.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+
+            }
+            for (i = 0; i < counter; i++) {
+                var attribute = {};
+                attributes1[i] = $("#name" + i).val();
+                attributes2[i] = $("#drpvalue" + i).val();
+                attributes3[i] = $("#Length" + i).val();
+                attributes4[i] = $('input[id=mandatory' + i + ']:checked').val();
+
+            }
+            $.ajax({
+
+                contentType: "application/json;charset=utf-8",
+                url: "../StorageAttributes/Save",
+                type: "POST",
+                dataType: "json",
+                data: '{"DeptID":"' + DeptID + '","UnitID":"' + UnitID + '","DgroupID":"' + DgroupID + '","DNameID":"' + DNameID + '","attributes1":"' + attributes1 + '","attributes2":"' + attributes2 + '","attributes3":"' + attributes3 + '","attributes4":"' + attributes4 + '"}',
+                success: function (data) {
+                    debugger;
+                    if (data.success == 1) {
+                        debugger;// if true (1)
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Attributes are saved successfully.!',
+                            type: 'green',
+                        });
+                        setTimeout(function () {// wait for 5 secs(2)
+                            location.reload(); // then reload the page.(3)
+                        }, 2500);
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        var custid = 0;
+        var type = "department";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            datatype: "json",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+
+                    var opt = new Option(data[i].Dept_Name, data[i].Dept_Id);
+                    var opt2 = new Option(data[0].Dept_Name, data[0].Dept_Id);
+                    $('#DeptID').append(opt);
+                    $("#DeptID").find('option').each(function (i, opt) {
+                        $(opt2).attr('selected', 'selected');
+
+                    });
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "unit";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].unit_name, data[i].unit_id);
+                    var opt2 = new Option(data[0].unit_name, data[0].unit_id);
+                    $('#Unit').append(opt);
+
+                    $("#Unit").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });
+
+
+        var custid = 0;
+        var type = "CateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dgroup_Name, data[i].Dgroup_Id);
+                    var opt2 = new Option(data[0].Dgroup_Name, data[0].Dgroup_Id);
+                    $('#Catgery').append(opt);
+
+                    $("#Catgery").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "SubCateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dname_Name, data[i].Dname_Id);
+                    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                    $('#subCatgery').append(opt);
+
+                    $("#subCatgery").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });
+
+    });
+
+</script>
+
+<script>
+    function fetchDept() {
+        debugger;
+        var DeptID = $("#DeptID").val();
+        if (DeptID == "" || DeptID == null || DeptID == "undefined" || DeptID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDept", "ConfigureAttributes")',
+
+                data: { 'DeptID': DeptID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_unit;
+                    var value2 = data.Get_docgroup;
+                    var value3 = data.Get_docname;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckUnitId = $("#Unit").val();
+                    if (CheckUnitId == "0") {
+                        $('#Unit').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].unit_name, value1[i].unit_id);
+                            var opt2 = new Option(value1[0].unit_name, value1[0].unit_id);
+
+                            $('#Unit').append(opt);
+                        }
+                        if (length1 == 2) {
+                            $("#Unit").val($("#Unit option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    if (CheckDocGroupId == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                            var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+                        }
+                        if (length2 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    }
+
+
+                }
+            });
+        }
+    }
+
+
+    function fetchUnit() {
+        debugger;
+        var UnitID = $("#Unit").val();
+        if (UnitID == "" || UnitID == null || UnitID == "undefined" || UnitID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetUnit", "ConfigureAttributes")',
+
+                data: { 'UnitID': UnitID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept1;
+                    var value2 = data.Get_docgroup1;
+                    var value3 = data.Get_docname1;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptID = $("#DeptID").val();
+                    if (CheckDeptID == "0") {
+                        $('#DeptID').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                            var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                            $('#DeptID').append(opt);
+
+                        }
+                        if (length1 == 2) {
+                            $("#DeptID").val($("#DeptID option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocGroupID = $("#Catgery").val();
+                    if (CheckDocGroupID == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                            var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+
+                        }
+                        if (length2 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocNameID = $("#subCatgery").val();
+                    if (CheckDocNameID == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    }
+
+
+                }
+            });
+        }
+    }
+
+
+
+    function fetchDocGroup() {
+        debugger;
+        var DocGroupID = $("#Catgery").val();
+        if (DocGroupID == "" || DocGroupID == null || DocGroupID == "undefined" || DocGroupID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocGroup", "ConfigureAttributes")',
+
+                data: { 'DocGroupID': DocGroupID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept2;
+                    var value2 = data.Get_unit2;
+                    var value3 = data.Get_docname2;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptId = $("#DeptID").val();
+                    if (CheckDeptId == "0") {
+                        $('#DeptID').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                            var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                            $('#DeptID').append(opt);
+                        }
+                        if (length1 == 2) {
+                            $("#DeptID").val($("#DeptID option").eq(1).val());
+                        }
+                    }
+
+                    var CheckUnitId = $("#Unit").val();
+                    if (CheckUnitId == "0") {
+                        $('#Unit').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                            var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                            $('#Unit').append(opt);
+                        }
+                        if (length2 == 2) {
+                            $("#Unit").val($("#Unit option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    }
+
+                }
+            });
+        }
+    }
+
+
+
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "ConfigureAttributes")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                    var value1 = data.Get_dept3;
+                    var value2 = data.Get_unit3;
+                    var value3 = data.Get_docgroup3;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptId = $("#DeptID").val();
+                    //if (CheckDeptId == "0") {
+                        $('#DeptID').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                            var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+                            var opt3 = new Option(value1[1].Dept_Name, value1[1].Dept_Id);
+                            $('#DeptID').append(opt);
+                        }
+                        if (length1 == 2) {
+                            $("#DeptID").val($("#DeptID option").eq(1).val());
+                        }
+                    //}
+
+                    var CheckUnitId = $("#Unit").val();
+                    //if (CheckUnitId == "0") {
+                        $('#Unit').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                            var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                            $('#Unit').append(opt);
+                        }
+                        if (length2 == 2) {
+                            $("#Unit").val($("#Unit option").eq(1).val());
+                        }
+                    //}
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                            var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+                        }
+                        if (length3 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    //}
+
+                }
+            });
+        }
+    }
+
+</script>
+
+<script type="text/javascript">
+    var counter = 0;
+    var specialKeys = new Array();
+    specialKeys.push(8); //Backspace
+    specialKeys.push(9); //Tab
+    specialKeys.push(46); //Delete
+    specialKeys.push(36); //Home
+    specialKeys.push(35); //End
+    specialKeys.push(37); //Left
+    specialKeys.push(39); //Right
+    function IsAlphaNumeric(e) {
+        var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+        var ret = ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (specialKeys.indexOf(e.keyCode) != -1 && e.charCode != e.keyCode));
+        document.getElementById("error").style.display = ret ? "none" : "inline";
+        return ret;
+    }
+
+    function isNumber(evt, ctrl) {
+        $(ctrl).val($(ctrl).val().replace(/[^\d].+/, ""));
+        if ((evt.which < 48 || evt.which > 57)) {
+            evt.preventDefault();
+        }
+    }
+
+    function myFunction(ctrl) {
+        var x = document.getElementById(ctrl.id).value;
+        if (x <= 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter greater than zero.!',
+                type: 'green',
+            });
+            document.getElementById(ctrl.id).value = "";
+
+        }
+    }
+
+    function NumersOnly(evt) {
+        debugger;
+        if (evt.keyCode == '9' || evt.keyCode == '16') {
+            return;
+        }
+        evt.keyCode
+        var code;
+        if (evt.keyCode) code = evt.keyCode;
+        else if (evt.which) code = evt.which;
+        if (evt.which == 46)
+            return false;
+        if (code == 8 || code == 46)
+            return true;
+        if (code < 48 || code > 57)
+            return false;
+    }
+
+    function test(SeltVal) {
+        debugger;
+        var lovname;
+        //var counter = 0;
+        for (i = 0; i < counter; i++) {
+            var type = $("#drpvalue" + i).val();
+            if (type == "Alpha Numeric") {
+                $("#Length" + i).val("500");
+                //$("#Length" + i).prop("readonly").disabled = false;
+                $("#Length" + i).prop("readonly", false);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Numeric") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Datetime") {
+                //$("#Length" + i).prop("readonly").value = "0";
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Amount") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+
+            if (type == "Logical") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+        }
+        //var seltvaltxt = $("#drpvalue" + SeltVal + ' :selected').text();
+        //if (seltvaltxt == "Lov Name") {
+        //    $("#tdlov" + SeltVal).css('display', 'inline');
+        //    $("#Length" + SeltVal).css('display', 'none');
+        //}
+    }
+
+    function test1() {
+        debugger;
+        // var counter = 0;
+        for (i = 0; i < counter; i++) {
+            var txtlenval = $("#Length" + i).val()
+            if (txtlenval > 500) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'The given string length should not be greater than 500.!',
+                    type: 'blue',
+                });
+            }
+        }
+    }
+</script>

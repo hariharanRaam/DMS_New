@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "10ic2aw",
+  "CachePdfKey": "10ic2aw/10ic2aw-1nrwo2i.pdf",
+  "CacheXpzKey": "10ic2aw/10ic2aw-7ev856.xpz",
+  "CacheInfoKey": "10ic2aw/10ic2aw-7ev856.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\b s3(1).png",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "b s3(1).png",
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "10ic2aw",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

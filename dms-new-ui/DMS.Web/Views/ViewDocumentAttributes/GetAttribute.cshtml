@@ -1,0 +1,78 @@
+﻿@model DMS.Model.ViewDocumentAttributes_Model
+
+<style>
+    /*.ui-dialog-titlebar-close {
+        display:none;
+    }*/
+    .ui-dialog-titlebar-close:after {
+        content: 'X';
+    }
+    /*label {
+        font-weight: 400;
+    }*/
+</style>
+<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />
+@*class="modal-dialog fixed fade in"*@
+<table id="myTable1" style="width:100%;">
+    <tr>
+        <td style="width:25%"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Name</label></td>
+        <td style="width:20%"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Type</label></td>
+        <td style="width:20%"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Length/Master</label></td>
+        <td style="width:20%"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Mandatory</label></td>
+    </tr>
+</table>
+
+<div style="width:100%">
+    <table id="myTable1" class="table order-listedit"  style="width:100%"></table>
+    @*<div class="modal-content">
+        <div class="modal-body">*@
+    @*<div class="row text-center mt20">
+        <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange fa-align-center" />
+    </div>*@
+    @*</div>
+        </div>*@
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var docnameId = '@ViewBag.docnameId';
+        var docgrpId = '@ViewBag.docgrpId';
+        var unitId = '@ViewBag.unitId';
+        var depId = '@ViewBag.depId';
+        var docnameId1 = '@ViewBag.docnameId1';
+        $.ajax({
+            url: '@Url.Action("GetAttribute", "ViewDocumentAttributes")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'docnameId': docnameId, 'docgrpId': docgrpId, 'unitId': unitId, 'depId': depId, 'docnameId1': docnameId1 },
+            success: function (data) {
+                debugger;
+                var counter = data.count;
+                var data2 = JSON.parse(data.Data1);
+                for (i = 0; i < data2.length; i++) {
+                    var newRow = $("<tr  width='100%'>");
+                    var cols = "";
+                    cols += '<td style="width:25%"><label name="name' + i + '" id="name' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;" >' + data2[i].Atr_Name + '</label></td>';
+                    //cols += '<td><select  onchange="test(' + i + ')"  id="type' + i + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option><option value="Lov Name">Lov Name</option></select></td>';
+                    cols += '<td style="width:20%"><label name="type' + i + '" id="type' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;" >' + data2[i].Atr_Type + '</label></td>';
+                    cols += '<td style="width:20%"><label name="len' + i + '" id="len' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;" >' + data2[i].Atr_Length + '</label></td>';
+                    cols += '<td style="width:20%"><label name="mand' + i + '" id="mand' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;">' + data2[i].Atr_Mandotry + '</label></td></tr>';
+                    //cols += '<td><input type="radio"  name="mand' + i + '" id="mand' + i + '" value="Y"/>&nbsp;Yes &nbsp;<input type="radio"  name="mand' + i + '" id="mand' + i + '" value="N"/>&nbsp;No</td>'
+                    newRow.append(cols);
+                    $("table.order-listedit").append(newRow);
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Failed to create..!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+    });
+</script>

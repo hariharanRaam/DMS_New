@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "82epsn",
+  "CachePdfKey": "82epsn/82epsn-1k3kk2s.pdf",
+  "CacheXpzKey": "82epsn/82epsn-aw5gl7.xpz",
+  "CacheInfoKey": "82epsn/82epsn-aw5gl7.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\Invoice\\Vendor Invoice\\ClientInv002(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv002(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "82epsn",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

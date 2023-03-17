@@ -1,0 +1,686 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        ul {
+            display: block;
+        }
+    </style>
+    <style>
+       .k-dropdown-wrap.k-state-default{
+            background-clip: padding-box;
+           
+    display: block;
+    height:90%;
+    width:initial;
+    padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+    -moz-padding-start: calc(0.875rem - 3px);
+    font-size: 0.7075rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #697a8d;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 17px 12px;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+        .k-item{
+             background-color: #fff;
+             background-position: right 0.875rem center;
+             
+             
+        }
+        .k-content{
+            width:100%;
+        }
+        /*.k-button{
+             background-color: transparent;
+              color: blue;
+              border: aliceblue;
+
+        }*/
+        .k-grid{
+             color: #697a8d;
+    background-color: #fff;
+        }
+        .k-grid-header th.k-header{
+            text-overflow: ellipsis;
+    text-align: center;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+        }
+        .k-pager-info {
+    float: right;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 0 1.333em;
+}
+        .k-pager-sizes {
+    display: inline-block;
+    padding-top: 1px;
+    text-transform: none;
+    font-size: 0.90rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+         .k-footer{
+             background-color: #fff;
+        }
+ .k-widget{
+      background-color: #fff;
+ }
+        .k-header {
+        background-color: #fff;
+        }
+        .k-grid td {
+    white-space: nowrap;
+    background-color: #eceef1;
+    border-color: inherit;
+    /* text-align: center; */
+}
+        
+    .k-state-selected {
+        color: #000;
+        border-color: inherit;
+    }
+    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <meta name="viewport" content="width=device-width" />
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed" id="viewdoc">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        @*<section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Single</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form method="get" class="form-horizontal" enctype="multipart/form-data" id="form">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <button type="button" onclick="return RedirectBulkIndexing()" class="btn btn-danger pull-left">Assign Attributes Bulk</button>
+                                </div>
+                                <label class="col-md-2 control-label">Active</label>
+                                <div class="col-md-6" style="margin-top: 5px;">
+                                    <input type="radio" value="Y" name="active_flag" id="rbY" checked /> Yes &nbsp;
+                                    <input type="radio" value="N" name="active_flag" id="rbN"/> No
+                                </div>
+                            </div>
+                            <div id="Maingrid"></div>
+                            @*<div id="example" style="top:20px; position:relative" class="k-content">
+                                <table id="grid" data-bind="source: gridRows"></table>
+                            </div>*@
+                       @* </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>*@
+        <!-- /.content -->
+        <div id="overlayy"></div>
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card-body" style="margin-top:-9px;">
+                <h5 class="mobile-card-header">Single</h5>
+                <form id="form" method="get" onsubmit="return false" enctype="multipart/form-data">
+                    <div class="row" id="header" style="margin-bottom:10px">
+                        @*@Html.Partial("BindOrgLevels2")*@
+                        <div class="col-sm-3" style="width:23.5%">
+                            <label class="form-label" for="subCatgery">Document Type</label>
+                            <select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-select"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </div>
+                        <div class="col-sm-3" style="width:23.5%">
+                            <label class="form-label" for="Catgery">Document Group</label>
+                            <select id="Catgery" name="Catgery" onchange="fetchDocGroup()" class="form-select"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </div>
+                        <div class="col-sm-3" style="width:23.5%">
+                            <label class="form-label" for="submissiondt">Submission Date&nbsp;</label>
+                            <input type="date" class="form-control" id="submissiondt" placeholder="">
+                        </div>
+                        <div class="col-sm-2" style="width:21.5%">
+                            <label class="form-label" for="docstat">Status</label>
+                            <select class="form-select" id="docstat" style="width:125%">
+                                <option value="1">Archived</option>
+                                <option value="2">Indexed</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1" style="margin-top:30px;margin-left:36px;width:0%">
+                            <img src="../Assets/images/login-refresh.png" onclick="gridfetch('Y')" style="height: 20px;width: 20px;">
+                        </div>
+                    </div>
+                    <div class="row" hidden>
+                        <label class="col-md-2 control-label">Active</label>
+                        <div class="col-md-6" style="margin-top: 5px;">
+                            <input type="radio" value="Y" name="active_flag" id="rbY" checked /> Yes &nbsp;
+                            <input type="radio" value="N" name="active_flag" id="rbN" /> No
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" id="Maingrid" style="margin-top:10px">
+                            @*<div class="table-responsive text-nowrap" id="chk1">
+                                <div id="Maingrid"></div>
+                            </div>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        </div>
+</body>
+</html>
+<script>
+    var viewModel;
+    var orglevelcode1 = "";
+    var orglevelcode2 = "";
+    var orglevelcode3 = "";
+    var orglevelcode4 = "";
+    var loadflag = "";
+    var indexavlflag = "";
+    $(document).ready(function () {
+        debugger;
+        $("#navhead").text("Indexing List");
+        getScreenAccess(20, "Indexing");
+        //$('input[type=radio][name=active_flag]').change(function () {
+        //    debugger;
+        //    var activeflag = $("input[name='active_flag']:checked").val();
+        //    gridfetch(activeflag);
+        //});
+        @*$.ajax({
+            url: '@Url.Action("GetBasicReportDetails", "BasicReport")',
+            type: "GET",
+            data: { 'Master': "DocName" },
+            success: function (data) {
+                debugger;
+                var value1 = data;
+                for (var i = 0; i < value1.length; i++) {
+                    var opt = new Option(value1[i].SubCateName, value1[i].SubCateID);
+                    var opt2 = new Option(value1[0].SubCateName, value1[0].SubCateID);
+                    $('#subCatgery').append(opt);
+
+                    //$("#Catgery").find('option').each(function (i, opt) {
+                    //    $(opt2).attr('selected', 'selected');
+                    //});
+                }
+            }
+        });
+
+
+
+        //var custid = 0;
+        //var type = "SubCateGory";
+        //var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("GetBasicReportDetails", "BasicReport")',
+            type: "GET",
+            data: { 'Master': "DocGroup" },
+            success: function (data) {
+                debugger;
+                var value1 = data;
+                for (var i = 0; i < value1.length; i++) {
+                    var opt = new Option(value1[i].CateName, value1[i].CateID);
+                    var opt2 = new Option(value1[0].CateName, value1[0].CateID);
+                    $('#Catgery').append(opt);
+
+                    //$("#subCatgery").find('option').each(function (i, opt) {
+                    //    $(opt2).attr('selected', 'selected');
+                    //});
+                }
+            }
+        });*@
+
+
+
+       // loaddynamiccolumns();
+        
+    });
+    @*function loaddynamiccolumns() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                     var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                         orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                         orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                     alert(orglevelcode1);
+                    setTimeout(function () {
+                        window.location.reload(1);
+                    }, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }*@
+    function gridfetch(active_flag) {
+        var docnameid = $("#subCatgery").val();
+        var docgroupid = $("#Catgery").val();
+        var submissiondate = $("#submissiondt").val();
+        var stat = $("#docstat").val();
+        debugger;
+        $.ajax({
+            url: '@Url.Action("GetScannedDocuments", "GetAllDocuments")',
+            data: { 'activeflag': active_flag, 'docname': docnameid, 'docgroup': docgroupid, 'submission': submissiondate, 'status':stat },
+            success: function (result) {
+                debugger;
+               // $("#grid").empty();
+                //$("#grid").kendoGrid();
+                var columns = [];
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                if (data.length == 0) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No records found.!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                var i = 0;
+                var entryIndex = "entries[" + i + "]";
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+                    //var ans = entryIndex;
+                    if (val == 'Date' || val == 'DateTime') {
+                        columns.push({
+                            field: entryIndex,
+                          //  template: '#= kendo.toString(kendo.parseDate('+entryIndex+'), "dd-MM-yyyy")#',
+                            title: key,
+                            type: val,
+                            width: '180px'
+
+                        });
+
+                    } else if (key == 'File Type' || key == 'File Size') {
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            type: val,
+                            width: '120px'
+
+                        });
+                    } else if (key == 'File Name') {
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            type: "string",
+                            width: '300px'
+
+                        });
+                    }
+                    else {
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            type: val,
+                            width: '180px'
+
+                        });
+                    }
+                   
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+                }
+
+                columns.push({
+                    field: entryIndex + 1,
+                    title: 'Action',
+                    template: '<label name="View" id="View" value="View" onclick="view()" style="color: blue;cursor:pointer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Indexing" '+ indexavlflag +'>Index</label>',
+                   // template: '<a  href="/dms/indexing.html" onclick="view()">Index</a>',
+                    filterable: false,
+                    sortable: true,
+                    editable: true,
+                    width: '70px'
+                });
+                
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+                        //entryArray.push(key);
+                        entryArray.push(val);
+
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+
+                });
+
+                viewModel = kendo.observable({
+                    gridRows: rows
+                });
+                var configuration = {
+                    editable: false,
+                    sortable: true,
+                    scrollable: true,
+                    filterable: true,
+                    pagable: true,
+                    resizable: true,
+                   // persistSelection: true,
+                   // selectable: "false",
+                    pageable: {
+                        pageSize: 7,
+                        buttonCount: 3,
+                        pageSizes: [10, 20, 30, 40, 50]
+                    },
+                    columns: columns,
+                    rows: viewModel,
+                    dataBound: function () {
+                        //for (var i = 0; i < this.columns.length; i++) {
+                        //    this.autoFitColumn(i);
+                        //}
+                    },
+                };
+
+                $("#example").remove();
+                //   $('#Maingrid').append('<div class="col-sm-1" style="margin-top: -37px;margin-left: 120px;position:relative;top:39px;z-index:1;"><button type="button" id="btnbulmail" onclick="return forbulkMail()" style="width:140px" class="btn btn-orange"><i class="fa fa-envelope-o"></i> Mail</button></div>');
+                $('#Maingrid').append('<div id="example" class="table-responsive text-nowrap" id="chk1"><table id="grid" data-bind="source: gridRows" class="table table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px;"></table></div>');
+                var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                //alert(timeEditGrid);
+                kendo.bind($("#grid"), viewModel);
+
+               // alert(orglevelcode4 + ' , '+ orglevelcode3 + ' , '+ orglevelcode2 + ' , '+ orglevelcode1 + ' , ')
+                var grid = $("#grid").data("kendoGrid");
+                grid.hideColumn(0);
+                if (orglevelcode4 != "" && orglevelcode4 != null && orglevelcode4 != "undefined") {
+                    //grid.hideColumn(8);
+                    //grid.hideColumn(9);
+                    //grid.hideColumn(10);
+                    //grid.hideColumn(11);
+                } else if (orglevelcode3 != "" && orglevelcode3 != null && orglevelcode3 != "undefined") {
+                    //grid.hideColumn(7);
+                    //grid.hideColumn(8);
+                    //grid.hideColumn(9);
+                    grid.hideColumn(10);
+                   // grid.hideColumn(11);
+                } else if (orglevelcode2 != "" && orglevelcode2 != null && orglevelcode2 != "undefined") {
+                    //grid.hideColumn(6);
+                    //grid.hideColumn(7);
+                    //grid.hideColumn(8);
+                    grid.hideColumn(9);
+                    grid.hideColumn(10);
+                  //  grid.hideColumn(11);
+                } else if (orglevelcode1 != "" && orglevelcode1 != null && orglevelcode1 != "undefined") {
+                    //grid.hideColumn(5);
+                    //grid.hideColumn(6);
+                    //grid.hideColumn(7);
+                    grid.hideColumn(8);
+                    grid.hideColumn(9);
+                    grid.hideColumn(10);
+                   // grid.hideColumn(11);
+                }
+                //for (var i = 0; i < grid.columns.length; i++) {
+                //    if (i != grid.columns.length) {
+                //        grid.autoFitColumn(i);  //autofit each column.
+
+                //    }
+                //}
+
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred.!',
+                    type: 'red',
+                });
+            }
+        });
+
+    }
+
+    function view() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var id = (model.entries[0]);
+        var mode = 'I';
+        window.location.href = '../SetDocAttributes/SetDocAttributes?id=' + id + '&Action=' + mode;
+    }
+    function Edit() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var id = (model.entries[0]);
+        var filename = (model.entries[1]);
+        var mode = 'E';
+        var activeflag = $("input[name='active_flag']:checked").val();
+
+        window.location.href = '../DocArchival/DocArchival_Single?id=' + id + '&mode=' + mode + '&filename=' + filename + '&activeflag=' + activeflag;
+    }
+    function Delete() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var id = (model.entries[0]);
+        var mode = 'D';
+        window.location.href = '../DocArchival/DocArchival_Single?id=' + id + '&mode=' + mode;
+    }
+    function RedirectBulkIndexing() {
+        debugger;
+        window.location.href = '../DocArchivalBulkUpload/DocArchivalBulkUpload';
+    }
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "DocArchival")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                    //   var value1 = data.Get_dept3;
+                    var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docgroup3;
+
+                    //  var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                        var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+
+                    }
+                    if (length3 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+                    if (length2 == 2) {
+                        //  $("#QCD_mst_tHR").val($("#QCD_mst_tHR option").eq(1).val());
+
+                        var orglvlid = "";
+                        if (maxorglvl == 4) {
+                            orglvlid = "orglvl4val";
+                        } else if (maxorglvl == 3) {
+                            orglvlid = "orglvl3val";
+                        } else if (maxorglvl == 2) {
+                            orglvlid = "orglvl2val";
+                        } else if (maxorglvl == 1) {
+                            orglvlid = "orglvl1val";
+                        }
+
+
+                        $("#" + orglvlid).empty();
+                        var optsel = new Option("select", "select");
+
+                        $("#" + orglvlid).append(optsel);
+                        var opt = new Option(value2[1].master_name, value2[1].master_code);
+
+                        $("#" + orglvlid).append(opt);
+                        $("#" + orglvlid).val($("#" + orglvlid + " option").eq(1).val()).change();
+
+                        //var MaxorglevelPos = $("#MaxorglevelPos").val();
+                        //var orglevel3 = $("#orglevel" + MaxorglevelPos).val();
+                        //$("#" + orglevel3).data("kendoDropDownList").value(value2[1].master_code);
+                        //var dropDownList = $("#" + orglevel3).getKendoDropDownList();
+                        //dropDownList.trigger("change");
+                    }
+                    //}
+
+                }
+            });
+        }
+    }
+
+    function load_doctype(_sel) {
+        loadflag = 1;
+        debugger;
+        var org1condition = getconcatval($('#orglvl1valO').val());
+        var org2condition = getconcatval($('#orglvl2valO').val());
+        var org3condition = getconcatval($('#orglvl3valO').val());
+        var org4condition = getconcatval($('#orglvl4valO').val());
+
+        $.ajax({
+            url: '@Url.Action("DepartmentEditNew", "DocArchival")',
+            type: "GET",
+            data: { 'type': _sel, "condition_1": org1condition, "condition_2": org2condition, "condition_3": org3condition, "condition_4": org4condition },
+            success: function (data) {
+                debugger;
+                var value1 = data.dept;
+                if (_sel == 'CAT') {
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].Dgroup_Name, value1[i].Dgroup_Id);
+                        var opt2 = new Option(value1[0].Dgroup_Name, value1[0].Dgroup_Id);
+                        $('#Catgery').append(opt);
+                    }
+                } else {
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].Dname_Name, value1[i].Dname_Id);
+                        var opt2 = new Option(value1[0].Dname_Name, value1[0].Dname_Id);
+                        $('#subCatgery').append(opt);
+                    }
+                }
+
+            }, error: function (error) {
+                alert(error);
+            }
+        });
+
+    }
+    //$(window).load(function () {
+    //    debugger;
+    //   // alert('hello');
+    //    load_doctype('SUBCAT');
+    //    load_doctype('CAT');
+    //});
+
+    //window.onload = function () {
+    //    if (window.jQuery) {
+    //        // jQuery is loaded  
+    //        alert("Yeah!");
+    //    } else {
+    //        // jQuery is not loaded
+    //        alert("Doesn't Work");
+    //    }
+    //}
+
+    $(document).ajaxStop(function () {
+        // $('#loader').hide();
+     //   alert('hi');
+        debugger;
+        if (loadflag == 0) {
+            load_doctype('SUBCAT');
+            load_doctype('CAT');
+        }
+        //hideProgress();
+    });
+
+    function getScreenAccess(screenID, screenName) {
+        debugger;
+        var result_;
+        $.ajax({
+            // type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //   async: false,
+            url: '@Url.Action("getScreenData", "UserGroupsMapping")',
+            data: { 'screen_id': screenID, 'screen_name': screenName },
+            success: function (data) {
+                debugger;
+                var data1 = JSON.parse(data.Data1);
+                if (data1[0].add_perm == "1" || data1[0].mod_perm == "1") {
+
+                }
+                else if (data1[0].inactivate_perm == "1") {
+                    $("#overlayy").show();
+                    indexavlflag = "disabled";
+                }
+                else if (data1[0].deny_perm == "1") {
+                    $("#overlayy").show();
+                    indexavlflag = "disabled";
+                } else if (data1[0].view_perm == "1") {
+                    indexavlflag = "disabled";
+                } else {
+                    indexavlflag = "disabled";
+                }
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+</script>

@@ -1,0 +1,126 @@
+﻿@model DMS.Model.UserGroups_Model.UserGroups
+
+<style>
+    .myTableStyleTabNew td span {
+        font-weight: normal;
+        font-size: 12px;
+        color: #333;
+        font-family: Verdana;
+    }
+
+    .collapse1 {
+        width: 15px;
+        background-image: url('../Images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -18px -128px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .expand1 {
+        width: 15px;
+        background-image: url('../Images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -50px -128px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .treeview ul {
+        /*font: 14px Arial, Sans-Serif;
+        margin: 0px;
+        padding-left: 20px;*/
+        list-style: none;
+    }
+
+    .treeview > li > a {
+        /*font-weight: bold;*/
+    }
+
+    .treeview li {
+    }
+
+        .treeview li a {
+            /*padding: 4px;
+            font-size: 12px;
+            display: inline-block;
+            text-decoration: none;
+            width: auto;*/
+        }
+
+    .modal-dialog {
+        width: 450px !important;
+        margin: 90px auto !important;
+    }
+
+    /*Normal font*/
+    label {
+        font-weight: 400;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+@*class="modal-dialog fixed fade in"*@
+<div class="modal-dialog fixed fade in">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" onclick="return Close();">×</button>
+            <h4 class="modal-title" id="title"></h4>
+        </div>
+        <input type="hidden" id="hdn_ugrp_gid" />
+        <input type="hidden" id="hdn_ugrp_name" />
+        <input type="hidden" id="hdn_model" />
+        <div class="modal-body">
+            <table class="myTableStyleTabNew" width="100%">
+                <tr>
+                    <td>
+                        <label class="control-label col-sm-4">User group:</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="txtusergroup" />
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="border:solid 1px black; margin-top:10px; padding:10px; background-color:#FAFAFA; width:100%; ">
+                            <div id="divtreeview" class="treeview" style="overflow:scroll;overflow-x: hidden; height:200px;">
+                                @if (Model != null)
+                                {
+                                    if (Model.menu != null && Model.menu.Count() > 0)
+                                    {
+                                        @Treeview.GetTreeView(Model.menu, Model.menu.FirstOrDefault().parent_menu_gid);
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </br>
+            <div class="row text-center mt20">
+                <input type="button" value="Submit" id="btn_submit" onclick="return CreateUserGroups(0)" class="btnsubmit" />
+                <input type="button" value="Update" id="btn_update" onclick="return CreateUserGroups(0);" class="btnsubmit" hidden="hidden" />
+                <input type="button" value="Cancel" id="btn_cancel" onclick="return Close();" class="btnsubmit" />
+            </div>
+            <div class="row text-center mt20">
+                <span class="errormessage"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/js/jQuery-2.1.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".treeview li>ul").css('display', 'none');
+        $(".collapsible1").click(function (e) {
+            e.preventDefault();
+            $(this).toggleClass("collapse1 expand1");
+            $(this).closest('li').children('ul').slideToggle();
+        });
+        $("#txtusergroup").val($("#hdn_grpname").val());
+        $("#title").text($("#hdn_title").val());
+
+    });   
+</script>

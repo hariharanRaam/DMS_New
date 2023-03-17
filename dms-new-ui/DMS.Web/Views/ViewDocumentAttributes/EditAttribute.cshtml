@@ -1,0 +1,1029 @@
+﻿
+<style>
+    .ui-dialog-titlebar-close:after {
+        content: 'X';
+    }
+
+    .ui-dialog {
+        z-index: 1040 !important;
+    }
+</style>
+<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />
+
+<div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+    <div class=" panel panel-primary" style="margin-bottom:5px;height:200px;">
+        <div class="panel-heading"></div>
+        <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+            <div class="col-md-9" style="margin:auto;height:150px;overflow:auto;width:104%;">
+
+                <table style="width:100%">
+                    <tr>
+                        <td >
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;">Doc Name</label>
+                        </td>
+                        <td >
+                            <input type="text" id="Docname" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                            <input type="hidden" id="Docnameid" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;">Doc Group</label>
+                        </td>
+                        <td>
+                            <input type="text" id="Docgrp" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                            <input type="hidden" hidden id="Docgrpid" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol4">
+                        <td >
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl4lbl">Orglvl4</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl4val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol3">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl3lbl">Orglvl4</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl3val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol2">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl2lbl">Orglvl4</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl2val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol1">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl1lbl">Orglvl1</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl1val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+
+
+                    @*<tr>
+                        <td style="width:20%;">
+                            <label style=" width:100%;font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;">Unit</label>
+                        </td>
+                        <td style="width:35%;">
+                            <input type="text" id="Unit" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                            <input type="hidden" hidden id="Unitid" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td style="width:20%;">
+                            <label style=" width:100%;font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;">Department</label>
+                        </td>
+                        <td style="width:35%;">
+                            <input type="text" id="Dept" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                            <input type="hidden" hidden id="Deptid" class="form-control" />
+                        </td>
+                    </tr>*@
+                    @*<tr>@Html.Partial("BindOrgLevels")</tr>*@
+                    <tr></tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;">Same AS</label>
+                        </td>
+                        <td >
+                            <select id="sdocname" name="sdocname" style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn bg-blue " id="Viewattrib" data-dismiss="modal" style="margin-left: 10px;">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="btn btn bg-green " id="Add" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+    <div class=" panel panel-primary" style="margin-bottom:5px;height:300px;">
+        <div class="panel-heading">Grid View</div>
+        <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+            <div class="col-md-9" style="margin:auto;height:210px;overflow:auto;width:104%;">
+                <table style="width:100%">
+                    <tr>
+                        <td style="width: 12%;padding-left: 5px;">
+                            <label style="width:100%;font-weight:bold;font-size: 15px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Order By</label>
+                        </td>
+
+                        <td style="width: 25%;padding-left:7px;">
+                            <label style="width:100%;font-weight:bold;font-size: 15px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Attribute Name</label>
+                        </td>
+                        <td style="width: 15%;">
+                            <label style="width:100%;font-weight:bold;font-size: 15px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Type </label>
+                        </td>
+                        <td style="width: 15%;padding-left: 10px;">
+                            <label style="width:100%;font-weight:bold;font-size: 15px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Length/Master</label>
+                        </td>
+
+                        <td style="width:10%;padding-left: 55px;">
+                            <label style="width:100%;font-weight:bold;font-size: 15px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Mandatory</label>
+                        </td>
+
+                        <td></td>
+                        <td class="col-sm-1" style="width:5%;">
+                            <button type="button" class="btn btn bg-green " id="addrow" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div class="ex1">
+                                <table id="myTable" class=" table order-list"></table>
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <table align="center" style="width:30%">
+        <tr>
+            <td>
+                <button type="button" id="cancel" class="btn btn-danger pull-right">Cancel</button>
+            </td>
+            <td width="5px"></td>
+            <td>
+                <input type="button" name="btnsubmit" value="Update" id="btnsubmit" class="btn btn-orange pull-left" />
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div id="ForPartialViewEditt"></div>
+
+<script>
+    var orglevelcode1 = "";
+    var orglevelcode2 = "";
+    var orglevelcode3 = "";
+    var orglevelcode4 = "";
+    var orglevel1 = "";
+    var orglevel2 = "";
+    var orglevel3 = "";
+    var orglevel4 = "";
+    var counter = 0;
+    var countdata = [];
+    var orderby = 0;
+    $(document).ready(function () {
+        debugger;
+        loaddynamiccolumns();
+        //  $("#sdocname").val('@ViewBag.docname_id');
+        var custid = 0;
+        var type = "SubCateGory";
+        var actiontype = "GetAll";
+        @*$.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dname_Name, data[i].Dname_Id);
+                    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                    $('#sdocname').append(opt);
+
+                    $("#sdocname").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });*@
+
+        $('#cancel').click(function () {
+            debugger;
+            counter = 0;
+            objDialogedit.dialog("close");
+        });
+
+        $('#Viewattrib').click(function () {
+
+            var docnameId = $("#Docnameid").val();
+            var docgrpId = $("#Docgrpid").val();
+            var unitId = $("#Unitid").val();
+            var depId = $("#Deptid").val();
+            var docnameId1 = $("#sdocname").val();
+            if (docnameId1 == 0 || docnameId1 == null || docnameId1 == "" || docnameId1 == undefined) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please check Same As Values.!',
+                    type: 'red',
+                });
+            }
+            else {
+                var objDialogedit;
+                objDialogeditt = $("[id$='ForPartialViewEditt']");
+                objDialogeditt.dialog({
+                    autoOpen: false,
+                    modal: true,
+                    width: 700,
+                    height: 250
+                });
+                $.ajax({
+                    url: '@Url.Action("GetAttribute", "ViewDocumentAttributes")',
+                    type: "POST",
+                    datatype: "json",
+                    async: false,
+                    data: { 'docnameId': docnameId, 'docgrpId': docgrpId, 'unitId': unitId, 'depId': depId, 'docnameId1': docnameId1 },
+                    success: function (data) {
+                        debugger;
+                        var data2 = JSON.parse(data.Data1);
+                        var chklenght = data2.length;
+                        if (chklenght != 0) {
+                            objDialogeditt.load('../ViewDocumentAttributes/GetAttribut?docnameId=' + docnameId + '&docgrpId=' + docgrpId + '&unitId=' + unitId + '&depId=' + depId + '&docnameId1=' + docnameId1);
+                            objDialogeditt.dialog({ title: 'View' });
+                            objDialogeditt.dialog("open");
+                        }
+                        else {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'There is no attributes found..!',
+                                type: 'blue',
+                            });
+                            return false;
+                        }
+                    },
+                    error: function () {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Some error has occured..!',
+                            type: 'red',
+                        });
+                        return false;
+                    }
+                });
+            }
+        });
+
+
+        $('#Add').click(function () {
+            var Dognameid = $("#sdocname").val();
+            if (Dognameid == 0 || Dognameid == null || Dognameid == undefined) {
+
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please check Same As Values.!',
+                    type: 'red',
+                });
+            }
+            else {
+                Getdata();
+            }
+
+        });
+        Getdata();
+        function Getdata() {
+            var Attrbid = '@ViewBag.Attrbid';//$("#hdn_ugrp_gid").val();
+            // var Dognameid = $("#sdocname").val();
+            var Dognameid = '@ViewBag.docname_id';
+            // alert(Dognameid);
+            $.ajax({
+                url: '@Url.Action("EditAttribute", "ViewDocumentAttributes")',
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: { 'Attrbid': Attrbid, 'Dognameid': Dognameid },
+                //data: { 'Attrbid': Attrbid},
+                success: function (data) {
+
+                    debugger;
+                    var chkval = JSON.parse(data.Data1);
+
+                    try {
+                        //if (orglevelcode4 != null && orglevelcode4 != "" && orglevelcode4 != "undefined") {
+                        //    $("#" + orglevelcode4).data("kendoDropDownList").value(chkval[0].Org_Level4);
+                        //    $("#" + orglevelcode4).kendoDropDownList({
+                        //        enable: false
+                        //    });
+                        //}
+                        //if (orglevelcode3 != null && orglevelcode3 != "" && orglevelcode3 != "undefined") {
+                        //    $("#" + orglevelcode3).data("kendoDropDownList").value(chkval[0].Org_Level3);
+                        //    $("#" + orglevelcode3).kendoDropDownList({
+                        //        enable: false
+                        //    });
+                        //}
+                        //if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                        //    $("#" + orglevelcode2).data("kendoDropDownList").value(chkval[0].Org_Level2);
+                        //    $("#" + orglevelcode2).kendoDropDownList({
+                        //        enable: false
+                        //    });
+                        //}
+                        //if (orglevelcode1 != null && orglevelcode1 != "" && orglevelcode1 != "undefined") {
+                        //    $("#" + orglevelcode1).data("kendoDropDownList").value(chkval[0].Org_Level1);
+                        //    $("#" + orglevelcode1).kendoDropDownList({
+                        //        enable: false
+                        //    });
+                        //}
+
+
+                        var orglvl4 = chkval[0].Org_Level4name;
+                        var orglvl3 = chkval[0].Org_Level3name;
+                        var orglvl2 = chkval[0].Org_Level2name;
+                        var orglvl1 = chkval[0].Org_Level1name;
+                        // alert(orglvl4);
+                        if (orglvl4 != "" && orglvl4 != null && orglvl4 != "undefined") {
+                            $("#orglvl4val").val(orglvl4);
+                            $("#orgcol4").show()
+                        }
+                        if (orglvl3 != "" && orglvl3 != null && orglvl3 != "undefined") {
+                            $("#orglvl3val").val(orglvl3);
+                            $("#orgcol3").show()
+                        }
+                        if (orglvl2 != "" && orglvl2 != null && orglvl2 != "undefined") {
+                            $("#orglvl2val").val(orglvl2);
+                            $("#orgcol2").show()
+                        }
+                        if (orglvl1 != "" && orglvl1 != null && orglvl1 != "undefined") {
+                            $("#orglvl1val").val(orglvl1);
+                            $("#orgcol1").show()
+                        }
+
+
+                    } catch (er) {
+                        // alert(er);
+                    }
+                    // if (Dognameid <= 0) {
+
+                    $('#Docname').val(chkval[0].Dname_Name);
+                    $('#Docgrp').val(chkval[0].Dgroup_Name);
+                    //  $('#Unit').val(chkval[0].Unit_Name);
+                    //  $('#Dept').val(chkval[0].Dept_Name);
+                    $('#Docnameid').val(chkval[0].Dname_Id);
+                    $('#Docgrpid').val(chkval[0].Dgroup_Id);
+                    //  $('#Unitid').val(chkval[0].Unit_Id);
+                    //  $('#Deptid').val(chkval[0].Dept_Id);
+                    //  }
+                    counter = 0;
+                    for (i = 0; i < chkval.length; i++) {
+                        //alert(chkval[i].Atr_Length);
+                        var newRow = $("<tr  width='100%'>");
+                        var cols = "";
+                        var radname = "mandatory" + counter;
+                        // var orderby = counter + 1;
+                        orderby = counter + 1;
+                        cols += '<td style="display:none"><input type="hidden" class="nr" value=' + orderby + ' id="hddn' + orderby + '"/></td>';
+                        cols += '<td ><input style="width:80px;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;" type="text" ; maxlength ="2"; value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                        cols += '<td style="width:0%;"><input style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;" type="text"  name="name' + orderby + '" id="name' + orderby + '" onkeypress="return PreventSpecialChar(event);" /></td>';
+                        cols += '<td style="width:0%"><select  onchange="test(' + orderby + ')"  id="drpvalue' + orderby + '" style=";font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option><option value="Lov Name">Lov Name</option><option value="AutoNumber">Auto Numbering</option></select></td>';
+                        cols += '<td style="width:0%;"><select id="tdlov' + orderby + '" style="display:none;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><option value="0">Select Master</option></select><select id="tdautonumber' + orderby + '" style="display:none;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><option value="0">Select Master</option></select><input  type="text" onchange="test1()"  onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + orderby + '" id="Length' + orderby + '" style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                        cols += '<td  style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="Y"/> Yes &nbsp;<input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="N"/> No</td>'
+                        cols += '<td ><button "id=delbtn' + orderby + '"  type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td></tr>';
+
+                        countdata.push(orderby);
+
+                        newRow.append(cols);
+                        $("table.order-list").append(newRow);
+                        $('#orderbyid' + orderby).val(chkval[i].Attrib_orderId);
+                        $('#name' + orderby).val(chkval[i].Atr_Name);
+                        if (chkval[i].Atr_Name == "Period") {
+                            //  $("#delbtn" + orderby).prop('disabled', true);
+                            $('#delbtn' + orderby).attr('disabled', true);
+                        } else {
+                            //$("#delbtn" + orderby).prop('disabled', false);
+                            // $('#delbtn'+orderby).removeAttr('disabled',false);
+                        }
+                        $('#drpvalue' + orderby).val(chkval[i].Atr_Type);
+                        if (chkval[i].Atr_Type == "AutoNumber") {
+                            $('#tdautonumber' + orderby).val(chkval[i].Atr_Length);
+                        }
+                        else {
+                            $('#tdlov' + orderby).val(chkval[i].Atr_Length);
+                        }
+                        var selectedval = chkval[i].Atr_Length;
+                        // alert(selectedval);
+                        //if (chkval[i].Atr_Name == "Period") {
+                        //    $('input:radio[name="mandatory' + orderby + '"][value=' + chkval[i].Atr_Mandotry + ']').prop('checked', true);
+                        //    if (chkval[i].Atr_Mandotry == "Y") {
+                        //        $('input:radio[name="mandatory' + orderby + '"][value="N"]').prop('disbled', true);
+                        //    } else {
+                        //        $('input:radio[name="mandatory' + orderby + '"][value="Y"]').prop('disbled', true);
+                        //    }
+                        //} else {
+                        $('input:radio[name="mandatory' + orderby + '"][value=' + chkval[i].Atr_Mandotry + ']').prop('checked', true);
+                        //    }
+                        // $('#gid' + orderby).val(chkval[i].Atr_Id);
+                        /*  if (chkval[i].Atr_Mandotry = 'Y') {
+                              //  $('#mandatoryy' + orderby).prop("checked", true);
+                              // $('input:radio[name="mandatoryy"]').attr('checked', 'checked');
+                              $('input:radio[name="mandatory' + orderby + '"][value="Y"]').prop('checked', true);
+                          }
+                          else if (chkval[i].Atr_Mandotry = 'N') {
+                              // $('#mandatoryn' + orderby).prop("checked", true);
+                              //$('input:radio[name="mandatoryn"]').attr('checked', 'checked');
+                              $('input:radio[name="mandatoryn' + orderby + '"][value="N"]').prop('checked', true);
+                          }*/
+
+                        if (chkval[i].Atr_Type == "Lov Name") {
+                            $("#tdlov" + orderby).css('display', 'inline');
+                            $("#Length" + orderby).css('display', 'none');
+                            var j = chkval[i].Lov_Id;
+
+                            //Dropdown master biding
+                            var custid = 0;
+                            var type = "Lov_Master";
+                            var actiontype = "GetAll";
+                            debugger;
+                            $.ajax({
+
+                                url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+                                type: "GET",
+                                async: false,
+                                data: { 'custid': custid, "type": type, "actiontype": actiontype },
+                                success: function (data) {
+                                    debugger;
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].Lov_Name, data[i].Lov_Id);
+                                        var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#tdlov' + orderby).append(opt);
+
+                                        $('#tdlov' + orderby).find('option').each(function (i, opt) {
+                                            $(opt2).attr('selected', 'selected');
+                                        });
+
+
+
+                                    }
+                                    $('#tdlov' + orderby).val(j);//selectedval);
+                                }
+                            });
+                        }
+                        else if (chkval[i].Atr_Type == "AutoNumber") {
+                            $("#tdautonumber" + orderby).css('display', 'inline');
+                            $("#Length" + orderby).css('display', 'none');
+                            var j = chkval[i].Lov_Id;
+                            var custid = 0;
+                            var type = "Auto_Numbering";
+                            var actiontype = "GetAll";
+                            debugger;
+                            $.ajax({
+
+                                url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+                                type: "GET",
+                                async: false,
+                                data: { 'custid': custid, "type": type, "actiontype": actiontype },
+                                success: function (data) {
+                                    debugger;
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].autonumberdtl, data[i].autonumber_rowid);
+                                        var opt2 = new Option('select', 'select');
+                                        $('#tdautonumber' + orderby).append(opt);
+
+                                        $("#tdautonumber" + orderby).find('option').each(function (i, opt) {
+                                            $(opt2).attr('selected', 'selected');
+                                        });
+                                        $('#tdautonumber' + orderby).val(j);//selectedval);
+                                    }
+                                }
+                            });
+                        }
+
+                        else {
+                            $('#Length' + orderby).val(chkval[i].Atr_Length);
+
+                        }
+                        //end of master dropdown binding
+                        counter++;
+                        $("#counter").val(counter);
+
+                    }
+
+                },
+                error: function () {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Failed to create..!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+            });
+        }
+
+
+
+        $("table.order-list").on("click", ".ibtnDel", function (event) {
+            debugger;
+            var value = $(this).closest('tr').find('td:eq(0)');
+            value = value.find(".nr").val();
+            var array_val;
+            for (var i = 0; i < countdata.length; i++) {
+                array_val = countdata[i];
+                if (value == array_val) {
+                    countdata.splice(i, 1);
+                }
+            }
+
+            //if (value != counter) {
+            //    value = value - 1;
+            //    countdata.splice(value, 1);
+            //}
+            //else {
+            //    countdata.splice(value - 1, 1);
+            //}
+
+            $(this).closest("tr").remove();
+            // alert($(this).closest('tr').find('td:eq(0)').val());
+            counter -= 1
+            $("#counter").val(counter);
+
+        });
+
+
+
+        $("#addrow").on("click", function () {
+            debugger;
+            //   var dpnm = $("#Deptid").val();
+            //   var uname = $("#Unitid").val();
+            var docgroup = $("#Docgrpid").val();
+            var docname = $("#Docnameid").val();
+
+            //if (dpnm == "0" || uname == "0" || docgroup == "0" || docname == "0") {
+            //    $.alert({
+            //        title: 'DMS',
+            //        content: 'Select Dropdowns.!',
+            //        type: 'blue',
+            //    });
+            //    return false;
+            //}
+
+
+            // $("#btnsubmit").prop('disabled', false);
+            var newRow = $("<tr  width='100%'>");
+            var cols = "";
+            var radname = "mandatory" + counter;
+            //var orderby = counter + 1;
+            var autonumberexist = "";
+
+            for (var k = 0 ; k <= orderby; k++) {
+                var tempval = $("#drpvalue" + k).find(":selected").text();
+                if (tempval == "Auto Numbering") {
+                    autonumberexist = "Y";
+                }
+            }
+
+
+            orderby = orderby + 1;
+            /*  cols += '<td style="display:none"><input type="hidden" class="nr" value=' + orderby + ' id="hddn' + orderby + '"/></td>';
+              cols += '<td style="padding-left:0px;width:80px;"><input style="width:50px; type="text" ; maxlength ="2"; value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+              cols += '<td style="width:150px;"><input style="width:150px;"  type="text"  name="name' + orderby + '" id="name' + orderby + '"/></td>';
+              cols += '<td style="width:100px;"><select  onchange="test(' + orderby + ')"  id="drpvalue' + orderby + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option><option value="Lov Name">Lov Name</option></select></td>';
+              cols += '<td style="width:200px;"><select id="tdlov' + orderby + '" style="form-control;display:none;"><option value="0">Select Master</option></select><input  type="text" onchange="test1()"  onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + orderby + '" id="Length' + orderby + '"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+              cols += '<td  style="width:125px;"><input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="N"/>&nbsp;&nbsp;No</td>'
+              cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td>';*/
+
+            cols += '<td style="display:none"><input type="hidden" class="nr" value=' + orderby + ' id="hddn' + orderby + '"/></td>';
+            cols += '<td ><input type="text" ; maxlength ="2"; value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;width:80px;"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+            cols += '<td style="width:0%;"><input style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"  type="text"  name="name' + orderby + '" id="name' + orderby + '" onkeypress="return PreventSpecialChar(event);" /></td>';
+            cols += '<td style="width:0%;"><select  onchange="test(' + orderby + ')"  id="drpvalue' + orderby + '"  style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option><option value="Lov Name">Lov Name</option><option value="AutoNumber">Auto Numbering</option></select></td>';
+            cols += '<td style="width:0%;"><select id="tdlov' + orderby + '" style="form-control;display:none;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><option value="0">Select Master</option></select><select id="tdautonumber' + orderby + '" style="form-control;display:none;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><option value="0">Select Master</option></select><input  type="text" onchange="test1()"  onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + orderby + '" id="Length' + orderby + '"  style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+            cols += '<td style="width:auto;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input type="radio"  name="mandatoryy' + orderby + '" id="mandatory' + orderby + '" value="Y"/> Yes &nbsp;<input type="radio"  name="mandatoryn' + orderby + '" id="mandatory' + orderby + '" value="N"/> No</td>'
+            cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td></tr>';
+
+
+            countdata.push(orderby);
+
+            newRow.append(cols);
+            $("table.order-list").append(newRow);
+
+            if (autonumberexist != "" && autonumberexist != null && autonumberexist != "undefined") {
+                $("#drpvalue"+orderby+" option[value='AutoNumber']").remove();
+            }
+
+            //Dropdown master biding
+
+            @*var custid = 0;
+            var type = "Lov_Master";
+            var actiontype = "GetAll";
+            debugger;
+            $.ajax({
+
+                url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+                type: "GET",
+                async: false,
+                data: { 'custid': custid, "type": type, "actiontype": actiontype },
+                success: function (data) {
+                    debugger;
+                    for (var i = 0; i < data.length; i++) {
+                        var opt = new Option(data[i].Lov_Name, data[i].Lov_Id);
+                        var opt2 = new Option(data[0].Lov_Name, data[0].Lov_Name);
+                        $('#tdlov' + orderby).append(opt);
+
+                        $("#tdlov" + orderby).find('option').each(function (i, opt) {
+                            $(opt2).attr('selected', 'selected');
+                        });
+
+                    }
+                }
+            });*@
+
+
+
+            @*var custid = 0;
+            var type = "Auto_Numbering";
+            var actiontype = "GetAll";
+            debugger;
+            $.ajax({
+
+                url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+                type: "GET",
+                async: false,
+                data: { 'custid': custid, "type": type, "actiontype": actiontype },
+                success: function (data) {
+                    debugger;
+                    for (var i = 0; i < data.length; i++) {
+                        var opt = new Option(data[i].autonumberdtl, data[i].autonumber_rowid);
+                        var opt2 = new Option('select', 'select');
+                        $('#tdautonumber' + orderby).append(opt);
+
+                        $("#tdautonumber" + orderby).find('option').each(function (i, opt) {
+                            $(opt2).attr('selected', 'selected');
+                        });
+
+                    }
+                }
+            });*@
+
+
+            //end of master dropdown binding
+            counter++;
+            $("#counter").val(counter);
+
+        });
+
+        $("#btnsubmit").on("click", function () {
+            debugger;
+            if (counter == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please add the attribute row.!',
+                    type: 'blue',
+                });
+                //$("#btnsubmit").prop('disabled', true);
+                return false;
+            }
+
+            //Loop through the Table rows and build a JSON array.
+
+            // var DeptID = $("#Deptid").val();
+            // var UnitID = $("#Unitid").val();
+            var DgroupID = $("#Docgrpid").val();
+            var DNameID = $("#Docnameid").val();
+            // var Dognameid = $("#sdocname").val();
+            var attributes1 = new Array();
+            var attributes2 = new Array();
+            var attributes3 = new Array();
+            var attributes4 = new Array();
+            var attributes5 = new Array();
+            var attributes6 = new Array();
+            var attributes7 = new Array();
+            var attributes8 = new Array();
+            var z = 0;
+            // alert(counter);
+            for (j = 0; j < counter; j++) {
+                debugger;
+                var i = countdata[j];
+                if ($("#name" + i).val() == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - name.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+
+
+                if ($("#drpvalue" + i).val() == "0") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+                if ($("#drpvalue" + i).val() == "Alpha Numeric") {
+                    if ($("#Length" + i).val() == "0") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'enter the length greater then zero.!',
+                            type: 'blue',
+                        });
+                        document.getElementById(ctrl.id).value = "";
+                        return;
+                    }
+                }
+                var Check = $("#drpvalue" + i).val();
+                if (Check == "Alpha Numeric") {
+                    if ($("#Length" + i).val() == "") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please fill all the values in the attribute row/Delete the empty row - length.!',
+                            type: 'blue',
+                        });
+                        return;
+                    }
+                }
+                //to select master name
+                var Check = $("#drpvalue" + i).val();
+                debugger;
+                // alret("hello");
+                if (Check == "Lov Name" || Check == "Autonumber") {
+                    if ($("#tdlov" + i).val() == "0") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please select Master name.!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                }
+                else {
+                }
+                if ($('input[id=mandatory' + i + ']:checked').val() == undefined) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - mandatory.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+
+                debugger;
+                if (counter < $("#orderbyid" + i).val()) {
+                    // alert('orderby should not exeed ' + counter);
+                    $.alert({
+                        title: 'DMS',
+                        content: 'orderby should not exeed ' + counter,
+                        type: 'red',
+                    });
+                    return false;
+                }
+                var attribute = [];
+
+                attributes1[z] = $("#name" + i).val();
+                attributes2[z] = $("#drpvalue" + i).val();
+                attributes3[z] = $("#Length" + i).val();
+                attributes4[z] = $('input[id=mandatory' + i + ']:checked').val();
+                attributes5[z] = $("#tdlov" + i).val();
+                attributes6[z] = $("#orderbyid" + i).val();
+                attributes7[z] = $("#orderbyid" + i).val();
+                attributes8[z] = $("#tdautonumber" + i).val();
+                z++;
+
+            }
+            var sorted_arr = attributes7.sort();
+            debugger;
+            var results = [];
+            var duplicate = "false";
+            for (var i = 0; i < attributes7.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    results.push(sorted_arr[i]);
+                    duplicate = "true";
+                }
+            }
+            var uniqueNames = [];
+            $.each(results, function (i, el) {
+                if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+            });
+
+            if (duplicate == "true") {
+                // alert("duplicate Value:  " + results);
+                $.alert({
+                    title: 'DMS',
+                    content: 'duplicate Value:  ' + uniqueNames,
+                    type: 'red',
+                });
+
+                return false;
+            }
+            else {
+                debugger
+                var dynamictxt = "null";
+                var dynamictxt1 = [];
+                var dynamictxtlov = "null";
+                var dynamictxtlov1 = [];
+                var dynamictxtautonumber = "null";
+                var dynamictxtautonumber1 = [];
+                var dynamictxtupdate = "null";
+                var dynamictxt1update = [];
+                var dynamictxtlovupdate = "null";
+                var dynamictxtlov1update = [];
+                var dynamictxtautonumberupdate = "null";
+                var ddynamictxtautonumber1update = [];
+
+                for (var k = 0; k < attributes1.length; k++) {
+                    if (attributes2[k] == "Lov Name") {
+
+                        var lovvalues = "( '" + attributes1[k] + "'," + attributes5[k] + ",'" + attributes2[k] + "','" + attributes4[k] + "'," + DgroupID + "," + DNameID + " ," + attributes6[k] + " )"
+
+                        dynamictxtlov1.push(lovvalues);
+                    }
+                    else if (attributes2[k] == "AutoNumber" || attributes2[k] == "Auto Number") {
+                     //   var autonumbervalues = "( '" + attributes1[k] + "'," + attributes8[k] + ",'" + attributes2[k] + "','" + attributes4[k] + "'," + DgroupID + "," + DNameID + " ," + attributes6[k] + " )"
+                        //   dynamictxtautonumber1.push(autonumbervalues);
+                        var lovvalues = "( '" + attributes1[k] + "'," + attributes8[k] + ",'" + attributes2[k] + "','" + attributes4[k] + "'," + DgroupID + "," + DNameID + " ," + attributes6[k] + " )"
+
+                        dynamictxtlov1.push(lovvalues);
+                    }
+                    else {
+
+                        var values = "( '" + attributes1[k] + "'," + attributes3[k] + ",'" + attributes2[k] + "','" + attributes4[k] + "'," + DgroupID + "," + DNameID + "," + attributes6[k] + ", 'N' )"
+                        dynamictxt1.push(values);
+
+                    }
+
+                }
+
+                if (dynamictxt1 != 0 && dynamictxt1 != null && dynamictxt1 != "") {
+                    dynamictxt = dynamictxt1.join(",");
+                    //alert(dynamictxt);
+                }
+
+                if (dynamictxtlov1 != 0 && dynamictxtlov1 != null && dynamictxtlov1 != "") {
+                    dynamictxtlov = dynamictxtlov1.join(",");
+                    //alert(dynamictxtlov);
+                }
+                //if (dynamictxtautonumber1 != 0 && dynamictxtautonumber1 != null && dynamictxtautonumber1 != "") {
+                //    dynamictxtautonumber = dynamictxtautonumber1.join(",");
+                //}
+                /* if (dynamictxtlov1update != 0 && dynamictxtlov1update != null && dynamictxtlov1update != "") {
+                    dynamictxtlovupdate = dynamictxtlov1update.join(",");
+                    //alert(dynamictxt);
+                }
+
+                if (dynamictxt1update != 0 && dynamictxt1update != null && dynamictxt1update != "") {
+                    dynamictxtupdate = dynamictxt1update.join(",");
+                    //alert(dynamictxtlov);
+                }*/
+                // var a = '@Url.Action("Save", "ViewDocumentAttributes")';
+                // alert(a);
+                $.ajax({
+                    type: "POST",
+                    //  url: "../ViewDocumentAttributes/Save",
+                    url: '@Url.Action("Save", "ViewDocumentAttributes")',
+                    // url: "../ViewDocumentAttributes/Save",
+                    dataType: "json",
+                    //   contentType: "application/json;charset=utf-8",
+                    //data: {},
+                    // data: { 'custid': custid, "type": type, "actiontype": actiontype },
+                    data: { "DgroupID": DgroupID, "DNameID": DNameID, "dynamictxt": dynamictxt, "dynamictxtlov": dynamictxtlov },
+                    success: function (data) {
+                        var data1 = JSON.parse(data.Data1);
+                        if (data1[0].Message == "Success") { // if true (1)
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Attributes are saved successfully.!',
+                                type: 'green',
+                            });
+                            setTimeout(function () {// wait for 5 secs(2)
+                                location.reload(); // then reload the page.(3)
+                            }, 2500);
+                        }
+                        else if (data1[0].Message) {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Attributes are Not saved.!' + data1[0].Message,
+                                type: 'red',
+                            });
+                            setTimeout(function () {// wait for 5 secs(2)
+                                location.reload(); // then reload the page.(3)
+                            }, 2500);
+                        }
+                        else {
+                            $.alert({
+                                title: 'DMS',
+                                content: data1[0].Message,
+                                type: 'red',
+                            });
+                            setTimeout(function () {// wait for 5 secs(2)
+                                location.reload(); // then reload the page.(3)
+                            }, 2500);
+                        }
+
+                    },
+                    error: function () {
+                        //alert("Error");
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Error',
+                            type: 'red',
+                        });
+
+                    }
+
+                });
+            }
+
+        });
+
+    });
+    function loaddynamiccolumns() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        var org1val = data[0].orghierarchy_name;
+                        $("#orglvl1lbl").text(org1val);
+                        // orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        var org1va2 = data[1].orghierarchy_name;
+                        $("#orglvl2lbl").text(org1va2);
+                        // orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        var org1va3 = data[2].orghierarchy_name;
+                        $("#orglvl3lbl").text(org1va3);
+                        //orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        var org1va4 = data[3].orghierarchy_name;
+                        $("#orglvl4lbl").text(org1va4);
+                        //orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    //function IsAlphaNumeric(e) {
+    //    var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+    //    var ret = ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (specialKeys.indexOf(e.keyCode) != -1 && e.charCode != e.keyCode));
+    //    document.getElementById("error").style.display = ret ? "none" : "inline";
+    //    return ret;
+    //}
+
+    function PreventSpecialChar(event) {
+        debugger;
+        var regex = new RegExp("^[a-zA-Z0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key) && key != " ") {
+            event.preventDefault();
+            return false;
+        }
+    }
+
+</script>

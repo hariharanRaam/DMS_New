@@ -1,0 +1,194 @@
+﻿
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="col-sm-3">
+        <label class="form-label" for="subvertical">Document Type</label>
+        <div class="input-group input-group-merge">
+            <input type="text"
+                   class="form-control"
+                   placeholder=""
+                   id="doctype"
+                   aria-describedby=""
+                   readonly />
+            <input hidden id="doctypecode" type="text" />
+            <span class="input-group-text" id="">
+                <i data-bs-toggle="modal" data-bs-target="#searchcourse" class="bx bx-search cursor-pointer" onclick="loaddynamiccolumns()"></i>
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3" >
+        <label class="form-label" for="subvertical">Document Group</label>
+        <input type="text" class="form-control" placeholder="" id="subdoctype" readonly>
+        <input hidden id="subdoctypecode" type="text"/>
+    </div>
+    <div class="col-sm-3" id="orgcol4h" style="display:none">
+        <label class="form-label" for="orglvl4valh" id="orglvl4lblh">Unit</label>
+        <input type="text" id="orglvl4valh" name="orglvl4valh" class="form-control" placeholder="" readonly>
+    </div>
+    <div class="col-sm-3" id="orgcol3h" style="display:none">
+        <label class="form-label" for="orglvl3valh" id="orglvl3lblh">Unit</label>
+        <input type="text" id="orglvl3valh" name="orglvl3valh" class="form-control" placeholder="" readonly>
+    </div>
+    <div class="col-sm-3" id="orgcol2h" style="display:none">
+        <label class="form-label" for="orglvl2valh" id="orglvl2lblh">Department</label>
+        <input type="text" id="orglvl2valh" name="orglvl2valh" class="form-control" placeholder="" readonly>
+    </div>
+    <div class="col-sm-3" id="orgcol1h" style="display:none">
+        <label class="form-label" for="orglvl1valh" id="orglvl1lblh">Department</label>
+        <input type="text" id="orglvl1valh" name="orglvl1valh" class="form-control" placeholder="" readonly>
+    </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                console.log("ready!");
+                loaddynamiccolumns1();
+            });
+            function loaddynamiccolumns1() {
+                try {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                        data: "{}",
+                        success: function (data) {
+                            debugger;
+                            // var orglevelcode1 = data[0].orghierarchy_code;
+                            maxorglvl = data.length;
+                            // alert(maxorglvl);
+                            if (data.length >= 1) {
+                                orglevelcode1 = data[0].orghierarchy_code;
+                                var org1val = data[0].orghierarchy_name;
+                                if (orglevelcode1 != null && orglevelcode1 != "" && orglevelcode1 != "undefined") {
+                                    $("#orglvl1lblh").text(org1val);
+                                    //orglevelval1 = $("#" + orglevelcode1).val();
+                                    $("#orgcol1h").show()
+
+                                    @*$.ajax({
+                                        url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                        type: "GET",
+                                        data: { 'parentcode': orglevelcode1, "dependcode": "" },
+                                        success: function (data) {
+
+                                            for (var i = 0; i < data.length; i++) {
+                                                var opt = new Option(data[i].master_name, data[i].master_code);
+                                                //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                                $('#orglvl1val').append(opt);
+
+                                                //$("#sdocname").find('option').each(function (i, opt) {
+
+                                                //    // if (opt.value === Draft)
+                                                //    $(opt2).attr('selected', 'selected');
+                                                //});
+
+                                            }
+                                        }
+                                    });*@
+                                }
+
+                            }
+                            if (data.length >= 2) {
+                                orglevelcode2 = data[1].orghierarchy_code;
+                                var org1va2 = data[1].orghierarchy_name;
+                                if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                                    $("#orglvl2lblh").text(org1va2);
+                                    //   orglevelval2 = $("#" + orglevelcode2).val();
+                                    $("#orgcol2h").show();
+
+                                    @*$.ajax({
+                                        url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                        type: "GET",
+                                        data: { 'parentcode': orglevelcode2, "dependcode": "" },
+                                        success: function (data) {
+
+                                            for (var i = 0; i < data.length; i++) {
+                                                var opt = new Option(data[i].master_name, data[i].master_code);
+                                                //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                                $('#orglvl2val').append(opt);
+
+                                                //$("#sdocname").find('option').each(function (i, opt) {
+
+                                                //    // if (opt.value === Draft)
+                                                //    $(opt2).attr('selected', 'selected');
+                                                //});
+
+                                            }
+                                        }
+                                    });*@
+                                }
+                            }
+                            if (data.length >= 3) {
+                                orglevelcode3 = data[2].orghierarchy_code;
+                                var org1va3 = data[2].orghierarchy_name;
+                                if (orglevelcode3 != null && orglevelcode3 != "" && orglevelcode3 != "undefined") {
+                                    $("#orglvl3lblh").text(org1va3);
+                                    // orglevelval3 = $("#" + orglevelcode3).val();
+                                    $("#orgcol3h").show();
+
+                                    @*$.ajax({
+                                        url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                        type: "GET",
+                                        data: { 'parentcode': orglevelcode3, "dependcode": "" },
+                                        success: function (data) {
+
+                                            for (var i = 0; i < data.length; i++) {
+                                                var opt = new Option(data[i].master_name, data[i].master_code);
+                                                //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                                $('#orglvl3val').append(opt);
+
+                                                //$("#sdocname").find('option').each(function (i, opt) {
+
+                                                //    // if (opt.value === Draft)
+                                                //    $(opt2).attr('selected', 'selected');
+                                                //});
+
+                                            }
+                                        }
+                                    });*@
+                                }
+                            }
+                            if (data.length == 4) {
+                                orglevelcode4 = data[3].orghierarchy_code;
+                                var org1va4 = data[3].orghierarchy_name;
+                                if (orglevelcode4 != null && orglevelcode4 != "" && orglevelcode4 != "undefined") {
+                                    $("#orglvl4lblh").text(org1va4);
+                                    //orglevelval4 = $("#" + orglevelcode4).val();
+                                    $("#orgcol4h").show();
+
+                                    @*$.ajax({
+                                        url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                        type: "GET",
+                                        data: { 'parentcode': orglevelcode4, "dependcode": "" },
+                                        success: function (data) {
+
+                                            for (var i = 0; i < data.length; i++) {
+                                                var opt = new Option(data[i].master_name, data[i].master_code);
+                                                //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                                $('#orglvl4val').append(opt);
+
+                                                //$("#sdocname").find('option').each(function (i, opt) {
+
+                                                //    // if (opt.value === Draft)
+                                                //    $(opt2).attr('selected', 'selected');
+                                                //});
+
+                                            }
+                                        }
+                                    });*@
+                                }
+                            }
+
+
+                            // alert(orglevelcode1);
+                            //setTimeout(function () {
+                            //    window.location.reload(1);
+                            //}, 2500);
+                        },
+                    });
+                } catch (er) {
+                    alert(er);
+                }
+            }
+        </script>
+</body>
+</html>

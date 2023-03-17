@@ -1,0 +1,105 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.DocGroupMaster_Model
+ 
+<style>
+
+</style>
+<div style="width:25px"></div>
+<div>
+    <table>
+        @Html.HiddenFor(model => model.DgroupId, new { style = "height:25px;width:225px;font-weight: normal;" })
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">
+                @Html.Label("Name", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DgroupName, new { style = "height:25px;width:225px;font-weight: normal;", id = "dgroupname" })
+                @Html.ValidationMessageFor(model => model.DgroupName)
+            </td>
+            
+        </tr>
+        <tr style="height:10px"></tr>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">
+                @Html.Label("Short Name", new { style = "width:120px;font-weight: normal;"})
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Dgroup_shortname, new { style = "height:25px;width:225px;font-weight: normal;", id = "shortname" })
+                @Html.ValidationMessageFor(model => model.Dgroup_shortname)
+            </td>
+
+        </tr>
+        <tr style="height:10px"></tr>
+        <tr>
+            @Html.Partial("BindOrgLevels")
+        </tr>
+        <tr style="height:10px;"><td colspan="2"></td></tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" name="btncancel" value="Cancel" id="btncancel" onclick="return closeopup()" class="btn btn-orange pull-right" style="width:60px;margin-left:15px" />
+            </td>
+            <td colspan="2">
+                <input type="button" name="btnsubmit" value="Save" id="btnsave" onclick="return save()" class="btn btn-orange pull-right" style="width:60px" />
+            </td>
+        </tr>
+        @*@for (int i = 0; i < labellist.Count; i++)
+        {
+            <tr style="height:10px"></tr>
+            <tr>
+                <td style="left:15px; position:relative">
+                    @Html.Label(labellist[i].orghierarchy_name, new { style = "width:120px;font-weight: normal;" })
+                </td>
+                <td>
+                    @(Html.Kendo().DropDownList()
+                          .Name(labellist[i].orghierarchy_code)
+                              .DataTextField("master_name")
+                              .DataValueField("master_code")
+                              .Events(e => e.Change("onChangeunit"))
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" , id = labellist[i].orghierarchy_code})
+              .DataSource(source => { source.Read(read => { read.Action("DocGroupNames", "DocGroupMaster", new { parentcode = labellist[i].orghierarchy_code, dependcode = "" }); }).ServerFiltering(true); }))
+                   
+                </td>
+            </tr>
+        }*@
+        @*<tr style="height:10px"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Unit", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("UnitID")
+                              .DataTextField("Unit")
+                              .DataValueField("UnitID")
+                              .Events(e => e.Change("onChangeunit"))
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                              .DataSource(source => { source.Read(read => { read.Action("DocGroupNames", "DocGroupMaster", new { CommonVal = "U" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.UnitID)
+            </td>
+        </tr>
+
+        <tr style="height:10px"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Department", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("Dept_Id")
+                              .DataTextField("Dept_Name")
+                              .DataValueField("Dept_Id")                              
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                              .DataSource(source => { source.Read(read => { read.Action("DocGroupNames", "DocGroupMaster", new { CommonVal = "D" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.Dept_Id)
+            </td>
+        </tr>*@
+
+    </table>
+    @*<div class="row">
+        <button type="button" onclick="save()"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+        <button type="button" onclick="closeopup()"><i class="fa fa-ban" aria-hidden="true"></i>Cancel</button>
+    </div>*@
+</div>
+

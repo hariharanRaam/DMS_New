@@ -1,0 +1,1132 @@
+﻿@using Kendo.Mvc.UI;
+@model DMS.Model.ViewDocuments_Model
+
+@using System.Web.UI.WebControls;
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <meta name="viewport" content="width=device-width" />
+    @*<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">*@
+
+    <style>
+        .k-grid .k-grid-header .k-header .k-link {
+            height: auto;
+        }
+
+        .k-grid .k-grid-header .k-header .k-link{
+            white-space:nowrap;
+        }
+
+        .k-content {
+            font-weight: normal;
+            font-size: 13px;
+        }
+
+        .accordion_container {
+            width: 100%;
+        }
+
+        .accordion_head {
+            background-color: #337ab7;
+            color: white;
+            cursor: pointer;
+            font-family: arial;
+            font-size: 14px;
+            margin: 0 0 1px 0;
+            padding: 1px 3px;
+            font-weight: bold;
+        }
+
+        .accordion_body {
+            /*background: skyblue;*/
+        }
+
+            .accordion_body p {
+                padding: 18px 5px;
+                margin: 0px;
+            }
+
+        .plusminus {
+            float: right;
+        }
+
+        .ioniconplus {
+            width: 15px;
+            background-image: url('../images/minus-circled.png');
+            background-repeat: no-repeat;
+            background-position: -50px -128px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed" id="viewdoc">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Search - Within Doc Name</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form method="get" class="form-horizontal" enctype="multipart/form-data" id="form" style="height:473px">
+                            <div class="accordion_container">
+                                <div class="accordion_head">Search<span class="plusminus">+</span></div>
+                                <div class="accordion_body" style="display: none;">
+                                    <div>
+                                        <table>
+                                            <tr style="height:05px;"></tr>
+                                            <tr>
+                                                <td><label class="col-md-3 control-label" style="width:100px;font-weight:normal;">Doc Name</label></td>
+                                                <td><select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>
+
+                                                <td><label class="col-md-6 control-label" style="width:100px;font-weight:normal;">Doc Group</label></td>
+                                                <td><select id="Catgery" name="Catgery" onchange="fetchDocGroup()" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>
+
+                                                <td><label class="col-md-6 control-label" style="width:auto;font-weight:normal;">Unit</label></td>
+                                                <td><select id="Unit" name="Unit" onchange="fetchUnit()" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>
+
+                                                <td><label class="col-md-6 control-label" style="width:auto;font-weight:normal;">Department</label></td>
+                                                <td><select id="DeptID" name="DeptID" onchange="fetchDept()" class=" form-control" style="width:150px;height:30px;font-weight:normal;"></select> </td>
+                                                <td style="width:10px"></td>
+                                                <td><input type="button" name="btnsubmit" value="Get Documents" id="btnsearch" onclick="return CheckUserInputs()" class="btn btn-orange pull-right" style="width:115px" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div id="viewPlaceHolder" class="treeview" style="border-top:groove thin;border-top-style:ridge;border-bottom:groove thin;border-bottom-style:ridge;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Search1">
+                                @*<div id="example" style="top:5px; position:relative" class="k-content">
+                                        <table id="grid" data-bind="source: gridRows"></table>
+                                    </div>*@
+                            </div>
+                            <div id="Search2">
+                                @*<div id="example1" style="top:20px; position:relative" class="k-content">
+                                        <table id="grid2" data-bind="source: gridRows"></table>
+                                    </div>*@
+                            </div>
+                            <div id="ForPartialView"></div>
+                            <input type="hidden" id="hdn_attachid" />
+                            <input type="hidden" id="hdn_filelocation" />
+                            <input type="hidden" id="hdn_linkorinterfile" />
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+</body>
+</html>
+
+<script>
+    var objDialog;
+    $(document).ready(function () {
+        debugger;
+        objDialog = $("[id$='ForPartialView']");
+        objDialog.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 550,
+            height: 550
+        });
+
+
+        $(".accordion_head").click(function () {
+            if ($('.accordion_body').is(':visible')) {
+                $(".accordion_body").slideUp(300);
+                $(".plusminus").text('+');
+            }
+            if ($(this).next(".accordion_body").is(':visible')) {
+                $(this).next(".accordion_body").slideUp(300);
+                $(this).children(".plusminus").text('+');
+            } else {
+                $(this).next(".accordion_body").slideDown(300);
+                $(this).children(".plusminus").text('-');
+            }
+        });
+
+
+        $('#btnlink').prop('disabled', true);
+        $('#btninterfile').prop('disabled', true);
+        var custid = 0;
+        var type = "department";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "Search")',
+            type: "GET",
+            datatype: "json",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dept_Name, data[i].Dept_Id);
+                    var opt2 = new Option(data[0].Dept_Name, data[0].Dept_Id);
+                    $('#DeptID').append(opt);
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "unit";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "Search")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].unit_name, data[i].unit_id);
+                    var opt2 = new Option(data[0].unit_name, data[0].unit_id);
+                    $('#Unit').append(opt);
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "CateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "Search")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dgroup_Name, data[i].Dgroup_Id);
+                    var opt2 = new Option(data[0].Dgroup_Name, data[0].Dgroup_Id);
+                    $('#Catgery').append(opt);
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "SubCateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "Search")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dname_Name, data[i].Dname_Id);
+                    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                    $('#subCatgery').append(opt);
+
+                }
+            }
+        });
+
+    });
+
+</script>
+
+<script>
+    function fetchDept() {
+        debugger;
+        var DeptID = $("#DeptID").val();
+        if (DeptID == "" || DeptID == null || DeptID == "undefined" || DeptID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDept", "Search")',
+
+                data: { 'DeptID': DeptID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_unit;
+                    var value2 = data.Get_docgroup;
+                    var value3 = data.Get_docname;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckUnitId = $("#Unit").val();
+                    if (CheckUnitId == "0") {
+                        $('#Unit').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].unit_name, value1[i].unit_id);
+                            var opt2 = new Option(value1[0].unit_name, value1[0].unit_id);
+
+                            $('#Unit').append(opt);
+
+                        }
+                        if (length1 == 2) {
+                            $("#Unit").val($("#Unit option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    if (CheckDocGroupId == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                            var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+                        }
+                        if (length2 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    }
+
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+                        debugger;
+                        $("#viewPlaceHolder").load("../Search/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+
+                    }
+
+                }
+            });
+        }
+    }
+
+
+    function fetchUnit() {
+        debugger;
+        var UnitID = $("#Unit").val();
+        if (UnitID == "" || UnitID == null || UnitID == "undefined" || UnitID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetUnit", "Search")',
+
+                data: { 'UnitID': UnitID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept1;
+                    var value2 = data.Get_docgroup1;
+                    var value3 = data.Get_docname1;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptID = $("#DeptID").val();
+                    if (CheckDeptID == "0") {
+                        $('#DeptID').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                            var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                            $('#DeptID').append(opt);
+
+                        }
+                        if (length1 == 2) {
+                            $("#DeptID").val($("#DeptID option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocGroupID = $("#Catgery").val();
+                    if (CheckDocGroupID == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                            var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+
+                        }
+                        if (length2 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocNameID = $("#subCatgery").val();
+                    if (CheckDocNameID == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    }
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+                        debugger;
+                        $("#viewPlaceHolder").load("../Search/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+                    }
+                }
+            });
+        }
+    }
+
+    function fetchDocGroup() {
+        debugger;
+        var DocGroupID = $("#Catgery").val();
+        if (DocGroupID == "" || DocGroupID == null || DocGroupID == "undefined" || DocGroupID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocGroup", "Search")',
+
+                data: { 'DocGroupID': DocGroupID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept2;
+                    var value2 = data.Get_unit2;
+                    var value3 = data.Get_docname2;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptId = $("#DeptID").val();
+                    if (CheckDeptId == "0") {
+                        $('#DeptID').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                            var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+                            $('#DeptID').append(opt);
+                        }
+                        if (length1 == 2) {
+                            $("#DeptID").val($("#DeptID option").eq(1).val());
+                        }
+                    }
+
+                    var CheckUnitId = $("#Unit").val();
+                    if (CheckUnitId == "0") {
+                        $('#Unit').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                            var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                            $('#Unit').append(opt);
+
+                        }
+                        if (length2 == 2) {
+                            $("#Unit").val($("#Unit option").eq(1).val());
+                        }
+                    }
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    }
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+                        debugger;
+                        $("#viewPlaceHolder").load("../Search/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+                    }
+                }
+            });
+        }
+    }
+
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "Search")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                    var value1 = data.Get_dept3;
+                    var value2 = data.Get_unit3;
+                    var value3 = data.Get_docgroup3;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptId = $("#DeptID").val();
+                    //if (CheckDeptId == "0") {
+                    $('#DeptID').empty();
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                        var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                        $('#DeptID').append(opt);
+
+                    }
+                    if (length1 == 2) {
+                        $("#DeptID").val($("#DeptID option").eq(1).val());
+                    }
+                    //}
+
+                    var CheckUnitId = $("#Unit").val();
+                    //if (CheckUnitId == "0") {
+                    $('#Unit').empty();
+                    for (var i = 0; i < value2.length; i++) {
+                        var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                        var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                        $('#Unit').append(opt);
+
+                    }
+                    if (length2 == 2) {
+                        $("#Unit").val($("#Unit option").eq(1).val());
+                    }
+                    //}
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                        var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+
+                    }
+                    if (length3 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+                    //}
+
+                    var DeptID1 = $("#DeptID").val();
+                    var Unit1 = $("#Unit").val();
+                    var Dgroup1 = $("#Catgery").val();
+                    var Dname1 = $("#subCatgery").val();
+                    if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+
+                        $("#viewPlaceHolder").load("../Search/GetDynamicFields",
+                               { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1 });
+                    }
+                }
+            });
+
+        }
+    }
+
+</script>
+
+<script>
+    function colapse() {
+        debugger;
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    }
+
+    function NumersOnly(evt) {
+        debugger;
+        if (evt.keyCode == '9' || evt.keyCode == '16') {
+            return;
+        }
+        evt.keyCode
+        var code;
+        if (evt.keyCode) code = evt.keyCode;
+        else if (evt.which) code = evt.which;
+        if (evt.which == 46)
+            return false;
+        if (code == 8 || code == 46)
+            return true;
+        if (code < 48 || code > 57)
+            return false;
+    }
+
+    function isNumberKey(evt) {
+        debugger;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+          && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function CheckUserInputs() {
+        debugger;
+        var person = {};
+        person.DeptName = $('#DeptID').val();
+        person.UnitName = $('#Unit').val();
+        person.CateName = $('#Catgery').val();
+        person.SubCateName = $('#subCatgery').val();
+
+        //Framing where clause condition.
+        var count = $('#ctlcount').val();
+        var concatval;
+        //creating array variable.
+        var Dyntextvalues = [];
+        for (var i = 0; i < count; i++) {
+
+            var Attributetypes = $('#Attribtype' + i).val();
+            var atrname = $('#Attribname' + i).val();
+            //var Attributename = $('#Attribname' + i).val();
+            var Attributename = $.trim(atrname);
+            if (Attributetypes == "Logical") {
+                var gettxtdesval = $('input[id=ctl' + i + ']:checked').val()
+                if (gettxtdesval == undefined || gettxtdesval == "") {
+                }
+                else {
+                    concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(concatval);
+                }
+            }
+
+            else {
+                var gettxtdesval = $('#ctl' + i).val();
+                if (gettxtdesval == "" || gettxtdesval == "-Select-") {
+                }
+                else {
+                    concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(concatval);
+                }
+            }
+
+        }
+
+        var postData = ""
+        $.each(Dyntextvalues, function (index, item) {
+            debugger;
+            postData = postData + " " + "and" + " " + Dyntextvalues[index];
+
+        });
+        postData = postData;
+
+        var DeptID1 = $("#DeptID").val();
+        var Unit1 = $("#Unit").val();
+        var Dgroup1 = $("#Catgery").val();
+        var Dname1 = $("#subCatgery").val();
+        if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+
+            /*   //OverLapping Code
+               var CHANGE = 'change',
+                      $grid = $('#grid');
+
+               // Unbind existing refreshHandler in order to re-create with different column set
+               if ($grid.length > 0 && $grid.data().kendoGrid) {
+                   var thisKendoGrid = $grid.data().kendoGrid;
+
+                   if (thisKendoGrid.dataSource && thisKendoGrid._refreshHandler) {
+                       thisKendoGrid.dataSource.unbind(CHANGE, thisKendoGrid._refreshHandler);
+                       $grid.removeData('kendoGrid');
+                       $grid.empty();
+
+                       $(".k-grid-header").hide();
+                       $(".k-grid-pager").hide();
+                       $("#example .k-grid-header").css('padding', '0px');
+                       $("#example .k-grid-content").css('overflow-y', 'visible');
+
+                   }
+               }
+
+               var CHANGE = 'change',
+                    $grid = $('#grid2');
+
+               // Unbind existing refreshHandler in order to re-create with different column set
+               if ($grid.length > 0 && $grid.data().kendoGrid) {
+                   var thisKendoGrid = $grid.data().kendoGrid;
+
+                   if (thisKendoGrid.dataSource && thisKendoGrid._refreshHandler) {
+                       thisKendoGrid.dataSource.unbind(CHANGE, thisKendoGrid._refreshHandler);
+                       $grid.removeData('kendoGrid');
+                       $grid.empty();
+
+                       $(".k-grid-pager").hide();
+                   }
+               }*/
+
+            $.ajax({
+                url: '@Url.Action("GetDocuments", "Search")',
+                data: { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1, 'form': postData },
+                success: function (result) {
+                    debugger
+
+                    var chkval = JSON.parse(result.Data1);
+                    var arr = [];
+                    $.each(chkval, function (i, e) {
+                        $.each(e, function (key, val) {
+                            arr.push(val);
+                        });
+                    });
+
+                    if (arr == "NoRecords") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'No Records found..!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+
+                    var columns = [];
+                    var data = JSON.parse(result.Data1);
+                    var data2 = JSON.parse(result.Data2);
+                    var i = 0;
+
+                    var entryIndex = "entries[" + i + "]";
+
+                    for (var key in data[0]) {
+                        var val = data2[0][key];
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: '150px',
+                            type: val,
+                        });
+
+                        i = i + 1;
+                        entryIndex = "entries[" + i + "]";
+                    }
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Download',
+                        template: '<span class="btn btn-orange fa fa-download Download" name="Download" id="Download" value="Download" onclick="Download()"></span>',
+                        //template: '<span class="glyphicon glyphicon-download Download" name="Download" id="Download" value="Download" onclick="Download()"></span>',
+                        filterable: false,
+                        sortable: true,
+                        width: 80,
+                        editable: true
+                    });
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Mail',
+                        template: '<span class="btn btn-orange fa fa-envelope mail" name="mail" id="mail" value="mail" onclick="Mail()"></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: 70,
+
+                    });
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Link',
+                        template: '<span class="btn btn-orange fa fa-link link" name="link" id="link" value="link" onclick=Grid2("Link")></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: 70,
+                    });
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Inter File',
+                        template: '<span class="btn btn-orange fa fa-save file" name="file" id="file" value="file" onclick=Grid2("InterFile")></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: 70,
+
+                    });
+
+                    var rows = [];
+                    var data1 = JSON.parse(result.Data1);
+
+                    $.each(data1, function (i, e) {
+                        var entryArray = [];
+                        $.each(e, function (key, val) {
+
+                            entryArray.push(val);
+                        });
+                        rows.push(kendo.observable({
+                            entries: entryArray
+                        }));
+
+                    });
+
+                    var viewModel = kendo.observable({
+                        gridRows: rows
+                    });
+
+                    var configuration = {
+                        editable: false,
+                        sortable: true,
+                        scrollable: true,
+                        filterable: true,
+                        pagable: true,
+                        resizable: true,
+                        selectable: 'row',
+                        pageable: {
+                            pageSize: 8,
+                            buttonCount: 4
+                        },
+                        columns: columns,
+                        rows: viewModel,
+                        //height: '95%'
+                        dataBound: function () {
+                            for (var i = 0; i < this.columns.length; i++) {
+                                this.autoFitColumn(i);
+                            }
+                        },
+                    };
+
+                    $("#example").remove();
+                    $('#Search1').append('<div id="example" style="top:5px; position:relative" class="k-content"><table id="grid" data-bind="source: gridRows"></table></div>');
+                    var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                    kendo.bind($("#grid"), viewModel);
+
+                    //var grid = $("#grid").data("kendoGrid");
+                    //for (var i = 0; i < grid.columns.length; i++) {
+                    //    grid.autoFitColumn(i);  //autofit each column.
+                    //}
+
+                    $('#btnlink').prop('disabled', false);
+                    $('#btninterfile').prop('disabled', false);
+
+                },
+                error: function () {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Some error has occurred.!',
+                        type: 'red',
+                    });
+                }
+            })
+
+        }
+        else {
+            $.alert({
+                title: 'DMS',
+                content: 'Please fill all search criteria..!',
+                type: 'blue',
+            });
+            return false;
+        }
+    }
+
+    function Grid2(id) {
+        debugger;
+        var DeptID1 = $("#DeptID").val();
+        var Unit1 = $("#Unit").val();
+        var Dgroup1 = $("#Catgery").val();
+        var Dname1 = $("#subCatgery").val();
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var grid2 = $("#grid2").data("kendoGrid");
+        var Attribid = (model.entries[0]);
+        var method = "";
+        var Contol = "";
+        $("#hdn_linkorinterfile").val(" ")
+        if (id == "Link") {
+            method = "ShowLinkedDocuments/";
+            Contol = "Search";
+            $("#hdn_linkorinterfile").val("link")
+        }
+
+        if (id == "InterFile") {
+            method = "ShowInterFilingDocuments/";
+            Contol = "Search";
+            $("#hdn_linkorinterfile").val("interfile")
+        }
+        if (DeptID1 !== "0" && Unit1 !== "0" && Dgroup1 !== "0" && Dname1 !== "0") {
+
+            var CHANGE = 'change',
+                   $grid2 = $('#grid2');
+
+            // Unbind existing refreshHandler in order to re-create with different column set
+            if ($grid2.length > 0 && $grid2.data().kendoGrid) {
+                var thisKendoGrid = $grid2.data().kendoGrid;
+
+                if (thisKendoGrid.dataSource && thisKendoGrid._refreshHandler) {
+                    thisKendoGrid.dataSource.unbind(CHANGE, thisKendoGrid._refreshHandler);
+                    grid2.pager.element.hide();
+                    $grid2.removeData('kendoGrid');
+                    $grid2.empty();
+                    $("#example1 .k-grid-header").hide();
+                    $("#example1 .k-grid-header").css('padding', '0px');
+                    $("#example1 .k-grid-content").css('overflow-y', 'visible');
+                }
+            }
+            $.ajax({
+                url: method + Contol,
+                data: { 'DeptID1': DeptID1, 'Unit1': Unit1, 'Dgroup1': Dgroup1, 'Dname1': Dname1, 'Attribid': Attribid },
+                success: function (result) {
+                    debugger
+                    var chkval = JSON.parse(result.Data3);
+                    var arr = [];
+                    $.each(chkval, function (i, e) {
+                        $.each(e, function (key, val) {
+                            arr.push(val);
+                        });
+                    });
+
+                    if (arr == "NoRecords") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'There is no record found..!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+
+                    var columns = [];
+                    var data = JSON.parse(result.Data3);
+                    var data2 = JSON.parse(result.Data4);
+                    debugger;
+                    var i = 0;
+                    var entryIndex = "entries[" + i + "]";
+
+                    for (var key in data[0]) {
+                        var val = data2[0][key];
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: 20,
+                            type: val
+                        });
+                        i = i + 1;
+                        entryIndex = "entries[" + i + "]";
+                    }
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Download',
+                        template: '<span class="glyphicon glyphicon-download Download" name="Download" id="Download" value="Download" onclick="Grid2Download()"></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: 5
+                    });
+
+                    columns.push({
+                        field: entryIndex + 1,
+                        title: 'Mail',
+                        //template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick="Mail()"></span>',
+                        template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick="Grid2Mail()"></span>',
+                        filterable: false,
+                        sortable: true,
+                        editable: true,
+                        width: 5
+                    });
+
+                    var rows = [];
+                    var data1 = JSON.parse(result.Data3);
+
+                    $.each(data1, function (i, e) {
+                        var entryArray = [];
+                        $.each(e, function (key, val) {
+                            //entryArray.push(key);
+                            entryArray.push(val);
+
+                        });
+                        rows.push(kendo.observable({
+                            entries: entryArray
+                        }));
+
+                    });
+
+                    var viewModel = kendo.observable({
+                        gridRows: rows
+                    });
+
+                    var configuration = {
+                        editable: false,
+                        sortable: true,
+                        scrollable: true,
+                        filterable: true,
+                        pagable: true,
+                        resizable: true,
+                        selectable: 'row',
+                        pageable: {
+                            pageSize: 5,
+                            buttonCount: 4
+                        },
+                        columns: columns,
+                        rows: viewModel,
+                        //height: '95%'
+                    };
+
+                    $("#example1").remove();
+                    $('#Search2').append('<div id="example1" style="top:5px; position:relative" class="k-content"><table id="grid2" data-bind="source: gridRows"></table></div>');
+
+                    var timeEditGrid = $("#grid2").kendoGrid(configuration).data("kendoGrid");
+                    kendo.bind($("#grid2"), viewModel);
+                    var grid = $("#grid2").data("kendoGrid");
+                    for (var i = 0; i < grid.columns.length; i++) {
+                        grid.autoFitColumn(i);  //autofit each column.
+                    }
+
+                },
+                error: function () {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Some error has occurred!',
+                        type: 'red',
+                    });
+                }
+            });
+        }
+        else {
+            $.alert({
+                title: 'DMS',
+                content: 'Please fill all search criteria.!',
+                type: 'blue',
+            });
+            return false;
+        }
+    }
+
+    function Download() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var attached = (model.entries[0]);
+
+        var fileData = new FormData();
+        fileData.append('attacheid', attached);
+
+        $.ajax({
+            url: '@Url.Action("Download", "Search")',
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: fileData,
+        }).done(function (data) {
+            //get the file name for download
+            if (data.attacheid != "") {
+                //use window.location.href for redirect to download action for download the file
+                window.location.href = "@Url.RouteUrl(new { Controller = "Search", Action = "DownloadFile" })/?attacheid=" + data.attacheid;
+            }
+        });
+    }
+
+    function Grid2Download() {
+        debugger;
+        var grid = $("#grid2").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var attached = (model.entries[0]);
+
+        var fileData = new FormData();
+        fileData.append('attacheid', attached);
+
+        $.ajax({
+            url: '@Url.Action("Download", "Search")',
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: fileData,
+        }).done(function (data) {
+            //get the file name for download
+            if (data.attacheid != "") {
+                //use window.location.href for redirect to download action for download the file
+                window.location.href = "@Url.RouteUrl(new { Controller = "Search", Action = "DownloadFile" })/?attacheid=" + data.attacheid;
+            }
+        });
+    }
+
+
+    function Mail() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var attachedid = (model.entries[0]);
+        $("#hdn_attachid").val(" ");
+        $("#hdn_linkorinterfile").val(" ");
+        $("#hdn_attachid").val(attachedid);
+        $("#hdn_linkorinterfile").val("index");
+
+        objDialog.load('../Search/Showmailpartialview');
+        objDialog.dialog({ title: 'Send Mail' });
+        objDialog.dialog("open");
+        return false;
+    }
+    function Grid2Mail() {
+        debugger;
+        var grid = $("#grid2").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var attachedid = (model.entries[0]);
+        $("#hdn_attachid").val(" ");
+        $("#hdn_attachid").val(attachedid);
+        objDialog.load('../Search/Showmailpartialview');
+        objDialog.dialog({ title: 'Send Mail' });
+        objDialog.dialog("open");
+        return false;
+    }
+</script>

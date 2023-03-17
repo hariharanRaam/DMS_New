@@ -1,0 +1,193 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@using Kendo.Mvc.Resources;
+@model  DMS.Model.EmployeeMaster_Model
+
+<!Doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+
+        .k-state-active {
+            display: none;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:650px">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Employee</h3>
+                        </div>
+                        @using (Html.BeginForm("EmployeeMaster", "EmployeeMaster", FormMethod.Post, new { @id = "form1" }))
+                        {
+                            <div>
+                                @(Html.Kendo().Grid<DMS.Model.EmployeeMaster_Model>().Name("Employees")
+                                .HtmlAttributes(new { style = "width:100%;line-height:2em;font-weight:normal" })
+                                .ToolBar(toolbar => toolbar.Create().Text("Add New Employee"))
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(m => m.EmployeeID).Width(20);
+                                    columns.Bound(m => m.EmployeeCode).Width(80);
+                                    columns.Bound(m => m.EmployeeName).Width(100);
+                                    columns.Bound(m => m.Title).Width(80);
+                                    columns.Bound(m => m.City).Width(80);
+                                    columns.Bound(m => m.State).Width(100);
+                                    columns.Bound(m => m.MobileNo).Width(100);
+                                    columns.Bound(m => m.EmailID).Width(150);
+                                    columns.Command(cmd => { cmd.Edit();}).Title("Edit").Width(50);
+                                    columns.Template(p => { }).ClientTemplate("<button type='button' onclick='return myDeleteJs()'><i class='fa fa-trash-o' aria-hidden='true'></i>Delete</button>").Width(80).Title("Delete");
+                                })
+
+                            .Editable(editable =>
+                             { editable.Mode(GridEditMode.PopUp).TemplateName("EmployeeMasterDropdown"); })
+                             .Pageable()
+                             .Sortable()
+                             .Resizable(resize => resize.Columns(true))
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .PageSize(10)
+                             //.Events(events => events.Error("error_handler").RequestStart("onRequestStart"))
+                             .Events(events => events.Error("error_handler"))
+                             .Model(model => model.Id(p => p.EmployeeID))
+                             .Create(Create => Create.Action("SaveEmployee", "EmployeeMaster"))
+                             .Read(read => read.Action("EmployeeGrid_Read", "EmployeeMaster"))
+                             .Update(update => update.Action("EmployeeGrid_Update", "EmployeeMaster"))
+                             ))
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'red',
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        debugger;
+        $("#Employees").data("kendoGrid").dataSource.bind("requestEnd", onRequestEnd);
+        var grid = $("#Employees").data("kendoGrid");
+        //function for changing kendo popup title.
+        grid.bind("edit", function (event) {
+            debugger;
+            event.container.parent().find('.k-window-title').text(event.model.isNew() ? "New" : "Edit");
+        });
+    })
+
+    function onRequestEnd(e) {
+        debugger;
+        //Check request type
+        if (e.type == "create") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Employee has been created successfully!',
+                    type: 'green',
+                });
+                setTimeout(function () {
+                    debugger;
+                    window.location.reload(1);
+                }, 2000);
+
+            }
+        }
+        if (e.type == "update") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Employee has been Edited successfully!',
+                    type: 'green',
+                })
+                setTimeout(function () {
+                    debugger;
+                    window.location.reload(1);
+                }, 2000);
+            }
+        }
+    }
+
+    function myDeleteJs() {
+        debugger;
+        var grid = $("#Employees").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var EmployeeID = (model.EmployeeID);
+
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+            theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure do you want to delete this record!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("DeletingEmployee", "EmployeeMaster")',
+                        data: "{ EmployeeID:'" + EmployeeID + "'}",
+                        success: function (data) {
+                            debugger;
+                            if (data == 'Success') {
+                                $.alert({
+                                    icon: 'fa fa-success',
+                                    title: 'DMS',
+                                    theme: 'dark',
+                                    content: 'Record deleted.!',
+                                    type: 'green',
+                                    animationSpeed: 700,
+                                });
+                            }
+                            setTimeout(function () {
+                                window.location.reload(1);
+                            }, 2500);
+                        },
+                    });
+                },
+                cancel: function () {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        theme: 'dark',
+                        content: 'Delete Canceled.!',
+                        type: 'blue',
+                        animationSpeed: 700,
+                    });
+                },
+            }
+        });
+    }
+</script>  

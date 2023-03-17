@@ -1,0 +1,391 @@
+﻿@model DMS.Model.UserGroups_Model.UserGroups
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UserGroup-Roles Mapping</title>
+
+    <style>
+        .errormessage {
+            color: green;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .messagedisplay {
+            color: green;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .modal-dialog {
+            width: 450px !important;
+            margin: 190px auto !important;
+        }
+
+        .k-content {
+            font-weight: normal;
+            font-size: 13px;
+            text-align: left;
+            top: 20px;
+            position: relative;
+            left: 370px;
+        }
+
+        .k-grid {
+            width: 42%;
+        }
+    </style>
+
+    <style>
+        ul {
+            display: block;
+        }
+
+        .box-header {
+            padding: 0px !important;
+        }
+
+        .btnsubmit {
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 25px;
+            border: 0 none;
+            background-color: #337ab7;
+        }
+
+        .form-control {
+            font-weight: normal !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="content-wrapper">
+        <section class="content" style="top:0px;position:relative">
+            <div class="box-header text-center with-border">
+                <h3 class="box-title">User Group</h3>
+                <button class="btn btn-orange pull-left" onclick="return Add();" id=" btn_new">
+                    Create New
+                </button>
+            </div>
+            <div class=" box box-orange">
+                <div>
+                    <input type="hidden" id="hdn_grpname" />
+                    <input type="hidden" id="hdn_title" />
+                    <input type="hidden" id="hdn_ugrp_gid" />
+                </div>
+                <form method="get" class="form-horizontal" enctype="multipart/form-data" style="height:610px;" id="form">
+                    <div class="box-header text-center with-border">
+                        <div class="k-content" id="usergrp_list">
+                        </div>
+                    </div>
+                    <div id="user-modal" style="margin-left:30px;"></div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+
+</body>
+</html>
+
+<script>
+    function CreateUserGroups(usergroup_id) {
+        debugger;
+        if ($("#hdn_ugrp_gid").val() == "") {
+            $("#hdn_ugrp_gid").val(0);
+        }
+        var ugrp_id = $("#hdn_ugrp_gid").val();
+        var usergrp = $("#txtusergroup").val();
+        var menuchecked = sessionStorage.getItem("checkedmenu");
+        var menunotchecked = sessionStorage.getItem("notcheckedmenu");
+        debugger;
+        $.ajax({
+            type: "POST",
+            //cache: false,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            //dataType: "json",
+            url: '@Url.Action("CreateUserGroups", "UserGroupsMapping")',
+            data: "{ usergroup_gid:'" + ugrp_id + "',usergroup_name:'" + usergrp + "',menuchecked:'" + menuchecked + "',menunotchecked:'" + menunotchecked + "'}",
+            success: function (data) {
+                var message = data.msg;
+                var resultnew = data.result;
+                $(".errormessage").html('<span class="errormessage" id="mess">' + message + '</span>');
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 1500);
+                return false;
+            },
+            error: function (data) {
+                //alert("failed to load");
+                //var message = data.msg;
+                //var resultnew = data.result;
+                //$(".errormessage").html('<span class="errormessage" id="mess">' + message + '</span>');
+            }
+        });
+        $("#btn_submit").show();
+        $("#btn_update").hide();
+        $("#title").text("Create New User Groups");
+    }
+
+    $(document).ready(function () {
+        $(".treeview li>ul").css('display', 'none');
+        $(".collapsible1").click(function (e) {
+            e.preventDefault();
+            $(this).toggleClass("collapse1 expand1");
+            $(this).closest('li').children('ul').slideToggle();
+        });
+        $(function () {
+            $("#datepicker, #datepicker1").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+            }).datepicker('update', new Date());
+        });
+        debugger;
+        var uri = "../UserGroupsMapping/UserGroups";
+        $("#usergrp_list").kendoGrid({
+            selectable: "true",
+            allowCopy: true,
+            dataBound: onDataBound,
+            dataSource: {
+                transport: {
+                    read: {
+                        type: "POST",
+                        dataType: "json",
+                        url: uri,
+                        contentType: "application/json; charset=utf-8"
+                    },
+                    parameterMap: function (options, operation) {
+                        debugger;
+                        if (operation == "read") {
+                            return kendo.stringify(options);
+                        }
+                        else {
+                            return kendo.stringify(options);
+                        }
+                    },
+                },
+                requestEnd: function (e) {
+                    var response = e.response;
+                    var type = e.type;
+                    if (e.type !== "read") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'response',
+                            type: 'blue',
+                        });
+                        $.alert({
+                            title: 'DMS',
+                            content: e.response.out_msg,
+                            type: 'blue',
+                        });
+                        //alert('response');
+                        //alert(e.response.out_msg);
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "usergroup_gid",
+                        fields: {
+                            usergroup_gid: {
+                                editable: false,
+                                nullable: true,
+                                visible: false
+                            },
+                            usergroup_name: {
+                                editable: true,
+                                nullable: true
+                            },
+                        }
+                    }
+                },
+                pageSize: 10
+            },
+
+            editable: false,
+            sortable: true,
+            scrollable: false,
+            filterable: true,
+            pagable: true,
+            resizable: true,
+
+            pageable: {
+                pageSize: 5,
+                buttonCount: 4,
+                pageSizes: [10, 20, 30, 40, 50]
+            },
+            height: '95%',
+
+            columns: [
+                {
+                    field: "usergroup_gid",
+                    title: "UserGroup Id",
+                    hidden: true
+                },
+                {
+                    field: "usergroup_name",
+                    title: "UserGroup Name",
+                    width: "70%"
+                },
+                 {
+                     command: [
+                        {
+                            name: "edit",
+                            text: "Edit",
+                            className: "ob-edit",
+                            template: '<span class="glyphicon glyphicon-edit ob-edit" name="ob-edit" id="ob-edit" value="ob-edit"></span>&nbsp;&nbsp;&nbsp;&nbsp;',
+                        },
+                         {
+                             name: "view",
+                             text: "View",
+                             className: "ob-view",
+                             template: '<span class="glyphicon glyphicon-eye-open ob-view" name="ob-view" id="ob-view" value="ob-view"></span>&nbsp;&nbsp;&nbsp;&nbsp;',
+                             //template: '<span class="glyphicon glyphicon-eye-open ob-view" id="btnview" onclick="Download()""></span>&nbsp;&nbsp;&nbsp;&nbsp;',
+                         },
+                         {
+                             name: "destroy",
+                             text: "Delete",
+                             className: "ob-delete",
+                             template: '<span class="glyphicon glyphicon-trash ob-delete" name="ob-delete" id="ob-delete" value="ob-delete"></span>',
+
+                         }
+                     ],
+                     title: "Action",
+                 }
+            ],
+        })
+    });
+    function onDataBound() {
+        var grid = $("#usergrp_list").data("kendoGrid");
+        grid.autoFitColumn(1);
+        grid.autoFitColumn(2);
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).off('click', '#usergrp_list tbody tr .ob-edit').on("click", "#usergrp_list tbody tr .ob-edit", function (e) {
+        debugger;
+        var item = $("#usergrp_list").data("kendoGrid").dataItem($(this).closest("tr"));
+        var usergroup_gid = item.usergroup_gid;
+        var usergroup_name = item.usergroup_name;
+        $("#btn_submit").hide();
+        $("#btn_update").show();
+        $("#title").text("Update User Group");
+        $("#hdn_ugrp_gid").val(usergroup_gid);
+        $("#hdn_grpname").val(usergroup_name);
+        Edit(usergroup_gid);
+    });
+
+    $(document).on("click", "#usergrp_list tbody tr .ob-view", function (e) {
+        debugger;
+        e.preventDefault();
+        var item = $("#usergrp_list").data("kendoGrid").dataItem($(this).closest("tr"));
+        var usergroup_gid = item.usergroup_gid;
+        var usergroup_name = item.usergroup_name;
+        $("#btn_submit").hide();
+        $("#btn_update").show();
+        $("#title").text("Update User Group");
+        $("#hdn_ugrp_gid").val(usergroup_gid);
+        $("#hdn_grpname").val(usergroup_name);
+        $("#txtusergroup").prop("disabled", true);
+        View(usergroup_gid);
+        var disableprop = null;
+        sessionStorage.setItem("disable", disableprop);
+    });
+    //function Download() {
+    //    var item = $("#usergrp_list").data("kendoGrid").dataItem($(event.target).closest("tr"));
+    //    var usergroup_gid = item.usergroup_gid;
+    //    var usergroup_name = item.usergroup_name;
+    //    $("#btn_submit").hide();
+    //    $("#btn_update").show();
+    //    $("#title").text("Update User Group");
+    //    $("#hdn_ugrp_gid").val(usergroup_gid);
+    //    $("#hdn_grpname").val(usergroup_name);
+    //    $("#txtusergroup").prop("disabled", true);
+    //    View(usergroup_gid);
+    //    $('#btnview').prop('disabled', false);
+    //    var disableprop = null;
+    //    sessionStorage.setItem("disable", disableprop);
+    //}
+
+    $(document).off('click', '#usergrp_list tbody tr .ob-delete').on("click", "#usergrp_list tbody tr .ob-delete", function (e) {
+        debugger;
+        var item = $("#usergrp_list").data("kendoGrid").dataItem($(this).closest("tr"));
+        var usergroup_gid = item.usergroup_gid;
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            url: '@Url.Action("DeleteUserGroups", "UserGroupsMapping")',
+            data: "{ usergroup_gid:'" + usergroup_gid + "'}",
+            success: function (data) {
+                debugger;
+                var message = data;
+                $.dialog({
+                    title: 'DMS',
+                    content: message,
+                    icon: 'fa fa-success',
+                    type: 'blue',
+                })
+                //$(".messagedisplay").html('<span class="errormessage" id="mess">' + message + '</span>');
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 1500);
+                return false;
+            },
+        });
+    });
+
+    var modal;
+    $(document).ready(function () {
+        debugger;
+        modal = $("[id$='user-modal']");
+        //modal.dialog({
+        //    autoOpen: false,
+        //    modal: true,
+        //    duration: 300,
+        //});
+    });
+    function Add() {
+        debugger;
+        modal.load('../UserGroupsMapping/TreeViewPartial?usergroup_gid=0');
+        //window.location = "../UserGroupsMapping/TreeViewPartial?usergroup_gid=0";
+        $("#hdn_title").val("Create New UserGroups");
+        modal.show();
+        return false;
+    }
+    function Edit(usergroup_gid) {
+        modal.load('../UserGroupsMapping/TreeViewPartial?usergroup_gid=' + usergroup_gid);
+        $("#hdn_title").val("Update UserGroups");
+        modal.show();
+        modal.dialog("open");
+        return false;
+    }
+    function View(usergroup_gid) {
+        modal.load('../UserGroupsMapping/TreeViewPartial?usergroup_gid=' + usergroup_gid);
+        $("#hdn_title").val("View UserGroups");
+        modal.show();
+        $("#btn_submit").show();
+        return false;
+    }
+    function Close() {
+        debugger;
+        modal.hide();
+        $("#btn_submit").hide();
+        $("#btn_update").hide();
+        $("#title").text("Create New User Group");
+        $("#txtusergroup").prop("disabled", false);
+        //var item = $("#usergrp_list").data("kendoGrid")
+        setTimeout(function () {
+            window.location.reload(0);
+        }, 0);
+    }
+</script>
+

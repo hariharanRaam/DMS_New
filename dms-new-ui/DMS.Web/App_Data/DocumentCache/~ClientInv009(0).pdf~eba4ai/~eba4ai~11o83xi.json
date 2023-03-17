@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "eba4ai",
+  "CachePdfKey": "eba4ai/eba4ai-1k3kk2s.pdf",
+  "CacheXpzKey": "eba4ai/eba4ai-11o83xi.xpz",
+  "CacheInfoKey": "eba4ai/eba4ai-11o83xi.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\Invoice\\Client Invoice\\ClientInv009(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv009(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "eba4ai",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

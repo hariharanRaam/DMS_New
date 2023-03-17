@@ -1,0 +1,252 @@
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Web.dll.config
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Web.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Web.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\Antlr3.Runtime.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\ClosedXML.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Data.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Model.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Service.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\GleamTech.Core.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\Kendo.Mvc.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\MySql.Data.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\Newtonsoft.Json.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Helpers.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Mvc.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Optimization.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Razor.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Webpages.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Webpages.Razor.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\WebGrease.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Data.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Model.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\DMS.Service.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\Antlr3.Runtime.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\GleamTech.Core.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\Newtonsoft.Json.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Optimization.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Razor.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Webpages.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Webpages.Razor.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Helpers.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\bin\System.Web.Mvc.xml
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\obj\Debug\DMS.Web.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Web\obj\Debug\DMS.Web.pdb
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Web.dll.config
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Web.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Web.pdb
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\Antlr3.Runtime.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Data.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Model.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Service.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\GleamTech.Core.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\Kendo.Mvc.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\Newtonsoft.Json.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Helpers.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Optimization.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Razor.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Webpages.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Webpages.Razor.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\WebGrease.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Data.pdb
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Model.pdb
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\DMS.Service.pdb
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\Antlr3.Runtime.pdb
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\GleamTech.Core.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\Newtonsoft.Json.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Optimization.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Razor.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Webpages.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Webpages.Razor.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\bin\System.Web.Helpers.xml
+D:\Ramya\Projects\DMS.Web\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+D:\Ramya\Projects\DMS.Web\DMS.Web\obj\Debug\DMS.Web.dll
+D:\Ramya\Projects\DMS.Web\DMS.Web\obj\Debug\DMS.Web.pdb
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Web.dll.config
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Web.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Web.pdb
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\Antlr3.Runtime.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Data.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Model.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Service.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\GleamTech.Core.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\Kendo.Mvc.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\Newtonsoft.Json.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Helpers.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Optimization.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Razor.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Webpages.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Webpages.Razor.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\WebGrease.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Data.pdb
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Model.pdb
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\DMS.Service.pdb
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\Antlr3.Runtime.pdb
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\GleamTech.Core.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\Newtonsoft.Json.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Optimization.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Razor.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Webpages.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Webpages.Razor.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\bin\System.Web.Helpers.xml
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\obj\Debug\DMS.Web.dll
+D:\THIANESWARAN\dotnet\DMS\dms 08092022\dms-product\DMS.Web\obj\Debug\DMS.Web.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Web.dll.config
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Web.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Web.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Data.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Model.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Service.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\GleamTech.Core.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\Kendo.Mvc.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Helpers.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Mvc.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Optimization.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Razor.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Webpages.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\WebGrease.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Data.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Model.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\DMS.Service.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\GleamTech.Core.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Optimization.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Razor.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Webpages.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Helpers.xml
+D:\Dms new source\dms-new-ui\DMS.Web\bin\System.Web.Mvc.xml
+D:\Dms new source\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+D:\Dms new source\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.dll
+D:\Dms new source\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.pdb
+D:\Dms new source\dms-new-ui\DMS.Web\bin\mscorlib.dll
+D:\Dms new source\dms-new-ui\DMS.Web\bin\normidna.nlp
+D:\Dms new source\dms-new-ui\DMS.Web\bin\normnfc.nlp
+D:\Dms new source\dms-new-ui\DMS.Web\bin\normnfd.nlp
+D:\Dms new source\dms-new-ui\DMS.Web\bin\normnfkc.nlp
+D:\Dms new source\dms-new-ui\DMS.Web\bin\normnfkd.nlp
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Web.dll.config
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Web.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Web.pdb
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Data.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Model.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Service.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\GleamTech.Core.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\Kendo.Mvc.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Helpers.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Optimization.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Razor.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Webpages.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\WebGrease.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Data.pdb
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Model.pdb
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\DMS.Service.pdb
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.pdb
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\GleamTech.Core.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Optimization.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Razor.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Webpages.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\bin\System.Web.Helpers.xml
+D:\DMSdinesh\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+D:\DMSdinesh\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.dll
+D:\DMSdinesh\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.pdb
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Web.dll.config
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Web.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Web.pdb
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Data.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Model.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Service.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\GleamTech.Core.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\Kendo.Mvc.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Helpers.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Mvc.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Optimization.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Razor.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Webpages.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\WebGrease.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Data.pdb
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Model.pdb
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\DMS.Service.pdb
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.pdb
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\GleamTech.Core.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Optimization.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Razor.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Webpages.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Helpers.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\bin\System.Web.Mvc.xml
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.dll
+E:\Hariharan\Code backup\DMS\dms-new-ui\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.pdb
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Web.dll.config
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Web.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Web.pdb
+D:\Hariharan\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Data.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Model.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Service.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\GleamTech.Core.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\Kendo.Mvc.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Helpers.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Optimization.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Razor.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Webpages.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\WebGrease.dll
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Data.pdb
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Model.pdb
+D:\Hariharan\dms-new-ui\DMS.Web\bin\DMS.Service.pdb
+D:\Hariharan\dms-new-ui\DMS.Web\bin\Antlr3.Runtime.pdb
+D:\Hariharan\dms-new-ui\DMS.Web\bin\GleamTech.Core.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\GleamTech.DocumentUltimate.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\Newtonsoft.Json.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Optimization.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Razor.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Webpages.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Deployment.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Webpages.Razor.xml
+D:\Hariharan\dms-new-ui\DMS.Web\bin\System.Web.Helpers.xml
+D:\Hariharan\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.csprojResolveAssemblyReference.cache
+D:\Hariharan\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.dll
+D:\Hariharan\dms-new-ui\DMS.Web\obj\Debug\DMS.Web.pdb

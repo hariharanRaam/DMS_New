@@ -1,0 +1,208 @@
+﻿@model DMS.Model.Login_Model
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DMS Login Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #e4e4e4;
+            color: white;
+            text-align: center;
+        }
+    </style>
+   
+</head>
+<body onload="generateCaptcha();">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="~/Assets/images/dmsweblogo.png">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12">
+                <img src="~/Assets/images/flexidocs-banner.jpg" class="img-responsive">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row" style="margin-top:20px;">
+            <div class="col-sm-4" style="margin-top:35px;">
+                <img src="~/Assets/images/dmsbanner.jpg" class="img-responsive">
+            </div>
+            <div class="col-sm-4" style="margin-top:45px;">
+                <p style="text-align:justify;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged</p>
+            </div>
+            <div class="col-sm-4" style="margin-top:10px;border: 1px solid #e2e2e2;padding: 15px;border-radius: 5px;">
+                <form action="" method="post">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input class="form-control" type="text" name="txtusername" maxlength="50" id="txtusername" placeholder="User ID">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input class="form-control" type="password" name="txtpwd" maxlength="6" id="txtpwd" placeholder="Password">
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <select class="form-control" id="site" name="site">
+                            <option>Select Role</option>
+                            <option value="Block">Maker</option>
+                            <option value="State">Checker</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+                    <input type="text" id="mainCaptcha" readonly="readonly" style="border: 1px solid #ccc;border-radius: 5px;background-image:url(../Assets/images/captcha.jpg);color:#fff;font-size: 18px;width: 47%;font-weight: bold;" />
+                    <img src="~/Assets/images/login-refresh.png" onclick="generateCaptcha();"><input style="float:right;width:40%;border: 1px solid #ccc;border-radius: 5px;" type="text" id="txtInput" placeholder="" />
+                    <div class="form-group" style="margin-top:10px;">
+                        <center><button onclick="return CheckLogin();" id="btnsubmit" type="submit" style="background-color:#7d7d7d;color:white;" class="btn btn-def btn-block"> Login </button></center>
+                    </div>
+                    <div class="form-group text-center" style="color:red">
+                        <span class="errormessage" style="color: red;"></span>
+                    </div>
+                    <div class="form-group text-center">
+                        <a href="#" style="color:#0fadfd" onclick="ForgotPassword()">Forgot Password</a><br>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 footer">
+                <h5 class="copyright" style="color:#000;">DMS. &#169; by Flexicode Technologies (P) Ltd </h5>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    function generateCaptcha() {
+        debugger;
+        var alpha = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+        var i;
+        for (i = 0; i < 6; i++) {
+            var a = alpha[Math.floor(Math.random() * alpha.length)];
+            var b = alpha[Math.floor(Math.random() * alpha.length)];
+            var c = alpha[Math.floor(Math.random() * alpha.length)];
+            var d = alpha[Math.floor(Math.random() * alpha.length)];
+            var e = alpha[Math.floor(Math.random() * alpha.length)];
+            var f = alpha[Math.floor(Math.random() * alpha.length)];
+        }
+        var code = a + '' + b + '' + '' + c + '' + d + '' + e + '' + f;
+        document.getElementById("mainCaptcha").value = code
+    }
+    function CheckValidCaptcha() {
+        debugger;
+        var string1 = removeSpaces(document.getElementById('mainCaptcha').value);
+        var string2 = removeSpaces(document.getElementById('txtInput').value);
+        if (string1 == string2) {
+            document.getElementById('success').innerHTML = "Form is validated Successfully";
+            //alert("Form is validated Successfully");
+            return true;
+        }
+        else {
+            document.getElementById('error').innerHTML = "Please enter a valid captcha.";
+            //alert("Please enter a valid captcha.");
+            return false;
+
+        }
+    }
+    function removeSpaces(string) {
+        return string.split(' ').join('');
+    }
+
+</script>
+<script>
+    function CheckLogin() {
+        debugger;
+        try {
+            sessionStorage.removeItem('arr1');
+            sessionStorage.removeItem('arr2');
+            sessionStorage.removeItem('arr3');
+            sessionStorage.removeItem('arr4');
+        } catch (e) {
+
+        }
+        @*var d = new Date();//get current date.
+        var month = d.getMonth() + 1;//get current month
+        var day = d.getDate();//get current day
+        var Current_Date = d.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+        var expired_Date = '@(System.Configuration.ConfigurationManager.AppSettings["ExpiredDate"].ToString())'
+        if (expired_Date == Current_Date) {
+            alert('Your trail period is expired please contact admin.!!');
+            var url = '@Url.Action("login", "login")'
+            window.location.href = url;
+            return false;
+        }
+        else {*@
+        var UserName = $("#txtusername").val();
+        var Password = $("#txtpwd").val();
+        var Maincaptcha = $("#mainCaptcha").val();
+        var Usercaptcha = $("#txtInput").val();
+       // alert(UserName);
+        if (UserName == "") {
+            $(".errormessage").html('<span class="errormessage"  id="mess">Please Enter UserName...!!</span>');
+            $("#erridmsg").show();
+            return false;
+        }
+        if (Password == "") {
+            $(".errormessage").html('<span class="errormessage"  id="mess">Please Enter Password...!!</span>');
+            $("#erridmsg").show();
+            //$.alert({
+            //    title: 'DMS',
+            //    content: "Please Enter Password...!!",
+            //    type: 'blue',
+            //});
+            return false;
+        }
+        if (Usercaptcha == "" || Usercaptcha == "undefined" || Usercaptcha == null) {
+            $(".errormessage").html('<span class="errormessage"  id="mess">Please Enter Captcha...!!</span>');
+            $("#erridmsg").show();
+            //$.alert({
+            //    title: 'DMS',
+            //    content: "Please Enter Captcha...!!",
+            //    type: 'blue',
+            //});
+            return false;
+        }
+        if (Usercaptcha != Maincaptcha) {
+            $(".errormessage").html('<span class="errormessage"  id="mess">Invalid Captcha...!!</span>');
+            $("#erridmsg").show();
+            //$.alert({
+            //    title: 'DMS',
+            //    content: "Invalid Captcha...!!",
+            //    type: 'blue',
+            //});
+            return false;
+        }
+        @*}*@
+    }
+    function ForgotPassword() {
+        debugger;
+        var url = '@Url.Action("ForgetPassword", "login")'
+        window.location.href = url;
+        //window.location.href = '../login/ForgetPassword';
+    }
+</script>

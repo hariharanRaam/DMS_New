@@ -1,0 +1,193 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+
+@model DMS.Model.UnitMaster_Model
+<!Doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+
+        .k-state-active {
+            display: none;
+        }
+    </style>
+
+    <style>
+        .k-primary {
+            background-color: #337ab7;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:650px">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Unit</h3>
+                        </div>
+                        @using (Html.BeginForm("UnitMaster", "UnitMaster", FormMethod.Post, new { @id = "form1" }))
+                        {
+                            <div>
+                                @(Html.Kendo().Grid<DMS.Model.UnitMaster_Model>().Name("Unit")
+                                .HtmlAttributes(new { style = "width:100%;line-height:2em;font-weight:normal" })
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(m => m.UnitID).Width(5);
+                                    columns.Bound(m => m.UnitCode).Width(80);
+                                    columns.Bound(m => m.UnitName).Width(100);
+                                    columns.Bound(m => m.Dept_Name).Title("Department").Width(80);
+                                    columns.Command(cmd => { cmd.Edit();}).Title("Edit").Width(50);
+                                    //columns.Command(cmd => { cmd.Edit(); cmd.Destroy(); }).Title("Edit").Width(170);
+                                    columns.Template(p => { }).ClientTemplate("<button type='button' onclick='return myDeleteJs()'><i class='fa fa-trash-o' aria-hidden='true'></i>Delete</button>").Width(50).Title("Delete");
+                                })                                
+                                .Editable(editable => { editable.Mode(GridEditMode.PopUp).TemplateName("UnitMasterPartialPopUp");})
+                                .ToolBar(toolbar => toolbar.Create().Text("Add New Unit"))
+                                .Pageable()
+                                .Sortable()
+                                .Filterable()
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                .Events(events => events.Error("error_handler"))
+                                .Model(model => model.Id(p => p.UnitID))
+                                .Create(Create => Create.Action("SaveUnit", "UnitMaster"))
+                                .Read(read => read.Action("GetAllUnits", "UnitMaster"))
+                                .Update(update => update.Action("UpdateUnit", "UnitMaster"))))
+                                @*.Destroy(delete => delete.Action("DeleteUnit", "UnitMaster"))))*@
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        $("#Unit").data("kendoGrid").dataSource.bind("requestEnd", onRequestEnd);
+        var grid = $("#Unit").data("kendoGrid");
+        //function for changing kendo popup title.
+        grid.bind("edit", function (event) {
+            debugger;
+            event.container.parent().find('.k-window-title').text(event.model.isNew() ? "New" : "Edit");
+        });
+        //grid.setOptions({ "editable": { "confirmation": true }});
+        //grid.setOptions({ toolbar: [{ name: "Create", text: 'Add New Unit', GridEditMode: 'PopUp', TemplateName: 'UnitMasterPartialPopUp' }] }); 
+    })
+    function onRequestEnd(e) {
+        debugger;
+        //Check request type
+        if (e.type == "create") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Unit has been created successfully.!',
+                    type: 'green',
+                });
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 2500);
+            }
+        }
+        if (e.type == "update") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Unit has been Edited successfully.!',
+                    type: 'green',
+                });
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 2500);
+            }
+        }
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+    function myDeleteJs()
+    {
+        debugger;
+        var grid = $("#Unit").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var UnitID = (model.UnitID);
+
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+            theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure do you want to delete this record!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("DeletingUnit", "UnitMaster")',
+                        data: "{ UnitID:'" + UnitID + "'}",
+                        success: function (data) {
+                            debugger;
+                            if (data == 'Success')
+                            {
+                                $.alert({
+                                    icon: 'fa fa-success',
+                                    title: 'DMS',
+                                    theme: 'dark',
+                                    content: 'Record deleted.!',
+                                    type: 'green',
+                                    animationSpeed: 700,
+                                });
+                            }                           
+                            setTimeout(function () {
+                                window.location.reload(1);
+                            }, 2500);
+                        }, 
+                    });
+
+                },
+                cancel: function () {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        theme: 'dark',
+                        content: 'Delete Canceled.!',
+                        type: 'blue',
+                        animationSpeed: 700,
+                    });                   
+                },                
+            }
+        });
+    }
+</script>

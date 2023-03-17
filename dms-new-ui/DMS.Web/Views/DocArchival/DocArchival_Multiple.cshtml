@@ -1,0 +1,1285 @@
+﻿@model DMS.Model.Dept_Union_Cat_SubCat_Model
+@{
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+<!DOCTYPE html>
+<style>
+       .k-dropdown-wrap.k-state-default{
+            background-clip: padding-box;
+           
+    display: block;
+    height:90%;
+    width:initial;
+    padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+    -moz-padding-start: calc(0.875rem - 3px);
+    font-size: 0.7075rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #697a8d;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 17px 12px;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+        .k-item{
+             background-color: #fff;
+             background-position: right 0.875rem center;
+             
+             
+        }
+        .k-content{
+            width:100%;
+        }
+        /*.k-button{
+             background-color: transparent;
+              color: blue;
+              border: aliceblue;
+
+        }*/
+        .k-grid{
+             color: #697a8d;
+    background-color: #fff;
+        }
+        .k-grid-header th.k-header{
+            text-overflow: ellipsis;
+    text-align: center;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+        }
+        .k-pager-info {
+    float: right;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 0 1.333em;
+}
+        .k-pager-sizes {
+    display: inline-block;
+    padding-top: 1px;
+    text-transform: none;
+    font-size: 0.90rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+         .k-footer{
+             background-color: #fff;
+        }
+ .k-widget{
+      background-color: #fff;
+ }
+        .k-header {
+        background-color: #fff;
+        }
+        .k-grid td {
+    white-space: nowrap;
+    background-color: #eceef1;
+    border-color: inherit;
+    /* text-align: center; */
+}
+    .k-state-selected {
+        color: #000;
+        border-color: inherit;
+    }
+
+
+
+        /*.k-picker-wrap{
+
+            display: block;
+    width: 100%;
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.53;
+    color: #697a8d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d9dee3;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }*/
+</style>
+<html>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    @*Css and Js for Jquery alert box*@
+    <script src="~/Scripts/jquery-confirm.min.js"></script>
+    <link href="~/Content/css/jquery-confirm.min.css" rel="stylesheet" />
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card-body" style="margin-top:-9px;">
+                <h5 class="mobile-card-header">Trainer Master</h5>
+                <form id="formAccountSettings" method="POST" onsubmit="return false">
+                    <div class="row" id="header">
+                        @*@Html.Partial("BindOrgLevels2")*@
+                        <div class="col-sm-3" style="width: 23.5%;">
+                            <label class="form-label" for="subCatgery">Document Type&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                            <select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-select"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </div>
+                        <div class="col-sm-3" style="width: 23.5%;">
+                            <label class="form-label" for="Catgery">Document Group&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                            <select id="Catgery" name="Catgery" onchange="fetchDocGroup()" class="form-select"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </div>
+                        <div class="col-sm-3" style="width:46.5%">
+                            <label class="form-label" for="FileUpload1">File Path&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                            <input class="form-control" type="file" style="font-size: 10px !important;" name="FileUpload1" id="FileUpload1" multiple="multiple" />
+                            @*<label class="col-md-6 control-label" id="FileName"></label>*@
+                        </div>
+                        <div class="col-md-2" style="width:11%" hidden>
+                            <label class="form-label" for="total_File">Total No.of Files&nbsp;</label>
+                            <input class="form-control" type="text" name="total_File" id="total_File" readonly />
+                        </div>
+                        <div class="col-sm-1" style="width:6%">
+                            <button type="button" name="btnsubmit" value="submit" id="btn_uoload" class="btn btn-sm btn-primary me-2" onclick="return Save()" style="margin-top: 32px;margin-left: -15px">Save</button>
+                            <img src="~/Assets/images/brush.png" id="clean" onclick="refresh_()" style="margin-top: -52px;margin-left: 43px;height: 20px;width: 21px;" hidden>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:35px;">
+                        <div class="col-sm-2" hidden>
+                            <label class="form-label" for="active_flag">Active&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                            <div class="form-control" style="width:140px">
+                            <input name="active_flag" class="form-check-input" type="radio" value="Y" id="rbY" checked/>
+                            Yes &nbsp;
+                            <input name="active_flag" class="form-check-input" type="radio" value="I" id="rbN" />
+                            No
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top: 10px;margin-bottom: 7px;" hidden>
+
+                    <div class="row" id="showresult" style="margin-top:25px;">
+                        <div class="col-sm-12">
+                            <div id="Maingrid" class="col-md-9" style="margin:auto;top:10px;width:100%;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:-14px;">
+                        <center>
+                           
+                        </center>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+        <!-- /.content -->
+    </div>
+    <div id="overlayy"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var orglevelcode1 = "";
+    var orglevelcode2 = "";
+    var orglevelcode3 = "";
+    var orglevelcode4 = "";
+    var maxorglvl = 0;
+    var ScreenID = "18";
+    var ScreenName = "Archival";
+   // loaddynamiccolumns();
+    $(document).on('click', '.browse', function () {
+        var file = $(this).parent().parent().parent().find('.file');
+        file.trigger('click');
+    });
+    $(document).on('change', '.file', function () {
+        $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+
+    
+
+
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    //function onChangeunit(sel, idval) {
+    //    //    alert(this.value());
+    //    debugger;
+    //    var id = idval;
+    //    // alert(idval);
+
+    //    try {
+
+    //        var mastercode = sel.value;
+    //        var master = ""
+    //        if (mastercode == "" || mastercode == null || mastercode == "undefined" || mastercode == 0) {
+    //            return false;
+    //        }
+    //        else {
+    //            debugger;
+    //            $.getJSON("DocGroupNames/DocGroupMaster?parentcode=" + master + "&dependcode=" + mastercode, function (data) {
+    //                debugger;
+    //                var dept = data;
+    //                // maxorglvl = dept.length;
+
+    //                //$("#Dept_Id").data("kendoDropDownList").dataSource.data(data[1]);
+    //                if (dept.length > 1) {
+    //                    var ee = data[1].parent_code;
+
+    //                    $("#" + idval).empty();
+    //                    //   for (var i = 0; i < dept.length; i++) {
+    //                    var selopt = new Option("select", "select");
+    //                    $("#" + idval).append(selopt);
+    //                    var opt = new Option(data[1].master_name, data[1].master_code);
+    //                    //    var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+    //                    $("#" + idval).append(opt);
+    //                    //     }
+    //                    $("#" + idval).val($("#" + idval + " option").eq(1).val()).change();
+    //                    ////$("#" + ee).data("kendoDropDownList").dataSource.data(data);
+    //                    //$("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+    //                    ////$("#" + ee).data("kendoDropDownList").select(1)
+    //                    // $("#" + ee).data("select").trigger("change");
+    //                    //$("#Dept_Id").data("kendoDropDownList").refresh();
+    //                }
+    //                else {
+    //                    var ee = data[0].parent_code;
+    //                    //  $("#" + ee).data("kendoDropDownList").select(0)
+    //                }
+
+    //            });
+    //        }
+    //    } catch (er) {
+    //        hideProgress();
+    //    }
+    //}
+    function Save() {
+        debugger;
+        //  var department = $("#DeptID").val();
+        var unit = $("#Unit").val();
+        var docgroup = $("#Catgery").val();
+        var docname = $("#subCatgery").val();
+        var activeflag = $("input[name='active_flag']:checked").val();
+
+        if (activeflag != "Y") {
+            activeflag = "Y";
+        }
+
+        if (docname == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Doc Name.!',
+                type: 'blue',
+            });
+          //  jAlert("Select Doc Name","Info");
+            return false;
+        }
+
+        if (docgroup == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Doc Group.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        var filesize = $('#FileUpload1').val();
+        if (filesize == "" || filesize == null) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select File.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        else {
+            //$("#form_Multiplefile").submit();
+            debugger;
+            var useracceptance = "notallow";
+            $.ajax({
+                url: '@Url.Action("Save_Multiple_File", "DocArchival")',
+                type: "POST",
+                data: { 'docgroup': docgroup, 'docname': docname, 'useracceptance': useracceptance, 'activeflag': activeflag },
+                success: function (data) {
+                    debugger;
+                    if (data.message == 'inserted') {
+                        var message_ = 'File Uploaded Successfully';
+                        if (data.nooffiles > 1) {
+                            message_ = data.nooffiles + ' Files uploaded successfully.!';
+                        } else {
+                            message_ = data.nooffiles + ' File uploaded successfully.!';
+                        }
+                        $.alert({
+                            title: 'DMS',
+                            content: data.nooffiles + ' ' + 'File uploaded successfully.!',
+                            type: 'green',
+                        });
+                        setTimeout(function () {
+                            debugger;
+                            window.location.href = '../DocArchival/DocArchival_Multiple';
+                        }, 2500);
+                    }
+                    else if (data.message == 'exist') {
+                        $.confirm({
+                            icon: 'fa fa-warning',
+                            title: 'DMS',
+                            autoClose: 'cancel|10000',
+                            theme: 'dark',
+                            animationSpeed: 700,
+                            content: 'do you want to overwrite.!',
+                            type: 'orange',
+                            buttons: {
+                                confirm: function () {
+                                    var useracceptance = "allow";
+                                    $.ajax({
+                                        url: '@Url.Action("Save_Multiple_File", "DocArchival")',
+                                        type: "POST",
+                                        data: { 'docgroup': docgroup, 'docname': docname, 'useracceptance': useracceptance, 'activeflag': activeflag },
+                                        success: function (data) {
+                                            $.alert({
+                                                title: 'DMS',
+                                                content: data.nooffiles + ' ' + 'File uploaded successfully.!',
+                                                type: 'green',
+                                            });
+                                            setTimeout(function () {
+                                                debugger;
+                                                window.location.href = '../DocArchival/DocArchival_Multiple';
+                                            }, 2500);
+                                        },
+                                    });
+                                },
+                                cancel: function () {
+                                    $.alert({
+                                        icon: 'fa fa-success',
+                                        title: 'DMS',
+                                        theme: 'dark',
+                                        content: 'Uploading Cancelled.!',
+                                        type: 'blue',
+                                        animationSpeed: 700,
+                                    });
+                                },
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+    }
+
+    $('#FileUpload1').bind('change', function () {
+
+        debugger;
+        var fp = $("#FileUpload1");
+        var lg = fp[0].files.length; // get length
+        var items = fp[0].files;
+        var fileSize = 0;
+        var docgroup = $("#Catgery").val();
+        var docname = $("#subCatgery").val();
+        var ext = $('#FileUpload1').val().split('.').pop().toLowerCase();
+        //Allowed file types
+        if ($.inArray(ext, ['xlsx', 'xls', 'gif', 'png', 'jpg', 'jpeg', 'docx', 'doc', 'pdf', 'rtf', 'ppt', 'txt', 'odt']) == -1) {
+            $.alert({
+                title: 'DMS',
+                content: 'The file type is invalid.!',
+                type: 'blue',
+            });
+            $('#FileUpload1').val("");
+            $('#upload-file-info').html("");
+            return false;
+        }
+
+        if (lg > 0) {
+            for (var i = 0; i < lg; i++) {
+                fileSize = fileSize + items[i].size; // get file size
+            }
+            if (fileSize > 414572800) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'File size must not be more than 300 MB.!',
+                    type: 'blue',
+                });
+                $('#FileUpload1').val('');
+                return false;
+            }
+            else {
+                debugger;
+                var files = $("#FileUpload1").get(0).files;
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append("FileUpload1", files[i]);
+                }
+                fileData.append("Docgroupid", docgroup);
+                fileData.append("DocNameid", docname);
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("MultipleFile_onchange", "DocArchival")',
+                    dataType: "json",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        debugger;
+                        var columns = [];
+                        var chkval = JSON.parse(result.Data1);
+                        var coldatatype = JSON.parse(result.Data2);
+                        var arr = [];
+                        $.each(chkval, function (i, e) {
+                            $.each(e, function (key, val) {
+                                arr.push(val);
+                            });
+
+                        });
+
+                        if (arr == "No Records Found!" || arr == "Error in Data!") {
+                            $.alert({
+                                title: ' ',
+                                content: 'No Records found..!',
+                                type: 'blue',
+                            });
+                           // $('#btnbulmail').prop('disabled', true);
+                            return false;
+                        }
+
+
+                        var data = JSON.parse(result.Data1);
+                        var data2 = JSON.parse(result.Data2);
+                        var totalnooffiles = data2["totalnooffiles"];
+                        $("#total_File").val(totalnooffiles);
+                        var i = 0;
+
+                        var entryIndex = "entries[" + i + "]";
+                        //columns.push({
+                        //    title: "Select",
+                        //    template: '<input type="checkbox"  class="checkbox" name="attributecheckbox" id="attributecheckbox" value="" class="checkbox" ></span>'
+
+                        //});
+                        for (var key in data[0]) {
+                            debugger;
+                            var val = data2[key];
+                            var lock = false
+                            if (key == "File Name") {
+                                lock = true
+                            } else {
+                                lock = false
+                            }
+                            if (key == "Uploaded Date") {
+                                columns.push({
+                                    field: entryIndex,
+                                    title: key,
+                                    type: "date",
+                                    format: "{0: dd-MM-yyyy}",
+                                    // parseFormats: "{0:MM/dd/yyyy}",
+
+                                });
+                            } else if (key == "FileName") {
+                                columns.push({
+                                    field: entryIndex,
+                                    title: "File Name",
+                                    type: "string",
+                                    //     locked: lock
+                                });
+                            } else if (key == "FileSize") {
+                                columns.push({
+                                    field: entryIndex,
+                                    title: "File Size",
+                                    type: "string",
+                                    width:'150px'
+                                    //     locked: lock
+                                });
+                            } else if (key == "FileIsExists") {
+                                columns.push({
+                                    field: entryIndex,
+                                    title: "File Exists",
+                                    type: "string",
+                                    width:'150px'
+                                    //     locked: lock
+                                });
+                            }
+                            else {
+                                try {
+                                    var v_datatype = data2[key];
+                                    if (v_datatype == "Alpha Numeric" || v_datatype == "Lov Name") {
+                                        columns.push({
+                                            field: entryIndex,
+                                            title: key,
+                                            type: "string",
+                                            //     locked: lock
+                                        });
+                                    }
+                                    else if (v_datatype == "Datetime") {
+                                        columns.push({
+                                            field: entryIndex,
+                                            title: key,
+                                            type: "date",
+                                            // format: "{0: MM/dd/yyyy}",
+                                            format: "{0: dd-MM-yyyy}",
+                                            //    locked: lock
+                                            //  parseFormats: "{0:MM/dd/yyyy}",
+                                        });
+                                    }
+                                    else if (v_datatype == "Amount" || v_datatype == "Numeric") {
+                                        columns.push({
+                                            field: entryIndex,
+                                            title: key,
+                                            type: "number",
+                                            //    locked: lock
+                                        });
+                                    }
+                                    else if (key == "File Name") {
+                                        columns.push({
+                                            field: entryIndex,
+                                            title: key,
+                                            type: 'string',
+                                            //  locked: true
+                                        });
+                                    }
+                                    else {
+                                        columns.push({
+                                            field: entryIndex,
+                                            title: key,
+                                            type: 'string',
+                                            // lockable: false
+                                        });
+                                    }
+                                }
+                                catch (e) {
+                                    columns.push({
+                                        field: entryIndex,
+                                        title: key,
+                                        type: 'string'
+                                    });
+                                }
+                            }
+
+                            i = i + 1;
+                            entryIndex = "entries[" + i + "]";
+                        }
+
+                        //columns.push({
+                        //    //field: entryIndex + 1,
+                        //    title: 'Link',
+                        //    template: '<i class="bx bx-notepad" onclick=View("link")></i>',
+                        //    editable: true
+                        //});
+
+                        columns.push({
+                            //field: entryIndex + 1,
+                            title: 'Action',
+                            //template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick=View("main") style ="color:black;cursor:pointer"></span>',
+                            template: '<img src="../Assets/images/del.png" name="delete" id="delete" value="delte" onclick=Deleteg(this) style="cursor:pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">',
+                           // editable: true,
+                            width:'80px'
+                        });
+
+
+                        var rows = [];
+                        var data1 = JSON.parse(result.Data1);
+                        $.each(data1, function (i, e) {
+                            var entryArray = [];
+                            $.each(e, function (key, val) {
+                                var v_datatype = data2[key];
+                                if (v_datatype == "Datetime") {
+                                    //\  entryArray.push(getFormated_filterDate(val));
+                                    //  entryArray.push(new Date(getFormated_filterDate(val)));
+                                    entryArray.push(val);
+                                }
+                                else if (v_datatype == "Amount") {
+                                    entryArray.push(parseFloat(val));
+                                }
+                                else if (v_datatype == "Numeric") {
+                                    entryArray.push(parseInt(val));
+                                }
+                                else if (key == "Uploaded Date") {
+                                    console.log("Uplo", val);
+                                    //   entryArray.push(new Date(getFormated_filterDate(val)));
+                                    entryArray.push(val);
+                                }
+                                else {
+                                    entryArray.push(val);
+                                }
+                            });
+                            rows.push(kendo.observable({
+
+                                entries: entryArray
+                            }));
+                            //console.log(entryArray);
+                        });
+
+                        var viewModel = kendo.observable({
+                            gridRows: rows
+                        });
+
+                        var configuration = {
+                            //dataBound: function () {
+                            //    for (var i = 0; i < this.columns.length; i++) {
+                            //        this.autoFitColumn(i);
+                            //    }
+                            //},
+                            editable: false,
+                            sortable: true,
+                            scrollable: true,
+                           // height: "100%",
+                            filterable: true,
+                            pagable: false,
+                            resizable: true,
+                            persistSelection: true,
+                            selectable: "false",
+                            pageable: {
+                                pageSize: 5,
+                                buttonCount: 4,
+                                pageSizes: [10, 20, 30, 40, 50]
+                            },
+                            columns: columns,
+                            rows: viewModel
+                        };
+
+                        $("#example").remove();
+                        //   $('#Maingrid').append('<div class="col-sm-1" style="margin-top: -37px;margin-left: 120px;position:relative;top:39px;z-index:1;"><button type="button" id="btnbulmail" onclick="return forbulkMail()" style="width:140px" class="btn btn-orange"><i class="fa fa-envelope-o"></i> Mail</button></div>');
+                        $('#Maingrid').append('<div id="example" class="table-responsive text-nowrap" id="chk1"><table id="grid" data-bind="source: gridRows" class="table table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px;"></table></div>');
+                        var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+
+                        kendo.bind($("#grid"), viewModel);
+
+                        var grid = $("#grid").data("kendoGrid");
+                        grid.hideColumn(0);
+                        grid.hideColumn(2);
+                        grid.hideColumn(5);
+                        grid.hideColumn(6);
+                        grid.hideColumn(7);
+                        //$('#btnbulmail').prop('disabled', false);
+                        //bind click event to the checkbox
+                       // grid.table.on("click", ".checkbox", selectRow);
+                    },
+                    error: function (error) {
+                        debugger;
+                         alert(error);
+                    }
+                });
+            }
+        }
+    });
+
+    function Cancel_Multiple() {
+        debugger;
+        window.location.href = '../DocArchival/DocArchival_Multiple';
+    }
+
+</script>
+
+
+<script type="text/javascript">
+    var slno = 0;
+    var loadflag = 0;
+    $(document).ready(function () {
+        debugger;
+        $("#navhead").text("Archival");
+        getScreenAccess(18, "Archival");
+        $("#showcoursetable").click(function () {
+            var subCatgery = $("#subCatgery").val();
+            var Catgery = $("#Catgery").val();
+            var orglvl4val = $("#orglvl4val").val();
+            var orglvl3val = $("#orglvl3val").val();
+            var orglvl2val = $("#orglvl2val").val();
+            var orglvl1val = $("#orglvl1val").val();
+
+            if (subCatgery != 0 && Catgery != 0 && subCatgery != "" && subCatgery != "undefined" && Catgery != "" && Catgery != "undefined") {
+
+                var subCatgeryname = $("#subCatgery option:selected").text();
+                var Catgeryname = $("#Catgery option:selected").text();
+                var orglvl4valname = $("#orglvl4val option:selected").text();
+                var orglvl3valname = $("#orglvl3val option:selected").text();
+                var orglvl2valname = $("#orglvl2val option:selected").text();
+                var orglvl1valname = $("#orglvl1val option:selected").text();
+
+                slno++;
+                var newRow = $("<tr>");
+                var cols = "";
+                cols = '<td style="background-color: #eceef1;">' + slno + '</td>';
+                cols += '<td style="background-color: #eceef1;">' + subCatgeryname + '</td>';
+                cols += '<td style="background-color: #eceef1;">' + Catgeryname + '</td>';
+                if (orglvl4val != null && orglvl4val != "" && orglvl4val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl4valname + '</td>';
+                }
+                if (orglvl3val != null && orglvl3val != "" && orglvl3val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl3valname + '</td>';
+                }
+                if (orglvl2val != null && orglvl2val != "" && orglvl2val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl2valname + '</td>';
+                }
+                if (orglvl1val != null && orglvl1val != "" && orglvl1val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl1valname + '</td>';
+                }
+                cols += '<td align="center"><input name="default-radio-1" class="form-check-input" type="radio" value="" id="defaultRadio1" /></td>';
+
+                newRow.append(cols);
+                $("#tbodydtl").append(newRow);
+            } else {
+                debugger;
+
+                if (orglvl4val == "" || orglvl4val == null || orglvl4val == "undefined") {
+                    orglvl4val = 0;
+                }
+                if (orglvl3val == "" || orglvl3val == null || orglvl3val == "undefined") {
+                    orglvl3val = 0;
+                }
+                if (orglvl2val == "" || orglvl2val == null || orglvl2val == "undefined") {
+                    orglvl2val = 0;
+                }
+                if (orglvl1val == "" || orglvl1val == null || orglvl1val == "undefined") {
+                    orglvl1val = 0;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("Headerfetch", "DocArchival")',
+                    type: "GET",
+                    data: { 'orglvl4val': orglvl4val, "orglvl3val": orglvl3val, "orglvl2val": orglvl2val, "orglvl1val": orglvl4val },
+                    success: function (data) {
+                        debugger;
+                        var value1 = data;
+                        for (var i = 0; i < value1.length; i++) {
+
+                            var subCatgeryname = value1[i].SubCategory_name;
+                            var Catgeryname = value1[i].Category_name;
+                            var orglvl4valname = value1[i].Orglvl4name;
+                            var orglvl3valname = value1[i].Orglvl3name;
+                            var orglvl2valname = value1[i].Orglvl2name;
+                            var orglvl1valname = value1[i].Orglvl1name;
+
+                            slno++;
+                            var newRow = $("<tr>");
+                            var cols = "";
+                            cols = '<td style="background-color: #eceef1;">' + slno + '</td>';
+                            cols += '<td style="background-color: #eceef1;">' + subCatgeryname + '</td>';
+                            cols += '<td style="background-color: #eceef1;">' + Catgeryname + '</td>';
+                            if (orglvl4val != null && orglvl4val != "" && orglvl4val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl4valname + '</td>';
+                            }
+                            if (orglvl3val != null && orglvl3val != "" && orglvl3val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl3valname + '</td>';
+                            }
+                            if (orglvl2val != null && orglvl2val != "" && orglvl2val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl2valname + '</td>';
+                            }
+                            if (orglvl1val != null && orglvl1val != "" && orglvl1val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl1valname + '</td>';
+                            }
+                            cols += '<td align="center"><input name="default-radio-1" class="form-check-input" type="radio" value="" id="defaultRadio1" /></td>';
+
+                            newRow.append(cols);
+                            $("#tbodydtl").append(newRow);
+                        }
+                    }
+                });
+            }
+
+        });
+
+        $("#btn_transfer").click(function () {
+            var subCatgery = $("#subCatgery").val();
+            var Catgery = $("#Catgery").val();
+            var orglvl4val = $("#orglvl4val").val();
+            var orglvl3val = $("#orglvl3val").val();
+            var orglvl2val = $("#orglvl2val").val();
+            var orglvl1val = $("#orglvl1val").val();
+
+
+            var subCatgeryname = $("#subCatgery option:selected").text();
+            var Catgeryname = $("#Catgery option:selected").text();
+            var orglvl4valname = $("#orglvl4val option:selected").text();
+            var orglvl3valname = $("#orglvl3val option:selected").text();
+            var orglvl2valname = $("#orglvl2val option:selected").text();
+            var orglvl1valname = $("#orglvl1val option:selected").text();
+
+            $("#doctype").val(subCatgeryname);
+            $("#doctypecode").val(subCatgery);
+            $("#subdoctype").val(Catgeryname);
+            $("#subdoctypecode").val(Catgery);
+            $("#orglvl4valh").val(orglvl4valname);
+            $("#orglvl3valh").val(orglvl3valname);
+            $("#orglvl2valh").val(orglvl2valname);
+            $("#orglvl1valh").val(orglvl1valname);
+        });
+
+    });
+
+
+    function getScreenAccess(screenID, screenName) {
+        debugger;
+        var result_;
+        $.ajax({
+            // type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //   async: false,
+            url: '@Url.Action("getScreenData", "UserGroupsMapping")',
+            data: { 'screen_id': screenID, 'screen_name': screenName },
+            success: function (data) {
+                debugger;
+                var data1 = JSON.parse(data.Data1);
+                if (data1[0].add_perm == "1" || data1[0].mod_perm == "1") {
+
+                }
+                else if (data1[0].inactivate_perm == "1") {
+                    $("#overlay").show();
+                }
+                else if (data1[0].deny_perm == "1") {
+                    $("#overlay").show();
+                } else if (data1[0].view_perm == "1") {
+                    $("#FileUpload1").attr('disabled', true);
+                    $("#btn_uoload").attr('disabled', true);
+                } else {
+                    $("#FileUpload1").attr('disabled', true);
+                    $("#btn_uoload").attr('disabled', true);
+                }
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+
+
+</script>
+
+<script>
+    @*function fetchDept() {
+        debugger;
+        var DeptID = $("#DeptID").val();
+        if (DeptID == "" || DeptID == null || DeptID == "undefined" || DeptID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDept", "DocArchival")',
+
+                data: { 'DeptID': DeptID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_unit;
+                    var value2 = data.Get_docgroup;
+                    var value3 = data.Get_docname;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckUnitId = $("#Unit").val();
+                    //if (CheckUnitId == "0") {
+                        $('#Unit').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].unit_name, value1[i].unit_id);
+                            var opt2 = new Option(value1[0].unit_name, value1[0].unit_id);
+
+                            $('#Unit').append(opt);
+
+                        }
+                        if (length1 == 2) {
+                            $("#Unit").val($("#Unit option").eq(1).val());
+                        }
+                    //}
+
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                            var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+                        }
+                        if (length2 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    //}
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    //if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    //}
+
+
+                }
+            });
+        }
+    }*@
+
+
+    @*function fetchUnit() {
+        debugger;
+        var UnitID = $("#Unit").val();
+        if (UnitID == "" || UnitID == null || UnitID == "undefined" || UnitID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetUnit", "DocArchival")',
+
+                data: { 'UnitID': UnitID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept1;
+                    var value2 = data.Get_docgroup1;
+                    var value3 = data.Get_docname1;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDeptID = $("#DeptID").val();
+                    //if (CheckDeptID == "0") {
+                        $('#DeptID').empty();
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                            var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                            $('#DeptID').append(opt);
+                        }
+                        if (length1 == 2) {
+                            $("#DeptID").val($("#DeptID option").eq(1).val());
+                        }
+                    //}
+
+                    var CheckDocGroupID = $("#Catgery").val();
+                    //if (CheckDocGroupID == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value2.length; i++) {
+                            var opt = new Option(value2[i].Dgroup_Name, value2[i].Dgroup_Id);
+                            var opt2 = new Option(value2[0].Dgroup_Name, value2[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+
+
+                        }
+                        if (length2 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                    //}
+
+                    var CheckDocNameID = $("#subCatgery").val();
+                    //if (CheckDocNameID == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+
+
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    //}
+
+
+                }
+            });
+        }
+    }*@
+
+    function fetchDocGroup() {
+        debugger;
+        var DocGroupID = $("#Catgery").val();
+        if (DocGroupID == "" || DocGroupID == null || DocGroupID == "undefined" || DocGroupID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocGroup", "DocArchival")',
+
+                data: { 'DocGroupID': DocGroupID },
+                success: function (data) {
+                    debugger;
+                  //  var value1 = data.Get_dept2;
+                  //  var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docname2;
+
+                    //var length1 = value1.length;
+                    //var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    //var CheckDeptId = $("#DeptID").val();
+                    ////if (CheckDeptId == "0") {
+                    //    $('#DeptID').empty();
+                    //    for (var i = 0; i < value1.length; i++) {
+                    //        var opt = new Option(value1[i].Dept_Name, value1[i].Dept_Id);
+                    //        var opt2 = new Option(value1[0].Dept_Name, value1[0].Dept_Id);
+
+                    //        $('#DeptID').append(opt);
+                    //    }
+                    //    if (length1 == 2) {
+                    //        $("#DeptID").val($("#DeptID option").eq(1).val());
+                    //    }
+                    ////}
+
+                    //var CheckUnitId = $("#Unit").val();
+                    ////if (CheckUnitId == "0") {
+                    //    $('#Unit').empty();
+                    //    for (var i = 0; i < value2.length; i++) {
+                    //        var opt = new Option(value2[i].unit_name, value2[i].unit_id);
+                    //        var opt2 = new Option(value2[0].unit_name, value2[0].unit_id);
+
+                    //        $('#Unit').append(opt);
+
+                    //    }
+                    //    if (length2 == 2) {
+                    //        $("#Unit").val($("#Unit option").eq(1).val());
+                    //    }
+                    ////}
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                    //if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                    //}
+
+                }
+            });
+        }
+    }
+
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "DocArchival")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                 //   var value1 = data.Get_dept3;
+                    var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docgroup3;
+
+                  //  var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+              
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                        $('#Catgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                            var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                            $('#Catgery').append(opt);
+
+                        }
+                        if (length3 == 2) {
+                            $("#Catgery").val($("#Catgery option").eq(1).val());
+                        }
+                        if (length2 == 2) {
+                            //  $("#QCD_mst_tHR").val($("#QCD_mst_tHR option").eq(1).val());
+
+                            var orglvlid = "";
+                            if (maxorglvl == 4) {
+                                orglvlid = "orglvl4val";
+                            } else if (maxorglvl == 3) {
+                                orglvlid = "orglvl3val";
+                            } else if (maxorglvl == 2) {
+                                orglvlid = "orglvl2val";
+                            } else if (maxorglvl == 1) {
+                                orglvlid = "orglvl1val";
+                            }
+
+
+                            $("#" + orglvlid).empty();
+                            var optsel = new Option("select", "select");
+
+                            $("#" + orglvlid).append(optsel);
+                            var opt = new Option(value2[1].master_name, value2[1].master_code);
+
+                            $("#" + orglvlid).append(opt);
+                            $("#" + orglvlid).val($("#" + orglvlid + " option").eq(1).val()).change();
+
+                            //var MaxorglevelPos = $("#MaxorglevelPos").val();
+                            //var orglevel3 = $("#orglevel" + MaxorglevelPos).val();
+                            //$("#" + orglevel3).data("kendoDropDownList").value(value2[1].master_code);
+                            //var dropDownList = $("#" + orglevel3).getKendoDropDownList();
+                            //dropDownList.trigger("change");
+                        }
+                    //}
+
+                }
+            });
+        }
+    }
+
+    function Deleteg(sel) {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var gid = (model.entries[0]);
+        var $tr = $(this).closest("tr");
+        //        grid = $("#grid").data("kendoGrid");
+        // dataItem = grid.dataItem($tr);
+        
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+         //   theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure want to Remove..!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    debugger;
+                    var a = $("#total_File").val();
+                    var b = a - 1;
+                    if (b >= 0) {
+                        $("#total_File").val(b);
+                    }
+                    grid.dataSource.remove(model);
+                    $.ajax({
+                        url: '@Url.Action("deleteSessionfile", "DocArchival")',
+                        data: { 'GridID': gid },
+                        success: function (data) {
+                            debugger;
+
+                        }, error: function () {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    //$.alert({
+                    //    icon: 'fa fa-success',
+                    //    title: 'DMS',
+                    //    theme: 'dark',
+                    //    content: 'Uploading Cancelled.!',
+                    //    type: 'blue',
+                    //    animationSpeed: 700,
+                    //});
+                },
+            }
+        });
+    }
+    function refresh_() {
+        debugger;
+        location.reload();
+    }
+
+
+    function load_doctype(_sel) {
+        loadflag = 1;
+        debugger;
+        var org1condition = getconcatval($('#orglvl1valO').val());
+        var org2condition = getconcatval($('#orglvl2valO').val());
+        var org3condition = getconcatval($('#orglvl3valO').val());
+        var org4condition = getconcatval($('#orglvl4valO').val());
+
+        $.ajax({
+            url: '@Url.Action("DepartmentEditNew", "DocArchival")',
+            type: "GET",
+            data: { 'type': _sel, "condition_1": org1condition, "condition_2": org2condition, "condition_3": org3condition, "condition_4": org4condition },
+            success: function (data) {
+                debugger;
+                var value1 = data.dept;
+                if (_sel == 'CAT') {
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].Dgroup_Name, value1[i].Dgroup_Id);
+                        var opt2 = new Option(value1[0].Dgroup_Name, value1[0].Dgroup_Id);
+                        $('#Catgery').append(opt);
+                    }
+                } else {
+                    for (var i = 0; i < value1.length; i++) {
+                        var opt = new Option(value1[i].Dname_Name, value1[i].Dname_Id);
+                        var opt2 = new Option(value1[0].Dname_Name, value1[0].Dname_Id);
+                        $('#subCatgery').append(opt);
+                    }
+                }
+
+            }, error: function (error) {
+                alert(error);
+            }
+        });
+
+    }
+    //$(window).load(function () {
+    //    debugger;
+    //   // alert('hello');
+    //    load_doctype('SUBCAT');
+    //    load_doctype('CAT');
+    //});
+
+    //window.onload = function () {
+    //    if (window.jQuery) {
+    //        // jQuery is loaded  
+    //        alert("Yeah!");
+    //    } else {
+    //        // jQuery is not loaded
+    //        alert("Doesn't Work");
+    //    }
+    //}
+
+    $(document).ajaxStop(function () {
+        // $('#loader').hide();
+        // alert('hi');
+        if (loadflag == 0) {
+            load_doctype('SUBCAT');
+            load_doctype('CAT');
+        }
+        //hideProgress();
+    });
+</script>

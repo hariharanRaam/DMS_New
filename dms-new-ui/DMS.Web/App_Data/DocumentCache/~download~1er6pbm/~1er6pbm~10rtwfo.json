@@ -1,0 +1,27 @@
+{
+  "CacheSourceKey": "1er6pbm",
+  "CachePdfKey": "1er6pbm/1er6pbm-1sfq2ji.pdf",
+  "CacheXpzKey": "1er6pbm/1er6pbm-10rtwfo.xpz",
+  "CacheInfoKey": "1er6pbm/1er6pbm-10rtwfo.json",
+  "CacheCopyKey": "1er6pbm/1er6pbm.txt",
+  "Document": null,
+  "DocumentHandlerType": null,
+  "DocumentFileName": "download",
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "download",
+    "Format": "Txt",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1er6pbm",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

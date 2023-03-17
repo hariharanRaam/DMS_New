@@ -1,0 +1,237 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+
+    <style>
+        .messagedisplay {
+            color: green;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .k-content {
+            font-weight: normal;
+            font-size: 13px;
+            text-align: left;
+            position: relative;
+            left: 370px;
+        }
+
+        .k-grid {
+            width: 40%;
+        }
+    </style>
+
+    <style>
+        ul {
+            display: block;
+        }
+
+        /*.box-header {
+            padding: 0px !important;
+        }*/
+
+        .btnsubmit {
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 25px;
+            border: 0 none;
+            background-color: #337ab7;
+        }
+
+        .form-control {
+            font-weight: normal !important;
+        }
+    </style>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed" id="viewdoc">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">LOV for Attribute</h3>
+                        </div>
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button type="submit" onclick="btnadd()" class="btn btn-danger" style="left: 370px;position:relative"><span class="fa fa-plus-circle"></span> Add New</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form method="get" class="form-horizontal" enctype="multipart/form-data" style="height:610px;" id="form">
+                            @*<div class="box-header text-center with-border">*@
+                                <div id="example" class="k-content">
+                                    <table id="grid" data-bind="source: gridRows"></table>
+                                </div>
+                            @*</div>*@
+                            <div id="ForPartialView"></div>
+                            <input type="hidden" id="hdn_ugrp_gid" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+</body>
+@*<div class="content-wrapper">
+        <section class="content" style="top:0px;position:relative">
+            <div class="box-header text-center with-border">
+                <h3 class="box-title"> LOV for Attribute</h3>
+            </div>
+
+            <div>
+
+            </div>
+            <div class=" box box-orange">
+                <div>
+                    <input type="hidden" id="hdn_ugrp_gid" />
+                </div>
+
+            </div>
+        </section>
+    </div>*@
+</html>
+
+<script>
+
+    var objDialog;
+    $(document).ready(function () {
+        debugger;
+        objDialog = $("[id$='ForPartialView']");
+        objDialog.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 400,
+            height: 450
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetListView", "ViewAttributeLOV")',
+            success: function (result) {
+
+                var columns = [];
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                if (data.length == 0) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No records found!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                var i = 0;
+                var entryIndex = "entries[" + i + "]";
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+
+                    columns.push({
+                        field: entryIndex,
+                        title: key,
+                        type: val,
+                        //width: 20
+                    });
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+                }
+
+                columns.push({
+                    field: entryIndex + 1,
+                    title: 'View',
+                    template: '<span class="btn btn-orange fa fa-eye View" name="View" id="View" value="View" onclick="view()" ></span>',
+                    filterable: false,
+                    sortable: true,
+                    editable: true,
+                    width: '2%'
+                });
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+                        entryArray.push(val);
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+                var configuration = {
+                    editable: false,
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    pagable: true,
+                    resizable: true,
+                    pageable: {
+                        pageSize: 10,
+                        buttonCount: 4,
+                        pageSizes: [10, 20, 30, 40, 50]
+                    },
+                    columns: columns,
+                    rows: viewModel,
+                    height: '100%'
+                };
+
+                var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                kendo.bind($("#grid"), viewModel);
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred..!',
+                    type: 'red',
+                });
+            }
+
+        });
+    });
+
+    function view() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var data = grid.dataItem($(event.target).closest("tr"));
+        //var id = (data.entries[0]);
+        var group_gid = (data.entries[0]);
+        $("#hdn_ugrp_gid").val(group_gid);
+
+        objDialog.load('../ViewAttributeLOV/PartialView?lovid=' + group_gid);
+        objDialog.dialog({ title: 'View' });
+        objDialog.dialog("open");
+        return false;
+    }
+
+    function Close() {
+        debugger;
+        objDialog.dialog("close");
+    }
+
+</script>
+
+<script>
+    function btnadd() {
+        debugger;
+        var url = '@Url.Action("LOVMaster", "LOVMaster")'
+        window.location.href = url;
+    }
+</script>

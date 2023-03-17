@@ -1,0 +1,27 @@
+{
+  "CacheSourceKey": "1ebetsm",
+  "CachePdfKey": "1ebetsm/1ebetsm-17mep80.pdf",
+  "CacheXpzKey": "1ebetsm/1ebetsm-1ett7c0.xpz",
+  "CacheInfoKey": "1ebetsm/1ebetsm-1ett7c0.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Client Invoice\\Recon(0).txt",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "Recon(0).txt",
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": null,
+    "Format": "Txt",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1ebetsm",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

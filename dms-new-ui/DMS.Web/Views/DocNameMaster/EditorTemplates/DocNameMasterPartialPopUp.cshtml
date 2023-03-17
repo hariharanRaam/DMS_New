@@ -1,0 +1,75 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.DocNameMaster_Model
+
+<div>
+    <table>
+
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Doc Name", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+                @Html.TextBoxFor(m => m.DocName, new { style = "height:25px;width:225px;font-weight: normal;" })
+                @Html.ValidationMessageFor(m => m.DocName)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Short Name", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+                @Html.TextBoxFor(m => m.Dname_Shortname, new { style = "height:25px;width:225px;font-weight: normal;" })
+                @Html.ValidationMessageFor(m => m.Dname_Shortname)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Doc Group", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+                @(Html.Kendo().DropDownList()
+               .Name("DgroupID")
+               .DataTextField("DgroupName")
+               .DataValueField("DgroupID")
+               .Events(e => e.Change("onChangeDocGroup"))
+               .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+               .DataSource(source => { source.Read(read => { read.Action("GetmasterDorpdowns", "DocNameMaster", new { CommonVal = "G" }); }).ServerFiltering(true); }))
+               @Html.ValidationMessageFor(model => model.DgroupID)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Unit", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                .Name("UnitID")
+                .DataTextField("Unit")
+                .DataValueField("UnitID")
+                .Events(e => e.Change("onChangeunit"))
+                .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                .DataSource(source => { source.Read(read => { read.Action("GetmasterDorpdowns", "DocNameMaster", new { CommonVal = "U" }); }).ServerFiltering(true); }))
+                
+                @Html.ValidationMessageFor(model => model.UnitID)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Department", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+               @(Html.Kendo().DropDownList()
+              .Name("Dept_Id")
+              .DataTextField("Dept_Name")
+              .DataValueField("Dept_Id")
+              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetmasterDorpdowns", "DocNameMaster", new { CommonVal = "D" }); }).ServerFiltering(true); }))
+              @Html.ValidationMessageFor(model => model.Dept_Id)
+            </td>
+        </tr>
+    </table>
+
+</div>

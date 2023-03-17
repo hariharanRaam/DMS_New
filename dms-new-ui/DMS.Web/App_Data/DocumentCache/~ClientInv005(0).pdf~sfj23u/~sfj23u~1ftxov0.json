@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "sfj23u",
+  "CachePdfKey": "sfj23u/sfj23u-1k3kk2s.pdf",
+  "CacheXpzKey": "sfj23u/sfj23u-1ftxov0.xpz",
+  "CacheInfoKey": "sfj23u/sfj23u-1ftxov0.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Supplier Invoice\\ClientInv005(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv005(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "sfj23u",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

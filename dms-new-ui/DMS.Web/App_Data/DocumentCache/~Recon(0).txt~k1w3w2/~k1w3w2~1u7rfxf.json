@@ -1,0 +1,27 @@
+{
+  "CacheSourceKey": "k1w3w2",
+  "CachePdfKey": "k1w3w2/k1w3w2-sihbej.pdf",
+  "CacheXpzKey": "k1w3w2/k1w3w2-1u7rfxf.xpz",
+  "CacheInfoKey": "k1w3w2/k1w3w2-1u7rfxf.json",
+  "CacheCopyKey": "k1w3w2/k1w3w2.txt",
+  "Document": null,
+  "DocumentHandlerType": null,
+  "DocumentFileName": "Recon(0).txt",
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "Recon(0).txt",
+    "Format": "Txt",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "k1w3w2",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

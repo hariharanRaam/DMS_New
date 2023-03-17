@@ -1,0 +1,465 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.BasicReport_Model
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<style>
+    .cus-lbl {
+        font-weight: normal;
+    }
+     
+</style>
+<html>
+
+<body class="hold-transition skin-blue sidebar-mini fixed" style="overflow:hidden !important;">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Document Report</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form method="post" class="form-horizontal" enctype="multipart/form-data" id="form2">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        @Html.LabelFor(m => m.Lbl_Dept, Model.Lbl_Dept, new { @class = "cus-lbl" })
+                                        @(Html.Kendo().DropDownList()
+                                            .Name("DeptID")
+                                            .DataTextField("DeptName")
+                                            .DataValueField("DeptID")
+                                            //.Events(e => e.Change("onChangeDept"))
+                                            .HtmlAttributes(new { style = "height:25px;width:100%;font-weight: normal;" })
+                                            .DataSource(source => { source.Read(read => { read.Action("GetBasicReportDetails", "BasicReport", new { Master = "Dept" }); }).ServerFiltering(true); }))
+                                    </div>
+                                    <div class="col-sm-2">
+                                        @Html.LabelFor(m => m.Lbl_Unit, Model.Lbl_Unit, new { @class = "cus-lbl" })
+                                        @(Html.Kendo().DropDownList()
+                                           .Name("UnitID")
+                                           .DataTextField("UnitName")
+                                           .DataValueField("UnitID")
+                                           //.Events(e => e.Change("onChangeUnit"))
+                                           .HtmlAttributes(new { style = "height:25px;width:100%;font-weight: normal;" })
+                                           .DataSource(source => { source.Read(read => { read.Action("GetBasicReportDetails", "BasicReport", new { Master = "Unit" }); }).ServerFiltering(true); }))
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cus-lbl">Doc Group</label>
+                                        @(Html.Kendo().DropDownList()
+                                           .Name("CateID")
+                                           .DataTextField("CateName")
+                                           .DataValueField("CateID")
+                                           // .Events(e => e.Change("onChangeDocGroup"))
+                                           .HtmlAttributes(new { style = "height:25px;width:100%;font-weight: normal;" })
+                                           .DataSource(source => { source.Read(read => { read.Action("GetBasicReportDetails", "BasicReport", new { Master = "DocGroup" }); }).ServerFiltering(true); }))
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cus-lbl">Doc Name</label>
+                                        @(Html.Kendo().DropDownList()
+                                           .Name("SubCateID")
+                                           .DataTextField("SubCateName")
+                                           .DataValueField("SubCateID")
+                                           // .Events(e => e.Change("onChangeDocName"))
+                                           .HtmlAttributes(new { style = "height:25px;width:100%;font-weight: normal;" })
+                                           .DataSource(source => { source.Read(read => { read.Action("GetBasicReportDetails", "BasicReport", new { Master = "DocName" }); }).ServerFiltering(true); }))
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cus-lbl">From Date</label>
+                                        @(Html.Kendo().DatePicker()
+                                         .Name("FromDate")
+                                         .Max(DateTime.Today)
+                                         .Format("dd-MM-yyyy")
+                                         .HtmlAttributes(new { @class = "form-control", @placeholder = "DD-MM-YYYY", onkeypress = "return IsDateKey(event)", style = "height:25px;width:100%;font-weight: normal" }))
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cus-lbl">To Date</label>
+                                        @(Html.Kendo().DatePicker()
+                                         .Name("Todate")
+                                         .Max(DateTime.Today)
+                                         .Format("dd-MM-yyyy")
+                                         .HtmlAttributes(new { @class = "form-control", @placeholder = "DD-MM-YYYY", onkeypress = "return IsDateKey(event)", style = "height:25px;width:100%;font-weight: normal" }))
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <table align="right" style="width:100%;text-align:right !important;">
+                                    <tr>
+                                        <td style="width:87%;"></td>
+                                        <td> <button type="button" class="btn btn-danger pull-right" onclick="return GetUploadedFiles();"><i class="fa fa-search"></i>&nbsp; Search</button> </td>
+                                        <td><button type="button" class="btn btn-danger pull-right" onclick="return ClearRecords();"><i class="fa fa-refresh"></i>&nbsp;Clear</button> </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="box-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        @(Html.Kendo().Grid<DMS.Model.BasicReport_Model>().Name("kgrid_report")
+                                        .HtmlAttributes(new { style = "width:100%;line-height:2em;font-weight:normal;" })
+                                        .Resizable(resizing => resizing.Columns(true))
+                                        .Columns(columns =>
+                                        {
+                                            columns.Bound(m => m.DocID).Hidden();
+                                            columns.Bound(m => m.SlNo).Title("S No").Width(110).Filterable(false);
+                                            columns.Bound(m => m.DeptName).Title(Model.Lbl_Dept).Width(200);
+                                            columns.Bound(m => m.UnitName).Title(Model.Lbl_Unit).Width(200);
+                                            columns.Bound(m => m.CateName).Title("Doc Group").Width(200);
+                                            columns.Bound(m => m.SubCateName).Title("Doc Name").Width(200);
+                                            //columns.Bound(m => m.FileName).Title("Uploaded File Name").Width(100);
+                                            columns.Template(@<text></text>).ClientTemplate("<a style = 'color:blue;cursor:pointer' onclick = 'return Downloadfile()' >#= FileName #</a>").Title("Uploaded File Name").Width(350);
+                                            columns.Bound(m => m.UploadedBy).Title("Uploaded By").Width(150);
+                                            columns.Bound(m => m.FromDate).Title("Uploaded Date").Width(150);
+                                            columns.Bound(m => m.UploadStatus).Title("Uploaded Status").Width(150);
+                                            columns.Bound(m => m.UploadedFilePath).Hidden();
+                                        })
+                                        .ToolBar(toolbar => toolbar.Excel().Text("Download to Excel"))
+                                        .Pageable(pageable => pageable
+                                                .Refresh(true)
+                                                .PageSizes(true)
+                                                .ButtonCount(5))
+                                        .Filterable()
+                                        .Scrollable(scroll => scroll.Height(300).Enabled(true))
+                                        .Sortable()
+                                        .Excel(excel => excel.Filterable(true).AllPages(true))
+                                        .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .PageSize(10)
+                                        .Events(events => events.Error("error_handler"))
+                                        .Model(model => model.Id(p => p.DocID))
+                                        .Read(read => read.Action("GetUploadedFiles", "BasicReport").Data("GetParameters"))
+                                        ))
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+</body>
+</html>
+
+<script>
+    function Downloadfile() {
+        debugger;
+        var grid = $("#kgrid_report").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var FilePath = (model.UploadedFilePath);
+        var FileName = (model.FileName);
+        $.ajax(
+         {
+             url: '@Url.Action("CheckFileExists", "BasicReport")',
+             contentType: 'application/json; charset=utf-8',
+             datatype: 'json',
+             data: { absolutePath: FilePath },
+             type: "GET",
+             success: function (data) {
+                 debugger;
+                 if (data == 'fileexists') {
+                     var url = '@Url.Action("DownloadFile", "BasicReport", new { filePath = "REPLACEME", filename = "REPLACEFILENAME" })';
+                     url = url.replace('REPLACEME', FilePath).replace('REPLACEFILENAME', FileName);
+                     window.location.href = url.replace(/amp;/g, '');
+                 }
+                 else {
+                     $.dialog({
+                         title: 'DMS',
+                         content: 'File not found.!',
+                         type: 'blue',
+                     });
+                     return false;
+                 }
+             }
+         });
+    }
+
+    function GetUploadedFiles() {
+        debugger;
+        var datefrom = $("#FromDate").val();
+        var dateto = $("#Todate").val();
+
+        if (datefrom == "" || datefrom == null || datefrom == undefined ||
+            dateto == "" || dateto == null || dateto == undefined) {
+            $.dialog({
+                title: 'DMS',
+                content: 'Ensure From Date / To Date.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        $("#kgrid_report").data("kendoGrid").dataSource.read();
+    }
+
+    function ClearRecords() {
+        debugger;
+        $("#SubCateID").data("kendoDropDownList").select(0);
+        $("#CateID").data("kendoDropDownList").select(0);
+        $("#UnitID").data("kendoDropDownList").select(0);
+        $("#DeptID").data("kendoDropDownList").select(0);
+        $("#FromDate").val("");
+        $("#Todate").val("");
+        $("#kgrid_report").data("kendoGrid").dataSource.data([]);
+    }
+
+    function GetParameters() {
+        debugger;
+        //var dept = $("#DeptID").val();
+        //var unit = $("#UnitID").val();
+        //var docgroup = $("#CateID").val();
+        //var docname = $("#SubCateID").val();
+        //var fromdate = $("#FromDate").val();
+        //var todate = $("#Todate").val();
+        //var flag = 'S';
+        //return { Department: dept, Unit: unit, DocGroup: docgroup, DocName: docname, DateFrom: fromdate, DateTo: todate, Aflag: todate };
+        var arrModel = {};
+        arrModel.DeptID = $("#DeptID").val();
+        arrModel.UnitID = $("#UnitID").val();
+        arrModel.CateID = $("#CateID").val();
+        arrModel.SubCateID = $("#SubCateID").val();
+        arrModel.FromDate = $("#FromDate").val();
+        arrModel.Todate = $("#Todate").val();
+        arrModel.Flag = "Search";
+        return { modelObj: arrModel };
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.dialog({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+    function IsDateKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31)
+            return false;
+        return true;
+    }
+
+    function onChangeDocName() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetDocName"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docgroupdropdown = $("#CateID").data("kendoDropDownList");
+                var unitdropdown = $("#UnitID").data("kendoDropDownList");
+                var deptdropdown = $("#DeptID").data("kendoDropDownList");
+
+                docgroupdropdown.dataSource.data(data.lst_docgroup);
+                unitdropdown.dataSource.data(data.lst_unit);
+                deptdropdown.dataSource.data(data.lst_dept);
+
+                //datasource for docgroup.
+                if (data.lst_docgroup.length == 2) {
+                    docgroupdropdown.select(1)
+                }
+                else {
+                    docgroupdropdown.select(0)
+                }
+                docgroupdropdown.trigger("change");
+
+                //datasource for unit.
+                if (data.lst_unit.length == 2) {
+                    unitdropdown.select(1)
+                }
+                else {
+                    unitdropdown.select(0)
+                }
+                unitdropdown.trigger("change");
+
+                //datasource for department.
+                if (data.lst_dept.length == 2) {
+                    deptdropdown.select(1)
+                }
+                else {
+                    deptdropdown.select(0)
+                }
+                deptdropdown.trigger("change");
+
+            });
+        }
+    }
+
+    function onChangeDocGroup() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetDocGroup"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#SubCateID").data("kendoDropDownList");
+                var unitdropdown = $("#UnitID").data("kendoDropDownList");
+                var deptdropdown = $("#DeptID").data("kendoDropDownList");
+
+                if ($("#SubCateID").val() == "0" || $("#SubCateID").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+                unitdropdown.dataSource.data(data.lst_unit);
+                deptdropdown.dataSource.data(data.lst_dept);
+
+                //datasource for unit.
+                if (data.lst_unit.length == 2) {
+                    unitdropdown.select(1)
+                }
+                else {
+                    unitdropdown.select(0)
+                }
+                unitdropdown.trigger("change");
+
+                //datasource for department.
+                if (data.lst_dept.length == 2) {
+                    deptdropdown.select(1)
+                }
+                else {
+                    deptdropdown.select(0)
+                }
+                deptdropdown.trigger("change");
+
+            });
+        }
+    }
+
+    function onChangeUnit() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetUnit"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#SubCateID").data("kendoDropDownList");
+                var docgroupdropdown = $("#CateID").data("kendoDropDownList");
+                var deptdropdown = $("#DeptID").data("kendoDropDownList");
+
+                if ($("#SubCateID").val() == "0" || $("#SubCateID").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+
+                if ($("#CateID").val() == "0" || $("#CateID").val() == null) {
+                    docgroupdropdown.dataSource.data(data.lst_docgroup);
+                    //datasource for unit.
+                    if (data.lst_docgroup.length == 2) {
+                        docgroupdropdown.select(1)
+                    }
+                    else {
+                        docgroupdropdown.select(0)
+                    }
+                    docgroupdropdown.trigger("change");
+                }
+
+                deptdropdown.dataSource.data(data.lst_dept);
+                //datasource for department.
+                if (data.lst_dept.length == 2) {
+                    deptdropdown.select(1)
+                }
+                else {
+                    deptdropdown.select(0)
+                }
+                deptdropdown.trigger("change");
+
+            });
+        }
+    }
+
+    function onChangeDept() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "GetDept";
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("onChangeDropdowns/BasicReport?MasterID=" + masteritemid + "&Master=" + master, function (data) {
+                debugger;
+                var docnamedropdown = $("#SubCateID").data("kendoDropDownList");
+                var docgroupdropdown = $("#CateID").data("kendoDropDownList");
+                var unitdropdown = $("#UnitID").data("kendoDropDownList");
+
+                if ($("#SubCateID").val() == "0" || $("#SubCateID").val() == null) {
+                    docnamedropdown.dataSource.data(data.lst_docname);
+                    //datasource for unit.
+                    if (data.lst_docname.length == 2) {
+                        docnamedropdown.select(1)
+                    }
+                    else {
+                        docnamedropdown.select(0)
+                    }
+                    docnamedropdown.trigger("change");
+                }
+
+                if ($("#CateID").val() == "0" || $("#CateID").val() == null) {
+                    docgroupdropdown.dataSource.data(data.lst_docgroup);
+                    //datasource for unit.
+                    if (data.lst_docgroup.length == 2) {
+                        docgroupdropdown.select(1)
+                    }
+                    else {
+                        docgroupdropdown.select(0)
+                    }
+                    docgroupdropdown.trigger("change");
+                }
+
+                if ($("#UnitID").val() == "0" || $("#UnitID").val() == null) {
+                    unitdropdown.dataSource.data(data.lst_unit);
+                    //datasource for unit.
+                    if (data.lst_unit.length == 2) {
+                        unitdropdown.select(1)
+                    }
+                    else {
+                        unitdropdown.select(0)
+                    }
+                    unitdropdown.trigger("change");
+                }
+            });
+        }
+    }
+</script>

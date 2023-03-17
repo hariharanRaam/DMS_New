@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+    Page.Title = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Alert Msg</title>
+    <script src="~/Scripts/jquery-confirm.min.js"></script>
+    <script src="~/Scripts/js/main.js"></script>
+    <script src="~/Scripts/kendo/2015.1.318/jquery.min.js"></script>
+    <script src="~/Scripts/jquery-{version}.js"></script>
+    <script src="~/Scripts/kendo/2015.1.318/jszip.min.js"></script> 
+    <script src="~/Scripts/jquery.validate*"></script> 
+    <script src="JavaScript/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://example.com/sites/all/modules/ac_modules/ac_exercise/ac_exercise.js?nkuo2r"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <table >
+        <tr>
+            <td>
+                <button id="btn_Warning" onclick="Show_Warning();">Warning</button>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+<script>
+    function Show_Warning() {
+        debugger;
+        $.alert({
+            icon: 'fa fa-success',
+            title: 'IEM Product',
+            theme: 'dark',
+            content: 'Select atleast one record from above list!..',
+            type: 'blue',
+            animationSpeed: 700,
+        });
+    }
+</script>

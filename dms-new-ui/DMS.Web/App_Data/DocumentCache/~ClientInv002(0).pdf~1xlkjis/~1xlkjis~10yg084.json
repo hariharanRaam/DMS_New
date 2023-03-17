@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1xlkjis",
+  "CachePdfKey": "1xlkjis/1xlkjis-1k3kk2s.pdf",
+  "CacheXpzKey": "1xlkjis/1xlkjis-10yg084.xpz",
+  "CacheInfoKey": "1xlkjis/1xlkjis-10yg084.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\Vendor Invoice\\ClientInv002(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv002(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1xlkjis",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

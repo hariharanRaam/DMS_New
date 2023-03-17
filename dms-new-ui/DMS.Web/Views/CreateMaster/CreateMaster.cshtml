@@ -1,0 +1,472 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model  DMS.Model.CreateMaster_Model
+@{
+   
+
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+      
+ .k-dropdown-wrap.k-state-default{
+            background-clip: padding-box;
+           
+    display: block;
+    height:90%;
+    width:initial;
+    padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+    -moz-padding-start: calc(0.875rem - 3px);
+    font-size: 0.7075rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #697a8d;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 17px 12px;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+        .k-item{
+             background-color: #fff;
+             background-position: right 0.875rem center;
+             
+             
+        }
+        .k-content{
+            width:100%;
+        }
+        /*.k-button{
+             background-color: transparent;
+              color: blue;
+              border: aliceblue;
+
+        }*/
+        .k-grid{
+             color: #697a8d;
+    background-color: #fff;
+        }
+        .k-grid-header th.k-header{
+            text-overflow: ellipsis;
+    text-align: center;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+        }
+        .k-pager-info {
+    float: right;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 0 1.333em;
+}
+        .k-pager-sizes {
+    display: inline-block;
+    padding-top: 1px;
+    text-transform: none;
+    font-size: 0.90rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+         .k-footer{
+             background-color: #fff;
+        }
+ .k-widget{
+      background-color: #fff;
+ }
+        .k-header {
+        background-color: #fff;
+        }
+        .k-grid td {
+    white-space: nowrap;
+    background-color: #eceef1;
+    border-color: inherit;
+    /* text-align: center; */
+}
+        
+    .k-state-selected {
+        color: #000;
+        border-color: inherit;
+    }
+        .k-icon k-edit {
+          display:none;
+        }
+          .k-add.k-icon {
+                display: none;
+            }
+
+            .k-edit.k-icon {
+                display: none;
+            }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card-body" style="margin-top:-9px;">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:650px">
+
+                        <div class="box-header text-left  with-border">
+                            <table style="width:30% !important;position:relative;align-content :flex-start  ">
+                                <tr style="height:10px;"></tr>
+                                <tr>
+                                    <td style="left:15px;top:10px; position:relative">
+                                        @Html.Label("Master", new { @class="form-label" @*,style = "width:120px;font-weight: bold;"*@ })
+                                    </td>
+                                    <td style="left:15px; position:relative">
+                                        @(Html.Kendo().DropDownList().Name("MasterTypeId")
+                                 .DataTextField("MasterTypeName")
+                                 .DataValueField("MasterTypeId")
+                // .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                         .DataSource(source => { source.Read(read => { read.Action("GetMasterType", "CreateMaster"); }).ServerFiltering(true); })
+                 .SelectedIndex(0)
+                 .Events(e => e.Change("onChange"))
+                                        )
+                                        @* <select id="Master" name="Master" onchange="fetchMaster()" class="form-control"></select>*@
+                                    </td>
+
+                                    @Html.Hidden("OrgMasterId", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+
+                                </tr>
+
+                                <tr style="height:10px;"></tr>
+                            </table>
+                        </div>
+
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title"></h3>
+                        </div>
+
+
+                        @(Html.Kendo().Grid<DMS.Model.CreateMaster_Model>().Name("Department")
+                                    .HtmlAttributes(new { style = "width:100%;height:auto;line-height:1em;font-size:12px;" })
+                                    .Resizable(resizing => resizing.Columns(true))
+                            .Columns(columns =>
+                            {
+                                columns.Bound(m => m.Id).Title("Code");
+                                columns.Bound(m => m.Name).Title("Name");
+                                columns.Bound(m => m.DependId).Title("Depend Code");
+                                // columns.Bound(m => m.DependName).Title("Depend Master").Width(20);
+                                //columns.Bound(m => m.CreatedDate).Title("Created Date").Width(20).Format("{0: dd-MM-yyyy }");
+                                //columns.Bound(m => m.Createdby).Title("Created By").Width(20);
+                                columns.Bound(m => m.MasterTypeId).Title("MasterType").Hidden();
+                                columns.Command(cmd => { cmd.Edit().Text("<center><img src = '../Assets/images/editicons.png' ></center>"); }).Title("Edit").Width(5).HtmlAttributes(new { style = "text-align:center" });
+                                columns.Template(p => { }).ClientTemplate("<center><img src = '../Assets/images/del.png'  onclick='return myDeleteJs()' ></center>").Width(3).Title("Delete");
+                            })
+                            .ToolBar(toolbar => toolbar.Create())
+                            .Editable(ed => ed.Mode(GridEditMode.PopUp).TemplateName("CreateMasterDropdown"))
+                            .Pageable(pageable => pageable
+                                        .Refresh(true)
+                                        .PageSizes(true)
+                                        .ButtonCount(5))
+                            .Filterable()
+                            .Sortable()
+                            .Selectable()
+                                //.Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(10)
+                            .ServerOperation(false)
+                            .Events(events => events.Error("error_handler"))
+
+                                    .Model(model =>
+                                    {
+                                        model.Id(p => p.Id);
+                                        //  model.Field(p => p.MasterTypeId).DefaultValue("additionalinfo");
+                                    })
+
+                                            .Update(update => update.Action("DepartmentGrid_Update", "CreateMaster").Data("additionalinfo"))
+                                            .Create(Create => Create.Action("DepartmentGrid_Save", "CreateMaster").Data("additionalinfo"))
+                                           .Read(read => read.Action("MasterGrid_Read", "CreateMaster").Data("additionalinfo"))
+                            )
+                        )
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var slno = 0;
+        debugger;
+        $("#navhead").text("Masters");
+        getScreenAccess(46, "Masters");
+    })
+
+    function getScreenAccess(screenID, screenName) {
+        debugger;
+        var result_;
+        $.ajax({
+            // type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //   async: false,
+            url: '@Url.Action("getScreenData", "UserGroupsMapping")',
+            data: { 'screen_id': screenID, 'screen_name': screenName },
+            success: function (data) {
+                debugger;
+                var grid = $("#Department").data("kendoGrid");
+                
+                var data1 = JSON.parse(data.Data1);
+                if (data1[0].add_perm == "1" || data1[0].mod_perm == "1") {
+
+                }
+                    //else if (data1[0].inactivate_perm == "1") {
+                    //    $("#btnupdate").attr('disabled', true);
+                    //    // $("#applybtn").attr('disabled', true);
+                    //}
+
+                else if (data1[0].view_perm == "1") {
+                    grid.hideColumn(5);
+                    grid.hideColumn(4);
+                    $(".k-header.k-grid-toolbar.k-grid-top").hide();
+                    // showresult = 'Y';
+                }
+
+                    else if(data1[0].deny_perm == "1")
+                    {
+                        $(".k-header.k-grid-toolbar.k-grid-top").hide();
+                        grid.hideColumn(5);
+                        grid.hideColumn(4);
+                    }
+                else {
+                    $("#applybtn").attr('disabled', true);
+                }
+                // Getsummary();
+                for (var i = 0; i < grid.columns.length; i++) {
+                    if (i != grid.columns.length) {
+                        grid.autoFitColumn(i);  //autofit each column.
+
+                    }
+                }
+            },
+            error: function (data) {
+
+
+            }
+        });
+    }
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#navhead").text("Create Master");
+        debugger;
+        $("#Department").data("kendoGrid").dataSource.bind("requestEnd", onRequestEnd);
+      //  $("#Department").data("kendoGrid").dataSource.bind("onLoad",onload);
+        var grid = $("#Department").data("kendoGrid");
+        //function for changing kendo popup title.
+        grid.bind("edit", function (event) {
+            debugger;
+            event.container.parent().find('.k-window-title').text(event.model.isNew() ? "New" : "Edit");
+        });
+        $('.k-icon.k-edit').attr('hidden',true);
+    })
+
+    function onLoad(e)
+    {
+        alert("load");
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+    function onRequestEnd(e) {
+        debugger;
+        //Check request type
+        if (e.type == "create") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'QCD Master Record has been created successfully.!',
+                    type: 'blue',
+                });
+                $("#Department").data("kendoGrid").dataSource.read();
+                //setTimeout(function () {
+                //    debugger;
+                //    window.location.reload(1);
+                //}, 1500);
+            }
+        }
+        if (e.type == "update") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'QCD Master Record has been Edited successfully.!',
+                    type: 'blue',
+                });
+                $("#Department").data("kendoGrid").dataSource.read();
+                //setTimeout(function () {
+                //    debugger;
+                //    window.location.reload(1);
+                //}, 1500);
+            }
+        }
+
+    }
+
+    function myDeleteJs() {
+        debugger;
+        var grid = $("#Department").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var ID = (model.Id);
+        var MastertypeId = (model.MasterTypeId);
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+            theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure do you want to delete this record!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("DeletingDepartment", "CreateMaster")',
+                        data: "{ ID:'" + ID + "',MastertypeId:'" +MastertypeId+"'}",
+                        success: function (data) {
+                            debugger;
+                            if (data == 'Success') {
+                                $.alert({
+                                    icon: 'fa fa-success',
+                                    title: 'DMS',
+                                    //theme: 'dark',
+                                    content: 'Record deleted.!',
+                                    type: 'green',
+                                    animationSpeed: 700,
+                                });
+                            }
+                            //setTimeout(function () {
+                            //    window.location.reload(1);
+                            //}, 2500);
+                            $("#Department").data("kendoGrid").dataSource.read();
+                        },
+                    });
+
+                },
+                cancel: function () {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        theme: 'dark',
+                        content: 'Delete Canceled.!',
+                        type: 'blue',
+                        animationSpeed: 700,
+                    });
+                },
+            }
+        });
+    }
+
+    function onChange() {
+        var pid = this.value();
+        var PName = this.text();
+        $("#Orgname").text(PName);
+        sessionStorage.setItem('MasterTypeId', pid);
+        debugger;
+        $("#Orgname").text(PName);
+        //var name1 = $("#OrgMasterId").val();
+        //$("#Orgname").val("test");
+       // $.session.set("MasterTypeId", pid);
+        //alert($.session.get("MasterTypeId"));
+        // alert(pid);
+
+        //$.get('/CreateMaster/MasterGrid_Read', { MasterTypeId: pid }, function (data) {
+        //    $("#Department").data("kendoGrid").dataSource.read();
+        //    var grid = $("#Department").data("kendoGrid");
+        //})
+
+//        $.ajax(
+//{
+//    type: 'POST',
+//    url: '/CreateMaster/MasterGrid_Read/',
+//    dataType: 'json',
+//    data: { date: pDate },
+//    success: function (result) {
+//        $("#Department").data("kendoGrid").dataSource.data(result);
+//    }
+        //});
+
+        $("#MasterTypeId").val(pid).trigger("change");
+        $("#Department").data("kendoGrid").dataSource.read();
+
+        $("#OrgMasterId").val(pid);
+        @*$.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            url: '@Url.Action("MasterGrid_Read", "CreateMaster")',
+            data: "{ MasterTypeId:'" + pid + "'}",
+            success: function (data) {
+                debugger;
+
+
+                $("#Department").data("kendoGrid").dataSource.read();
+                alert("1");
+            },
+        });*@
+        $('h3').text(PName);
+    }
+    function additionalinfo()
+    {
+        var MasterTypeId = $("#MasterTypeId").val();
+        var depid = $("#DependId").val();
+        //alert(MasterTypeId);
+        if (MasterTypeId == null || MasterTypeId.length==0)
+        {
+            MasterTypeId = "QCD_mst_tdepartment";
+        }
+        else
+        {
+            MasterTypeId = $("#MasterTypeId").val();
+        }
+      ///  alert(MasterTypeId);
+        //Session["MasterType"]=MasterTypeId;
+        return {
+
+            Master_TypeId: MasterTypeId, dep_id: depid
+
+        }
+    }
+</script>

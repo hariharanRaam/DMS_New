@@ -1,0 +1,243 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.EmployeeMaster_Model
+
+<style>
+    div.k-window {
+        display: inline-block;
+        position: absolute;
+        z-index: 10001;
+        border-style: solid;
+        border-width: 1px;
+        padding-top: 1em;
+        width: 730px;
+        font-weight: normal;
+    }
+</style>
+
+<div>
+    <table>
+        <tr></tr>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">
+                @Html.Label("Employee Code", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EmployeeCode, new { style = "height:25px;width:225px;font-weight: normal;", placeholder = "Employee Code" })
+                @Html.ValidationMessageFor(model => model.EmployeeCode)
+            </td>
+            <td style="left:25px; position:relative">
+                @Html.Label("Mobile No", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @Html.EditorFor(model => model.MobileNo, new { htmlAttributes = new { @style = "height:25px;width:225px;font-weight: normal;", placeholder = "Mobile No" } })
+                @Html.ValidationMessageFor(model => model.MobileNo)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Employee Name", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EmployeeName, new { style = "height:25px;width:225px;font-weight: normal;", placeholder = "Employee Name" })
+                @Html.ValidationMessageFor(model => model.EmployeeName)
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("Lan No", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @Html.TextBoxFor(model => model.LanNo, new { style = "height:25px;width:225px;font-weight: normal;", placeholder = "Lan No" })
+                @Html.ValidationMessageFor(model => model.LanNo)
+            </td>
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Title", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList().Name("TitleID")
+              .DataTextField("Title")
+              .DataValueField("TitleID")
+              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "T" }); }).ServerFiltering(true); }))
+                @*@Html.ValidationMessageFor(model => model.TitleID)*@
+                @*@Html.TextBoxFor(model => model.Title, new { style = "height:25px;width:225px;font-weight: normal;" })*@
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("Date of Joining", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @*@Html.EditorFor(model => model.DOJ, new { htmlAttributes = new { @style = "height:25px;width:225px;font-weight: normal;"} })*@
+                @(Html.Kendo().DatePickerFor(model => model.DOJ).Format("MM/dd/yyyy").HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" }))
+                @*@Html.ValidationMessageFor(model => model.DOJ)*@
+            </td>
+
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Address", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Address, new { style = "height:25px;width:225px;font-weight: normal;", placeholder = "Address" })
+                @Html.ValidationMessageFor(model => model.Address)
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("Department", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @(Html.Kendo().DropDownList()
+                              .Name("Dept_Id")
+                              .DataTextField("Dept_Name")
+                              .DataValueField("Dept_Id")
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "D" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.Dept_Id)
+            </td>
+
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("City", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("CityID")
+                              .DataTextField("City")
+                              .DataValueField("CityID")
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "C" }); }).ServerFiltering(true); }))
+
+                @Html.ValidationMessageFor(model => model.CityID)
+            </td>
+            <td style="left:25px; position:relative">
+                @Html.Label("Unit", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @(Html.Kendo().DropDownList()
+                              .Name("UnitID")
+                              .DataTextField("Unit")
+                              .DataValueField("UnitID")
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "U" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.UnitID)
+            </td>
+
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+
+            <td style="left:15px; position:relative">
+                @Html.Label("Region", new { style = "width:120px;font-weight: normal;" })
+            </td>
+
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("RegionID")
+                              .DataTextField("Region")
+                              .DataValueField("RegionID")
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "R" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.RegionID)
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("Grade", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @(Html.Kendo().DropDownList()
+                              .Name("GradeID")
+                              .DataTextField("Grade")
+                              .DataValueField("GradeID")
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "G" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.GradeID)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Pin Code", new { style = "width:120px;font-weight: normal;" })
+            </td>
+
+            <td>             
+                @Html.TextBoxFor(model => model.Pin, new { style = "height:25px;width:225px;font-weight: normal;", placeholder = "Pin Code" })
+                @Html.ValidationMessageFor(model => model.Pin)
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("EmployeeType", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @(Html.Kendo().DropDownList()
+                    .Name("TypeID")
+                    .DataTextField("TypeName")
+                    .DataValueField("TypeID")
+                    .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "E" }); }).ServerFiltering(true); }))
+
+                @Html.ValidationMessageFor(model => model.TypeID)
+            </td>
+        </tr>
+
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("State", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("StateID")
+                              .DataTextField("State")
+                              .DataValueField("StateID")
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "S" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.StateID)
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("Password", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @Html.PasswordFor(model => model.Password, new { placeholder = "Password", @style = "height:25px;width:225px;font-weight: normal;" })
+                @*@Html.TextBoxFor(model => model.Password, new { style = "height:25px;width:225px;font-weight: normal;" })*@
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Email ID", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EmailID, new { style = "height:25px;width:225px;font-weight: normal;", placeholder = "Email Address" })
+                @Html.ValidationMessageFor(model => model.EmailID)
+            </td>
+
+            <td style="left:25px; position:relative">
+                @Html.Label("User Group", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td style="left:15px; position:relative">
+                @(Html.Kendo().DropDownList()
+                 .Name("UserGroupID")
+                 .DataTextField("UserGroup")
+                 .DataValueField("UserGroupID")
+                 .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                 .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "UG" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.UserGroupID)
+            </td>
+            @Html.HiddenFor(model => model.EmployeeID, new { style = "height:25px;width:225px;font-weight: normal;" })
+    </table>
+</div>
+

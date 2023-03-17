@@ -1,0 +1,839 @@
+﻿@using Kendo.Mvc.UI;
+@model DMS.Model.SetDocAttributes_Model
+
+@using GleamTech.AspNet.Mvc
+@using GleamTech.DocumentUltimate
+@using GleamTech.DocumentUltimate.AspNet
+@using GleamTech.DocumentUltimate.AspNet.UI
+@using System.Web.UI.WebControls;
+
+@{
+    int i = 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title></title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        .error {
+            color: blue;
+        }
+
+        .div1 {
+            border: 1px solid;
+            padding: 10px;
+            box-shadow: 5px 10px;
+        }
+      
+        .asterisk_input:after {
+            content: " *";
+            color: #e32;
+            position: absolute;
+            margin: 0px 0px 0px -20px;
+            font-size: xx-large;
+            padding: 0 5px 0 0;
+        }
+
+        .toolbar .group:not(:last-child) {
+    border-right: 0px solid #cbcbcb;
+}
+          .toolbar .group {
+    padding: 0px;
+    float: left;
+    margin: 5px 0;
+}
+    </style>
+
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card-body" style="margin-top:-9px;">
+                <h5 class="mobile-card-header">Set Attributes Against Document</h5>
+                <form id="formAccountSettings" method="POST" onsubmit="return false">
+                    @*<div class="row" id="header">
+                        <div class="mb-3 col-md-5">
+
+                        </div>
+                        <div class="mb-3 col-md-4">
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="icons"><a href="/GetAllDocuments/GetAllDocuments"><img src="~/Assets/images/toplist.png" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="List" aria-label="List"></a></div>
+                        </div>
+                    </div>*@
+                    <div class="row" style="margin-top:-15px;">
+                        <div class="col-sm-3" style="width:23.5%;">
+                            <label class="form-label" for="subvertical">Document Type</label>
+                            @*<input type="text" class="form-control" placeholder="" readonly>*@
+                            @Html.TextBoxFor(m => m.SubCateName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "Id", "SubCateName" } })
+                        </div>
+                        <div class="col-sm-3" style="width:23.5%;">
+                            <label class="form-label" for="subvertical">Document Group</label>
+                            @*<input type="text" class="form-control" placeholder="" readonly>*@
+                            @Html.TextBoxFor(m => m.CateName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "Id", "CateName" } })
+                        </div>
+                        <div class="col-sm-3" id="orgcol4" style="display:none;width:23.5%;" >
+                            <label class="form-label" for="subvertical" id="orglvl4lbl">Unit</label>
+                            <input type="text" id="orglvl4val" class="form-control" placeholder="" readonly>
+                        </div>
+                        <div class="col-sm-3" id="orgcol3" style="display:none;width:23.5%;">
+                            <label class="form-label" for="subvertical" id="orglvl3lbl">Unit</label>
+                            <input type="text" id="orglvl3val" class="form-control" placeholder="" readonly>
+                        </div>
+                        <div class="col-sm-3" id="orgcol2" style="display:none;width:23.5%;">
+                            <label class="form-label" for="subvertical" id="orglvl2lbl">Unit</label>
+                            <input type="text" id="orglvl2val" class="form-control" placeholder="" readonly>
+                        </div>
+                        <div class="col-sm-3" id="orgcol1" style="display:none;width:23.5%;">
+                            <label class="form-label" for="subvertical" id="orglvl1lbl" onclick="docloadinit()">Unit</label>
+                            <input type="text" id="orglvl1val" class="form-control" placeholder="" readonly>
+                        </div>
+                        <div class="icons" style="width: 3%;margin-left: 10px;margin-top: 32px;">
+                            <a href="/GetAllDocuments/GetAllDocuments"><img src="/Assets/images/toplist.png" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="List" aria-label="List"></a>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:15px;display:none" id="orglvls">
+                        
+                    </div>
+                    <div class="row">
+                 
+                        <div class="col-sm-4" style="border: 1px solid #000;padding:20px;width: 32%;margin-left: -5px;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label class="form-label" for="FileName">File Name</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(m => m.FileName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                    @*<input type="text" class="form-control" placeholder="" readonly style="width: 180%;margin-left: -52px;">*@
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-sm-4">
+                                    <label class="form-label" for="FileSize">File Size</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(m => m.FileSize, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                    @Html.HiddenFor(m => m.VersionName, new Dictionary<string, object>() { { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                    @Html.HiddenFor(model => model.VersionDate, new { htmlAttributes = new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;" } })
+                                    @Html.HiddenFor(m => m.Signature, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                    @Html.HiddenFor(m => m.HideDocArchId, new { @class = "form-control", style = "height:25px;" })
+                                    @Html.HiddenFor(m => m.Filepathfrom, new { @class = "form-control", style = "height:25px;" })
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px" hidden>
+                                <div class="col-sm-4">
+                                    <label class="form-label" for="FileType">File Type</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @*<input type="text" class="form-control" placeholder="" readonly>*@
+                                    @Html.TextBoxFor(m => m.FileType, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                </div>
+                            </div>
+                            @*<hr>*@
+                            @foreach (var category in Model.dept)
+                            {
+                                <div class="row" style="margin-top:10px;">
+                                    <div class="col-sm-4">
+                                        <label class="form-label" for="subvertical">@category.attrbname</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        @if (category.attrbtype == "Datetime")
+                                        {
+                                            @Html.Editor("ctl" + i, @category.attrbdesc, new { htmlAttributes = new { @class = "form-control" } })
+
+                                        }
+                                        @if (category.attrbtype == "Alpha Numeric")
+                                        {
+
+                                            @Html.TextBox("ctl" + i, @category.attrbdesc, new { @class = "form-control" })
+
+                                        }
+                                        @if (category.attrbtype == "Numeric")
+                                        {
+                                            @Html.TextBox("ctl" + i, @category.attrbdesc, new { @class = "form-control", onkeypress = "return NumersOnly(event)" })
+                                        }
+                                        @if (category.attrbtype == "Amount")
+                                        {
+                                            @Html.TextBox("ctl" + i, @category.attrbdesc, new { @class = "form-control", onkeypress = "return isNumberKey(event)" })
+                                        }
+                                        @if (category.attrbtype == "Logical")
+                                        {
+
+                                            <div class="radio" style="left:25px; position:relative"> @Html.RadioButton("ctl" + i, "Yes") Yes &nbsp;&nbsp;&nbsp;&nbsp;  @Html.RadioButton("ctl" + i, "No") No</div>
+                                        }
+
+                                        @if (category.attrbtype == "Lov Name")
+                                        {
+                                            @*@Html.DropDownList("ctl" + i, (IEnumerable<SelectListItem>)ViewBag.Lovexl_Name, @category.attrbdesc, new { @class = "orm-control", style = "height:25px;width:225px;font-weight: normal;" })*@
+                                            @Html.DropDownList("ctl" + i, category.LovName, @category.attrbdesc, new { @class = "form-control" })
+
+                                        }
+
+                                        @if (category.attrbtype == "AutoNumber")
+                                        {
+                                            @Html.TextBox("ctl" + i, @category.autonumbervalue, new { @class = "form-control", @readonly = true })
+                                            @Html.TextBox("ctl" + i, @category.autonumberrowid, new { @class = "form-control", @hidden = true })
+                                        }
+
+                                        @if (category.attrbMand == "Y")
+                                        {
+                                            @*<label style="width:5px;color:red;font-size:larger">*</label>*@
+                                        }
+
+                                        @*<input type="text" class="form-control" placeholder="">*@
+                                    </div>
+                                </div>
+                                        i++;
+
+                            }
+
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-sm-4">
+                                    <label class="form-label" for="active_flag">Active</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="radio" style="margin-top:3px;">
+                                        <input type="radio" value="Y" name="active_flag" id="rbY" checked /> Yes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="radio" value="N" name="active_flag" id="rbN" /> No
+                                    </div>
+                                </div>
+                            </div>  
+                            <div class="row" style="margin-top:10px;">
+                                <center>
+                                    <button type="button" name="btnsubmit" value="@ViewBag.SubmitValue" id="btn_save" onclick="return CheckUserInputs()" class="btn btn-sm btn-primary me-2">Save</button>
+                                    <button type="button" class="btn btn-sm btn-danger me-2" onclick="close_fn()">Cancel</button>
+                                    <img src="~/Assets/images/previousarrow_anim.png" id="prev_grid" onclick="next_record('P')" style="height: 37px;width: 37px" />
+                                    <img src="~/Assets/images/nextarrow_anim.png" id="next_grid" onclick="next_record('N')" style="height: 37px;width: 37px" />
+                                </center>
+                                @Html.HiddenFor(model => model.attrbmode, new { id = "attrbmode" })
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="border: 1px solid #000;margin-left: 10px;width: 67.5%;overflow-y: scroll;max-height: 450px;">
+                           
+                            <div class="row" style="margin-top:10px;margin-bottom:10px" id="docloaddd" onloadedmetadata="">
+                                @*<img src="/dms/images/document.png" style="margin-top:10px;">*@
+                                @{
+                                    var documentViewer = new DocumentViewer
+                {
+                    //Width = 700,
+                    Height = 550,
+                    Document = ViewBag.FilePath,
+                    Id = "docview",       
+                };
+                                }
+                                @this.RenderBody(documentViewer)
+                                @this.RenderHead(documentViewer)
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @*<hr class="my-5" />
+        <footer class="content-footer footer bg-footer-theme">
+            <div class="container">
+                <h5 class="copyright">DMS. &#169; by Flexicode Technologies (P) Ltd </h5>
+            </div>
+        </footer>*@
+        <!-- / Footer -->
+
+        @*<div class="content-backdrop fade"></div>*@
+
+    </div>
+
+
+</body>
+@*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")*@
+</html>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $("#navhead").text("Indexing");
+        var orglvl4 = "@ViewBag.Orglvlval4";
+        var orglvl3 = "@ViewBag.Orglvlval3";
+        var orglvl2 = "@ViewBag.Orglvlval2";
+        var orglvl1 = "@ViewBag.Orglvlval1";
+
+        getScreenAccess(20, "Indexing");
+       // alert(orglvl4);
+        if(orglvl4 != "" && orglvl4 != null && orglvl4 != "undefined"){
+            $("#orglvl4val").val(orglvl4);
+       //     $('#' + id).css('display', 'inline-block');
+            $("#orgcol4").css('display', 'inline-block');
+        }
+        if(orglvl3 != "" && orglvl3 != null && orglvl3 != "undefined"){
+            $("#orglvl3val").val(orglvl3);
+            $("#orgcol3").css('display', 'inline-block');
+        }
+        if(orglvl2 != "" && orglvl2 != null && orglvl2 != "undefined"){
+            //orglvls
+            $("#orglvls").css('display', 'block');
+            $("#orglvl2val").val(orglvl2);
+            $("#orgcol2").css('display', 'inline-block');
+        }
+        if(orglvl1 != "" && orglvl1 != null && orglvl1 != "undefined"){
+            $("#orglvls").css('display', 'block');
+            $("#orglvl1val").val(orglvl1);
+            $("#orgcol1").css('display', 'inline-block')
+        }
+        $("#VersionName").val("0.1");
+        $("#Signature").val("Test");
+        loaddynamiccolumns2();
+        var UsersList = @Html.Raw(Json.Encode(@Model.dept));
+        var i=0;
+        var mode;
+        $.each(UsersList, function (index, item) {
+            debugger;
+            var Atrtype = item.attrbtype;
+            mode = item.attrbmode;
+            if (Atrtype == "Datetime") {
+                $('#ctl' + i).datepicker({
+                    dateFormat:"dd-mm-yy",
+                    changeMonth :true,
+                    changeYear: true  })
+                if(mode=="E" || mode=="D")
+                {
+                    $('#ctl'+i).datepicker('setDate', item.attrbdesc)
+                }
+                else
+                {
+                    $('#ctl'+i).datepicker('setDate', 'today')
+                }
+
+            }
+            i++;
+        });
+
+
+        $("#VersionDate").datepicker({dateFormat:"dd-mm-yy",
+            changeMonth :true,
+            changeYear: true  });
+        if(mode=="E")
+        {
+        }
+        else{
+            $('#VersionDate').datepicker('setDate', 'today')
+        }
+     
+
+
+    });
+    
+
+
+
+    function docloadinit(){
+        debugger;
+       // alert('hi');
+        $("#forwardPage").hide();
+        $("#backPage").hide();
+        $("#slider").hide();
+        $("#zoomBox").hide();
+    }
+
+    function loaddynamiccolumns2() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        var org1val = data[0].orghierarchy_name;
+                        $("#orglvl1lbl").text(org1val);
+                        
+                        // orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        var org1va2 = data[1].orghierarchy_name;
+                        $("#orglvl2lbl").text(org1va2);
+                       
+                        // orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        var org1va3 = data[2].orghierarchy_name;
+                        $("#orglvl3lbl").text(org1va3);
+                        //orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        var org1va4 = data[3].orghierarchy_name;
+                        $("#orglvl4lbl").text(org1va4);
+
+                        //orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+         //   alert(er);
+        }
+    }
+    function isNumberKey(evt) {
+        debugger;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+          && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    function NumersOnly(evt) {
+        debugger;
+        if (evt.keyCode == '9' || evt.keyCode == '16') {
+            return;
+        }
+        evt.keyCode
+        var code;
+        if (evt.keyCode) code = evt.keyCode;
+        else if (evt.which) code = evt.which;
+        if (evt.which == 46)
+            return false;
+        if (code == 8 || code == 46)
+            return true;
+        if (code < 48 || code > 57)
+            return false;
+    }
+
+    function CheckUserInputs() {
+        debugger;
+        var person = {};
+       // person.DeptName = $('#DeptName').val();
+       // person.UnitName = $('#UnitName').val();
+       // person.CateName = $('#CateName').val();
+        person.SubCateName = $('#SubCateName').val();
+        person.FileName = $('#FileName').val();
+        person.FileType = $('#FileType').val();
+        person.VersionName = $('#VersionName').val();
+        person.VersionDate = $('#VersionDate').val();
+        person.Signature = $('#Signature').val();
+        person.HideDocArchId = $('#HideDocArchId').val();
+        person.Filepathfrom = $('#Filepathfrom').val();
+        person.activeflag = $("input[name='active_flag']:checked").val();
+
+        var UsersList = @Html.Raw(Json.Encode(@Model.dept))
+
+        var count = '@ViewBag.AttributeCount';
+
+        var ret = 0;
+        var Dyntextvalues = [];
+        var i = 0;
+        $.each(UsersList, function (index, item) {
+            debugger;
+
+            var Atrtype = item.attrbtype;
+            var Atrlength = item.attrblen;
+            var Atrmandotry = item.attrbMand;
+
+            if (Atrtype == "Logical") {
+                var gettxtdesval = $('input[id=ctl' + i + ']:checked').val()
+                if (Atrmandotry == "Y") {
+                    if (gettxtdesval == undefined) {
+                        $.alert({
+                            title: 'DMS',
+                            content: item.attrbname + ' ' + 'field must have some input because it is mandtory field.!',
+                            type: 'blue',
+                        });
+                        //alert(item.attrbname + ' ' + 'field must have some input because it is mandotry Field.');
+                        return false;
+                    }
+                    else {
+                        Dyntextvalues.push(gettxtdesval);
+                    }
+                }
+                else {
+                    if (gettxtdesval == undefined) {
+                        gettxtdesval = "";
+                        Dyntextvalues.push(gettxtdesval);
+                    }
+                    else {
+                        Dyntextvalues.push(gettxtdesval);
+                    }
+                }
+
+            }
+            else {
+                if (Atrtype == "Lov Name") {
+                    if (Atrmandotry == "Y") {
+                        var gettxtdesval = $('#ctl' + i +' '+ 'option:selected').text();
+                        if(gettxtdesval=="-Select-"){
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Please select value into the' + ' ' + item.attrbname + ' ' + 'field because it is mandotry field.!',
+                                type: 'blue',
+                            });
+                            //alert('Please select the Value into the' + ' ' + item.attrbname + ' ' + 'field because it is mandotry field.')
+                            ret = 0;
+                            return false;
+                        }
+                        else
+                        {
+                            Dyntextvalues.push(gettxtdesval);
+                        }
+                    }
+                    else
+                    {
+                        debugger;
+                        var gettxtdesval = $('#ctl' + i +' '+ 'option:selected').text();
+                        if(gettxtdesval=="-Select-"){
+                           
+                            ret = 0;
+                            return false;
+                        }
+                        else
+                        {
+                            Dyntextvalues.push(gettxtdesval);
+                        }
+                    }
+                }
+                else
+                {
+                    var gettxtdesval = $('#ctl' + i).val();
+                    Dyntextvalues.push(gettxtdesval);
+                    var findtxtlen = gettxtdesval.length;
+                }
+            }
+
+            if (Atrtype == "Alpha Numeric") {
+                if (findtxtlen > Atrlength) {
+                    $.alert({
+                        title: 'DMS',
+                        content: item.attrbname + ' ' + 'field length should not be greater then' + ' ' + Atrlength,
+                        type: 'blue',
+                    });
+                    //alert(item.attrbname + ' ' + "field length should not be greater then" + ' ' + Atrlength)
+                    ret = 0;
+                    return false;
+
+                }
+            }
+            //if (Atrtype == "Lov Name") {
+            //    if (Atrmandotry == "Y") {
+            //        var gettxtdesval = $('#ctl' + i +' '+ 'option:selected').text();
+            //        if(gettxtdesval=="-Select-"){
+            //            alert('Please select the Value into the' + ' ' + item.attrbname + ' ' + 'field because it is mandotry field.')
+            //            ret = 0;
+            //            return false;
+            //        }
+            //    }
+            //}
+            if (Atrmandotry == "Y") {
+                if (gettxtdesval == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: item.attrbname + ' ' + 'field must have some input because it is mandotry field.!',
+                        type: 'blue',
+                    });
+                    //alert(item.attrbname + ' ' + 'field must have some input because it is mandotry Field.')
+                    ret = 0;
+                    return false;
+                }
+
+                if (Atrtype == "Datetime") {
+                    var isDate = (new Date(gettxtdesval) !== "Invalid Date")
+                    if (isDate == false) {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please enter the date value into' + ' ' + item.attrbname + ' ' + 'field because it is datetime type.!',
+                            type: 'blue',
+                        });
+                        //alert('Please enter the Date Value into the' + ' ' + item.attrbname + ' ' + 'field because it is having Datetime type.')
+                        ret = 0;
+                        return false;
+                    }
+                }
+
+            }
+            i++;
+            ret = 1;
+        });
+
+        var postData = " form : [ "
+        $.each(Dyntextvalues, function (index, item) {
+            debugger;
+            if (index == count - 1) {
+                postData = postData + "'" + Dyntextvalues[index] + "'";
+            } else {
+                postData = postData + "'" + Dyntextvalues[index] + "',";
+            }
+        });
+
+        postData = postData + "]";
+
+        //remaind to remove the below line
+        //ret = 0;
+
+        if (ret == "1" || UsersList.length == "0") {
+            debugger;
+            var flag=$("#attrbmode").val();
+            if(flag=='I')
+            {
+                @*$.ajax({
+                    type: "POST",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: '@Url.Action("ValidateAttributes", "SetDocAttributes")',
+                    data: '{deptsModel: ' + JSON.stringify(person) + ',' + postData + '}',
+                    success: function (data) {
+                        debugger;
+                        if(data=="duplicate found")
+                        {
+                            $.confirm({
+                                icon: 'fa fa-warning',
+                                title: 'DMS',
+                                autoClose: 'cancel|10000',
+                                theme: 'dark',
+                                animationSpeed: 700,
+                                content: 'The attribute duplication occurred do you want to overwrite.!',
+                                type: 'orange',
+                                buttons: {
+                                    confirm: function () {
+                                        $.ajax({
+                                            type: "POST",
+                                            cache: false,
+                                            contentType: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            url: '@Url.Action("SaveAttributes", "SetDocAttributes")',
+                                            data: '{deptsModel: ' + JSON.stringify(person) + ',' + postData + '}',
+                                            success: function (data) {
+                                                debugger;
+                                                if (data.status == 1) {
+                                                    $.alert({
+                                                        title: 'DMS',
+                                                        content: 'Document saved successfully.!',
+                                                        type: 'green',
+                                                    });
+                                                    setTimeout(function () {
+                                                        debugger;
+                                                        window.location.href = data.redirectUrl;
+                                                    }, 1500);
+
+                                                }
+                                            },
+                                            error: function () {
+                                            }
+                                        });
+
+                                    },
+                                    cancel: function () {
+                                        $.alert({
+                                            icon: 'fa fa-success',
+                                            title: 'DMS',
+                                            theme: 'dark',
+                                            content: 'Index Canceled.!',
+                                            type: 'blue',
+                                            animationSpeed: 700,
+                                        });
+                                    },
+                                }
+                            });
+                        }
+                        else
+                        {
+                            $.ajax({
+                                type: "POST",
+                                cache: false,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                url: '@Url.Action("SaveAttributes", "SetDocAttributes")',
+                                data: '{deptsModel: ' + JSON.stringify(person) + ',' + postData + '}',
+                                success: function (data) {
+                                    debugger;
+                                    if (data.status == 1) {
+                                        $.alert({
+                                            title: 'DMS',
+                                            content: 'Document saved successfully.!',
+                                            type: 'green',
+                                        });
+                                        setTimeout(function () {
+                                            debugger;
+                                            window.location.href = data.redirectUrl;
+                                        }, 1500);
+
+                                    }
+                                },
+                                error: function () {
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'some error occured .!',
+                            type: 'red',
+                        });
+                    }
+                });*@
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: '@Url.Action("SaveAttributes", "SetDocAttributes")',
+                    data: '{deptsModel: ' + JSON.stringify(person) + ',' + postData + '}',
+                    success: function (data) {
+                        debugger;
+                        if (data.status == 1) {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Document Indexed successfully.!',
+                                type: 'green',
+                            });
+                            //setTimeout(function () {
+                            //    debugger;
+                            //    window.location.href = data.redirectUrl;
+                            //}, 1500);
+
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+            if(flag=='E'||flag=='D')
+            {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: '@Url.Action("SaveAttributes", "SetDocAttributes")',
+                    data: '{deptsModel: ' + JSON.stringify(person) + ',' + postData + '}',
+                    success: function (data) {
+                        debugger;
+                        //if (data.status == 1) {
+                        //    $.alert({
+                        //        title: 'DMS',
+                        //        content: 'Document saved successfully.!',
+                        //        type: 'green',
+                        //    });
+                        //    setTimeout(function () {
+                        //        debugger;
+                        //        window.location.href = data.redirectUrl;
+                        //    }, 1500);
+                        //}
+                        if (data.status == 2) {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Document edited successfully.!',
+                                type: 'green',
+                            });
+                            //setTimeout(function () {
+                            //    debugger;
+                            //    window.location.href = data.redirectUrl1;
+                            //}, 1500);
+
+                        }
+                        if (data.status == 3) {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Document deleted successfully.!',
+                                type: 'green',
+                            });
+                            //setTimeout(function () {
+                            //    debugger;
+                            //    window.location.href = data.redirectUrl1;
+                            //}, 1500);
+
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+    }
+
+    function close_fn() {
+        debugger;
+        window.location.href = '../GetAllDocuments/GetAllDocuments';
+    }
+
+    function next_record(sel){
+        debugger;
+        var docid = "@ViewBag.doc_id";
+        window.location.href = '../SetDocAttributes/PreviousNextgridfetch?current_docid='+docid+'&grid_mode='+sel;
+    }
+
+    $(window).load(function () {
+        debugger;
+        setTimeout(function() {
+         //   alert('ok');
+            docloadinit ();}, 3000);
+    });
+
+    function getScreenAccess(screenID, screenName) {
+        debugger;
+        var result_;
+        $.ajax({
+            // type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //   async: false,
+            url: '@Url.Action("getScreenData", "UserGroupsMapping")',
+            data: { 'screen_id': screenID, 'screen_name': screenName },
+            success: function (data) {
+                debugger;
+                var data1 = JSON.parse(data.Data1);
+                if (data1[0].add_perm == "1" || data1[0].mod_perm == "1") {
+
+                }
+                else if (data1[0].inactivate_perm == "1") {
+                    $("#btn_save").hide();
+                    $("#prev_grid").hide();
+                    $("#next_grid").hide();
+                    //indexavlflag = "disabled";
+                }
+                else if (data1[0].deny_perm == "1") {
+                   // $("#overlayy").show();
+                    $("#btn_save").hide();
+                    $("#prev_grid").hide();
+                    $("#next_grid").hide();
+                } else if (data1[0].view_perm == "1") {
+                    $("#btn_save").hide();
+                    $("#prev_grid").hide();
+                    $("#next_grid").hide();
+                } else {
+                    $("#btn_save").hide();
+                    $("#prev_grid").hide();
+                    $("#next_grid").hide();
+                }
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+</script>
+
+

@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1r1qfp2",
+  "CachePdfKey": "1r1qfp2/1r1qfp2-1k3kk2s.pdf",
+  "CacheXpzKey": "1r1qfp2/1r1qfp2-cdf9c.xpz",
+  "CacheInfoKey": "1r1qfp2/1r1qfp2-cdf9c.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Supplier Invoice\\Mohanapriya CV(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "Mohanapriya CV(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1r1qfp2",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

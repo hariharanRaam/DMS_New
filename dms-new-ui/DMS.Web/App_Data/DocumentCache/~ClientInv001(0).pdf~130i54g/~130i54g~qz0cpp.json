@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "130i54g",
+  "CachePdfKey": "130i54g/130i54g-1k3kk2s.pdf",
+  "CacheXpzKey": "130i54g/130i54g-qz0cpp.xpz",
+  "CacheInfoKey": "130i54g/130i54g-qz0cpp.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\ClientInv001(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv001(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "130i54g",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

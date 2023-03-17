@@ -1,0 +1,1069 @@
+﻿@*@model DynamicTreeView.Models.AddNode*@
+@model IEnumerable<DMS.Model.HierarchyViewModel>
+<!DOCTYPE html>
+
+<style>
+    .accordion_container {
+        width: 100%;
+    }
+
+    .accordion_head {
+        background-color: #337ab7;
+        color: white;
+        cursor: pointer;
+        font-family: arial;
+        font-size: 14px;
+        margin: 0 0 1px 0;
+        padding: 1px 3px;
+        font-weight: bold;
+    }
+
+    .accordion_body p {
+        padding: 18px 5px;
+        margin: 0px;
+    }
+
+    .plusminus {
+        float: right;
+    }
+
+    .ioniconplus {
+        width: 15px;
+        background-image: url('../images/minus-circled.png');
+        background-repeat: no-repeat;
+        background-position: -50px -128px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .ob-right {
+        text-align: right;
+    }
+</style>
+
+<head>
+    <title></title>
+
+</head>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-md-3" style="margin:auto;max-height:650px;max-width:300px;">
+                <div class="col-md-3" style="width:100%;overflow-x:auto;height:560px;">
+                    <div class=" panel panel-primary">
+                        <div class="panel-heading">DMS Search</div>
+                        <div class="panel-body" style="width:100%;max-height:100%">
+                            <div id="Usertree" style="width:auto"></div>
+                            <div class="clearfix">
+                            </div>
+                            <br />
+                            <div>
+                                @*<button id="btnGetValue" class="btn btn-warning">Search</button>
+                                    <button id="btnGetdata" class="btn btn-warning" onclick="GetGridData()">Grid Data</button>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9" style="top:10%">
+                <div>
+                    <table>
+                        <tr>
+                            <td> <button id="btnGetValue" class="btn btn-orange" style="width:140px"><i class="fa fa-search"></i> Search</button> </td>
+                            <td width="1%"></td>
+                            <td> <button id="btnGetdata" class="btn btn-orange" disabled onclick="GetGridData()" style="width:140px"><i class="fa fa-database"></i> Grid Data</button> </td>
+                            <td width="1%"></td>
+                            <td> <button type="button" id="btnbulmail" disabled onclick="return forbulkMail()" style="width:140px" class="btn btn-orange"><i class="fa fa-envelope-o"></i> Mail</button> </td>
+                            <td width="1%"></td>
+                            @*<td> <button type="button" id="btngrid" onclick="return LinkFilesMulti()" style="width:140px" class="btn btn-orange pull-right"><i class="fa fa-link"></i> Link</button></td>
+                                <td width="1%"></td>
+                                <td> <button type="button" id="btngrid" onclick="return DeLinkFilesMulti()" style="width:140px" class="btn btn-orange pull-right"><i class="fa fa-unlink "></i> Delink</button></td>
+                                <td width="1%"></td>*@
+                            <td> <button class="btn btn-orange" onclick="return ClearData()" style="width:140px"><i class="fa fa-refresh"></i> Clear</button> </td>
+                            <td width="1%"></td>
+                            @*<td><button id="btnRequestRetrivalValue" class="btn btn-orange" onclick="return RequestRetrivalPopup()" style="width:140px"><i class="fa fa-refresh"></i>Retreival Request</button> </td>*@
+                        </tr>
+                        <tr style="height:10px;"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-9" style="margin:auto;max-height:620px;max-width: 100%;padding-left: -10px;">
+                <div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+                    <div class="accordion_container">
+                        <div class=" panel panel-primary" style="margin-bottom:5px;">
+                            @*<div class="container">*@
+                            <div class="accordion_head">Atribute Search <span class="plusminus">+</span> </div>
+                            <div class="accordion_body">
+                                <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                                    <div style="margin:auto;height:110px;overflow:auto;width:104%;">
+                                        <div id="AttributeDataPartial" style="border-top:groove thin;border-top-style:ridge;border-bottom:groove thin;border-bottom-style:ridge;"> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-9" style="margin:auto;max-height:620px;max-width: 100%;padding-left: -10px;">
+                    <div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+                        <div class=" panel panel-primary" style="margin-bottom:5px;">
+                            <div class="panel-heading">Atribute Search</div>
+                            <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                                <div class="col-md-9" style="margin:auto;height:110px;overflow:auto;width:104%;">
+                                    <div id="AttributeDataPartial" style="border-top:groove thin;border-top-style:ridge;border-bottom:groove thin;border-bottom-style:ridge;"> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            <div class="col-md-9" style="margin:auto;max-height:620px;max-width:100%;padding-left: -10px;padding-left: -15px;">
+                <div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+                    <div class=" panel panel-primary" style="height:500px;">
+                        <div class="panel-heading">Grid View</div>
+                        <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                            <div class="col-md-9" style="margin:auto;overflow:auto; width:104%;">
+                                <div id="Maingrid" class="col-md-9" style="margin:auto;height:420px;top:10px;width:100%;"> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row" id="ForTreeSearchpartialView">  </div>
+        <div class="row" id="ForPartialView"> </div>
+        <div class="row" id="ForAttributeDetailsPartialView"></div>
+        <div class="row" id="ForDocumentPartialview"></div>
+        <div class="row" id="ForRequestRetrivalPartialview"></div>
+
+        <input type="hidden" id="hdn_mailtype" />
+        <input type="hidden" id="hdn_filegid" />
+        <input type="hidden" id="hdn_type" />
+        <input type="hidden" id="hdn_gridgid" />
+        <input type="hidden" id="hdn_attachid" />
+        <input type="hidden" id="hdn_mode" />
+        <input type="hidden" id="hdn_attachid" />
+        <input type="hidden" id="hdn_linkorinterfile" />
+        <input type="hidden" id="hdn_filelocation" />
+    </section>
+    <!-- /.content -->
+</div>
+<script src="@Url.Content("~/Scripts/conditional-validation.js")" type="text/javascript"></script>
+<script src="~/Scripts/Gijgo/gijgo.js"></script>
+<link href="http://code.gijgo.com/1.3.0/css/gijgo.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    //'Hierarchy/GetHierarchy'
+    var objDialog;
+    var objDialog5;
+    var objDialog12;
+    var objDialogRR;
+    $(document).ready(function () {
+        $('#btnRequestRetrivalValue').prop('disabled', true);
+
+        objDialogRR = $("[id$='ForRequestRetrivalPartialview']");
+        objDialogRR.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 850,
+            height: 400
+        });
+
+        objDialog = $("[id$='ForPartialView']");
+        objDialog.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 550,
+            height: 550
+        });
+
+        objDialog5 = $("[id$='ForAttributeDetailsPartialView']");
+        objDialog5.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 1250,
+            height: 680
+        });
+
+        objDialog12 = $("[id$='ForDocumentPartialview']");
+        objDialog12.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 850,
+            height: 650
+        });
+
+        var Usertree = "";
+        var tree = "";
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            url: '../TreeSearch/GetHierarchy',
+            success: function (records, textStatus, jqXHR) {
+                tree = $('#tree').tree({
+                    primaryKey: 'Id',
+                    dataSource: records,
+                    dragAndDrop: true,
+                    checkboxes: true,
+                    iconsLibrary: 'glyphicons',
+                    //uiLibrary: 'bootstrap'
+                });
+                Usertree = $('#Usertree').tree({
+                    primaryKey: 'Id',
+                    dataSource: records,
+                    dragAndDrop: false,
+                    checkboxes: true,
+                    iconsLibrary: 'glyphicons',
+                    //uiLibrary: 'bootstrap'
+                });
+                debugger;
+
+                //tree.on('nodeDrop', function (e, Id, PerentId) {
+                //    currentNode = Id ? tree.getDataById(Id) : {};
+                //    console.log("current Node = " + currentNode);
+                //    parentNode = PerentId ? tree.getDataById(PerentId) : {};
+                //    console.log("parent Node = " + parentNode);
+
+                //    if (currentNode.perentId === null && parentNode.perentId === null) {
+                //        alert("Parent node is not droppable..!!");
+                //        return false;
+                //    }
+                //    // console.log(parent.HierarchyLevel);
+                //    var params = { id: Id, parentId: PerentId };
+                //    $.ajax({
+                //        type: "POST",
+                //        url: "/Hierarchy/ChangeNodePosition",
+                //        data: params,
+                //        dataType: "json",
+                //        success: function (data) {
+                //            $.ajax({
+                //                type: "Get",
+                //                url: "/TreeSearch/GetHierarchy",
+                //                dataType: "json",
+                //                success: function (records) {
+                //                    Usertree.destroy();
+                //                    Usertree = $('#Usertree').tree({
+                //                        primaryKey: 'Id',
+                //                        dataSource: records,
+                //                        dragAndDrop: false,
+                //                        checkboxes: true,
+                //                        iconsLibrary: 'glyphicons',
+                //                        //uiLibrary: 'bootstrap'
+                //                    });
+                //                }
+                //            });
+
+                //        }
+                //    });
+
+                //});
+
+                $('#btnGetValue').click(function (e) {
+                    debugger;
+
+                    var result = Usertree.getCheckedNodes();
+                    if (result == "") {
+                       
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please Select Any One DocGroup..!!',
+                            type: 'blue',
+                        });
+                    }
+                    else {
+                        //alert("Selected Node id is= " + result.join());
+                        var data = result.join();
+                        @*$.ajax({
+                            type: "Post",
+
+                            dataType: "html",
+                            url: '@Url.Action("AttributeDataPartial", "TreeSearch")',
+                           data: { data: data },
+                           contentType: "application/json; charset=utf-8",
+                           success: function (response) {
+                               alert("TEST");
+                               $("#AttributeDataPartial").html(response);
+                            },
+
+                           failure: function (response) {
+                               alert("error");
+                                   alert(response.responseText);
+                               },
+                           error: function (response) {
+                               alert("error1");
+                               $("#AttributeDataPartial").html(response);
+                       }
+                        });*@
+                        $("#AttributeDataPartial").load("../TreeSearch/AttributeDataPartial",
+                            { 'data': data });
+                        $('#btnGetdata').prop('disabled', false);
+
+                        //$('#divid').innerHTML = data;
+                        // $.post
+                    }
+                });
+
+                //16-03-2019
+
+                $('#btnRequestRetrivalValue').click(function (e) {
+                    debugger;
+                    var result = Usertree.getCheckedNodes();
+                    if (result == "") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please Select Any One DocGroup..!!',
+                            type: 'red',
+                        });
+                    }
+                    else {
+                        var data = result.join();
+                        $("#AttributeDataPartial").load("../TreeSearch/AttributeDataPartial",
+                            { 'data': data });
+                        $('#btnGetdata').prop('disabled', false);
+
+
+                    }
+                });
+
+
+
+                //delete node
+                $('#btnDeleteNode').click(function (e) {
+                    e.preventDefault();
+                    var result = tree.getCheckedNodes();
+                    if (result != "") {
+                        $.ajax({
+                            type: "POST",
+                            url: "/TreeSearch/DeleteNode",
+                            data: { values: result.toString() },
+                            dataType: "json",
+                            success: function (data) {
+                               // alert("Deleted successfully ");
+                                $.alert({
+                                    title: 'DMS',
+                                    content: 'Deleted successfully..!!',
+                                    type: 'green',
+                                });
+                                window.location.reload();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                               // alert('Error - ' + errorThrown);
+                                $.alert({
+                                    title: 'DMS',
+                                    content: 'Error - ' + errorThrown,
+                                    type: 'red',
+                                });
+                            },
+                        });
+                    }
+                    else {
+                        
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please select Node to delete..!!',
+                            type: 'blue',
+                        });
+                    }
+
+
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Error - ' + errorThrown,
+                    type: 'red',
+                });
+
+            }
+        });
+
+        // show model popup to add new node in Tree
+        $('#btnpopoverAddNode').click(function (e) {
+            e.preventDefault();
+            $("#modalAddNode").modal("show");
+        });
+
+        //Save data from PopUp
+        $(document).on("click", "#savenode", function (event) {
+            event.preventDefault();
+            $.validator.unobtrusive.parse($('#formaddNode'));
+            $('#formaddNode').validate();
+            if ($('#formaddNode').valid()) {
+                var formdata = $('#formaddNode').serialize();
+                // alert(formdata);
+                $.ajax({
+                    type: "POST",
+                    url: "/TreeSearch/AddNewNode",
+                    dataType: "json",
+                    data: formdata,
+                    success: function (response) {
+                        // $("#modalAddNode").modal("hide");
+                        window.location.reload();
+                    },
+                    error: function (response) {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Exception found ' + response,
+                            type: 'red',
+                        });
+                        //  $("#modalAddNode").modal("hide");
+                        window.location.reload();
+                    },
+                    complete: function () {
+                        //  $('.ajax-loader').css("visibility", "hidden");
+                    }
+                });
+            }
+
+        });
+
+        //Close PopUp
+        $(document).on("click", "#closePopup", function (e) {
+            e.preventDefault();
+            $("#modalAddNode").modal("hide");
+        });
+
+        $('.rbtnnodetype').click(function (e) {
+            if ($(this).val() == "Pn") {
+                $('.petenddiv').attr("class", "petenddiv hidden");
+
+                $("#ParentName").val("");
+            }
+            else {
+                $('.petenddiv').attr("class", "petenddiv");
+            }
+        });
+
+    });
+    var checkedIds = {};
+    function GetGridData() {
+        debugger
+
+        $('#btnRequestRetrivalValue').prop('disabled', false);
+        //Framing where clause condition.
+        var count = $('#ctlcount').val();
+        var concatval;
+        //creating array variable.
+        var Dyntextvalues = [];
+        var Attributetypess = [];
+        var atrname = [];
+        var Docgroupid = [];
+        var Docnameid = [];
+        var Attributename = [];
+        var Conditions = [];
+        var operators = [];
+        var arr = [];
+        var z = 0;
+        for (var i = 0; i < count; i++) {
+            Attributetypess.push($('#Attribtype' + i).val());
+            atrname.push($('#Attribname' + i).val());
+            Docgroupid.push($('#Docgroupid' + i).val());
+            Docnameid.push($('#Docnameid' + i).val());
+            Conditions.push($('#cont' + i).val());
+            operators.push($('#ope' + i).val());
+            //  for (var j = 0; j <= count; j++) {
+            var Attributename = $.trim(atrname);
+            var cont = $('#cont' + i).val();
+            //  for (var z = 0; z <= arr.length; z++) {
+
+            /*  if (i == 0) {
+                  arr.push(Docgroupid[i]);
+                  var gettxtdesval = $('#ctl' + i).val();
+                  if ($('#cont' + i).val() == "Contains" && $('#ope' + i).val() == "and") {
+                      concatval = "and d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                  }
+                  else if ($('#cont' + i).val() == "Contains" && $('#ope' + i).val() == "or") {
+                      concatval = "or d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                  }
+                  else if ($('#cont' + i).val() == "StartWith" && $('#ope' + i).val() == "and") {
+                      concatval = "and d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "StartWith" && $('#ope' + i).val() == "or") {
+                      concatval = "or d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "EndWith" && $('#ope' + i).val() == "and") {
+                      concatval = "and d.Attribdtl_Description" + "Like" + "'" + gettxtdesval + "%" + "'"
+                  }
+                  else if ($('#cont' + i).val() == "EndWith" && $('#ope' + i).val() == "or") {
+                      concatval = "or d.Attribdtl_Description" + "Like" + "'" + gettxtdesval + "%" + "'"
+                  }
+                  else if ($('#cont' + i).val() == "Equal" && $('#ope' + i).val() == "and") {
+                      concatval = "and d.Attribdtl_Description" + "=" + "'" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "Equal" && $('#ope' + i).val() == "or") {
+                      concatval = "or d.Attribdtl_Description" + "=" + "'" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "greaterthen" && $('#ope' + i).val() == "and") {
+                      concatval = "and d.Attribdtl_Description" + ">" + "'" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "greaterthen" && $('#ope' + i).val() == "or") {
+                      concatval = "or d.Attribdtl_Description" + ">" + "'" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "lessthen" && $('#ope' + i).val() == "and") {
+                      concatval = "and d.Attribdtl_Description" + "<" + "'" + gettxtdesval + "'"
+                  }
+                  else if ($('#cont' + i).val() == "lessthen" && $('#ope' + i).val() == "or") {
+                      concatval = "or d.Attribdtl_Description" + "<" + "'" + gettxtdesval + "'"
+                  }
+                  Dyntextvalues.push(concatval);
+                  concatval = "";
+              }
+              else {
+                  for (; z < arr.length; z++)
+                  {
+                      var name = arr[z];
+                      var value = "";
+                      if (name == Docgroupid[i])
+                      {
+
+                          if ($('#cont' + i).val() == "contains" && $('#ope' + i).val() == "and") {
+                              value = Dyntextvalues[z] + "and d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "contains" && $('#ope' + i).val() == "or") {
+                              value = Dyntextvalues[z] + "or d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "startwith" && $('#ope' + i).val() == "and") {
+                              value = Dyntextvalues[z] + "and d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "startwith" && $('#ope' + i).val() == "or") {
+                              value = Dyntextvalues[z] + "or d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "endwith" && $('#ope' + i).val() == "and") {
+                              value = Dyntextvalues[z] + "and d.Attribdtl_Description" + "Like" + "'" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "endwith" && $('#ope' + i).val() == "or") {
+                              value = Dyntextvalues[z] + "or d.Attribdtl_Description" + "Like" + "'" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "equalto" && $('#ope' + i).val() == "and") {
+                              value = Dyntextvalues[z] + "and d.Attribdtl_Description" + "=" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "equalto" && $('#ope' + i).val() == "or") {
+                              value = Dyntextvalues[z] + "or d.Attribdtl_Description" + "=" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "greaterthen" && $('#ope' + i).val() == "and") {
+                              value = Dyntextvalues[z] + "and d.Attribdtl_Description" + ">" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "greaterthen" && $('#ope' + i).val() == "or") {
+                              value = Dyntextvalues[z] + "or d.Attribdtl_Description" + ">" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "lessthen" && $('#ope' + i).val() == "and") {
+                              value = Dyntextvalues[z] + "and d.Attribdtl_Description" + "<" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "lessthen" && $('#ope' + i).val() == "or") {
+                              value = Dyntextvalues[z] + "or d.Attribdtl_Description" + "<" + "'" + gettxtdesval + "'"
+                          }
+                          break;
+                      }
+                      else {
+                          arr.push(Docgroupid[i]);
+                          if ($('#cont' + i).val() == "contains" && $('#ope' + i).val() == "and") {
+                              concatval = "and d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "contains" && $('#ope' + i).val() == "or") {
+                              concatval = "or d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "startwith" && $('#ope' + i).val() == "and") {
+                              concatval = "and d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "startwith" && $('#ope' + i).val() == "or") {
+                              concatval = "or d.Attribdtl_Description" + "Like" + "'" + "%" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "endwith" && $('#ope' + i).val() == "and") {
+                              concatval = "and d.Attribdtl_Description" + "Like" + "'" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "endwith" && $('#ope' + i).val() == "or") {
+                              concatval = "or d.Attribdtl_Description" + "Like" + "'" + gettxtdesval + "%" + "'"
+                          }
+                          else if ($('#cont' + i).val() == "equalto" && $('#ope' + i).val() == "and") {
+                              concatval = "and d.Attribdtl_Description" + "=" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "equalto" && $('#ope' + i).val() == "or") {
+                              concatval = "or d.Attribdtl_Description" + "=" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "greaterthen" && $('#ope' + i).val() == "and") {
+                              concatval = "and d.Attribdtl_Description" + ">" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "greaterthen" && $('#ope' + i).val() == "or") {
+                              concatval = "or d.Attribdtl_Description" + ">" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "lessthen" && $('#ope' + i).val() == "and") {
+                              concatval = "and d.Attribdtl_Description" + "<" + "'" + gettxtdesval + "'"
+                          }
+                          else if ($('#cont' + i).val() == "lessthen" && $('#ope' + i).val() == "or") {
+                              concatval = "or d.Attribdtl_Description" + "<" + "'" + gettxtdesval + "'"
+                          }
+                          Dyntextvalues.push(concatval);
+                          concatval = "";
+                      }
+                  }
+              }*/
+
+        }
+
+        debugger
+        //creating array variable.
+        var Dyntextvalues = [];
+        for (var i = 0; i < count; i++) {
+
+            var Attributetypes = $('#Attribtype' + i).val();
+            var Attributename = $('#Attribname' + i).val();
+
+            if (Attributetypes == "Logical") {
+                var gettxtdesval = $('input[id=ctl' + i + ']:checked').val()
+                if (gettxtdesval == undefined || gettxtdesval == "" || gettxtdesval == " ") {
+                    gettxtdesval = "~";
+                    Dyntextvalues.push(gettxtdesval);
+                }
+                else {
+                    //concatval = "`" + Attributename + "`" + "=" + "'" + gettxtdesval + "'"
+                    //concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(gettxtdesval);
+                }
+            }
+            else {
+                var gettxtdesval = $('#ctl' + i).val();
+                if (gettxtdesval == "" || gettxtdesval == "-Select-" || gettxtdesval == undefined || gettxtdesval == " ") {
+                    gettxtdesval = "~";
+                    Dyntextvalues.push(gettxtdesval);
+                }
+                else {
+                    //concatval = "`" + Attributename + "`" + "=" + "'" + gettxtdesval + "'"
+                    // concatval = "`" + Attributename + "`" + "Like" + "'" + "%" + gettxtdesval + "%" + "'"
+                    Dyntextvalues.push(gettxtdesval);
+                }
+            }
+        }
+
+
+        debugger;
+
+        var atrname1 = atrname.join("$^`");
+        var Docgroupid1 = Docgroupid.join("$^`");
+        var Docnameid1 = Docnameid.join("$^`");
+        var Dyntextvalues1 = Dyntextvalues.join("$^`");
+        var Conditions1 = Conditions.join("$^`");
+        var operators1 = operators.join("$^`");
+        var Attributetypes1 = Attributetypess.join("$^`");
+        //var Attributename1 = Attributename.join(",");
+        var Dgroup1 = $("#Catgery").val();
+        var Dname1 = $("#subCatgery").val();
+        $.ajax({
+            url: '@Url.Action("GetDocuments", "TreeSearch")',
+            type: "Post",
+            data: {
+                'Attributetypes1': Attributetypes1, 'atrname1': atrname1, 'Docgroupid1': Docgroupid1, 'Docnameid1': Docnameid1, "Dyntextvalues1": Dyntextvalues1,
+                'Conditions1': Conditions1, 'operators1': operators1
+            },
+            success: function (result) {
+
+                debugger
+                var columns = [];
+                var chkval = JSON.parse(result.Data1);
+                var arr = [];
+                $.each(chkval, function (i, e) {
+                    debugger;
+                    $.each(e, function (key, val) {
+                        arr.push(val);
+                    });
+
+                });
+
+                if (arr == "No Records Found!" || arr == "Error in Data!") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No Records found..!',
+                        type: 'blue',
+                    });
+                    $('#btnbulmail').prop('disabled', true);
+                    return false;
+                }
+
+
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                var i = 0;
+
+                var entryIndex = "entries[" + i + "]";
+                columns.push({
+                    title: "Select",
+                    template: '<input type="checkbox" name="attributecheckbox" id="attributecheckbox" value="" class="checkbox" ></span>'
+
+                });
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+                    columns.push({
+                        field: entryIndex,
+                        title: key,
+                        type: val
+                    });
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+
+                }
+
+                columns.push({
+                    field: entryIndex + 1,
+                    title: 'View File',
+                    template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick=View("main")></span>',
+                    //template: '<span class="glyphicon glyphicon-download Download" name="Download" id="Download" value="Download" onclick="Download()"></span>',
+                    filterable: false,
+                    sortable: true,
+                    editable: true
+                });
+
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+
+                        entryArray.push(val);
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+
+                var configuration = {
+                    dataBound: onDataBound,
+                    editable: false,
+                    sortable: true,
+                    scrollable: true,
+                    filterable: true,
+                    pagable: false,
+                    resizable: true,
+                    persistSelection: true,
+                    selectable: "false",
+                    pageable: {
+                        pageSize: 10,
+                        buttonCount: 4,
+                        pageSizes: [10,20, 30, 40, 50]
+                    },
+                    columns: columns,
+                    rows: viewModel
+                };
+
+                $("#example").remove();
+                $('#Maingrid').append('<div id="example" style="position:relative" class="k-content"><table id="grid" data-bind="source: gridRows" style="position:relative;overflow:scroll;width:100%"></table></div>');
+                var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+
+                kendo.bind($("#grid"), viewModel);
+
+                var grid = $("#grid").data("kendoGrid");
+                //grid.hideColumn(3);
+                grid.hideColumn(5);
+                grid.hideColumn(6);
+                for (var i = 0; i < grid.columns.length; i++) {
+                    if (i != grid.columns.length) {
+                        grid.autoFitColumn(i);  //autofit each column.
+
+                    }
+                }
+                $('#btnbulmail').prop('disabled', false);
+                //bind click event to the checkbox
+                grid.table.on("click", ".checkbox", selectRow);
+
+            },
+            error: function (result) {
+               // alert("Error" + result.Data1);
+                $.alert({
+                    title: 'DMS',
+                    content: "Error" + result.Data1,
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+    //on click of the checkbox:
+    function selectRow() {
+        debugger
+        var grid1 = $("#grid").data("kendoGrid");
+        var checked = this.checked,
+        row = $(this).closest("tr"),//$("input:checked", grid1.tbody).closest("tr");//$(this).closest("tr"),
+        gridss = $("#grid").data("kendoGrid"),
+        dataItem = gridss.dataItem(row);
+
+        checkedIds[dataItem.entries[4]] = checked;
+        if (checked) {
+            //-select the row
+            //row.addClass("k-state-selected");
+            row.addClass("k-gridtest");
+        }
+        else {
+            //-remove selection
+            //row.removeClass("k-state-selected");
+            row.removeClass("k-gridtest");
+        }
+
+        /*   var checked = this.checked,
+           row = $(this).closest("tr"),
+           grid = $("#grid").data("kendoGrid"),
+           dataItem = grid.dataItem(row);
+
+           checkedIds[dataItem.id] = checked;
+           if (checked) {
+               //-select the row
+               row.addClass("k-state-selected");
+           } else {
+               //-remove selection
+               row.removeClass("k-state-selected");
+           }*/
+    }
+
+
+    //on dataBound event restore previous selected rows:
+    function onDataBound(e) {
+        debugger
+        var checked = [];
+        for (var i in checkedIds) {
+            if (checkedIds[i]) {
+                checked.push(i);
+                //row.addClass("k-state-selected");
+            }
+        }
+        debugger
+        var view = this.dataSource.view();
+        for (var i = 0; i < view.length; i++) {
+            if (checkedIds[view[i].entries[4]]) {
+                this.tbody.find("tr[data-uid='" + view[i].uid + "']")
+                //.addClass("k-state-selected")
+                .addClass("k-gridtest")
+                .find(".checkbox")
+                .attr("checked", "checked");
+            }
+        }
+
+
+    }
+
+    objDialog1 = $("[id$='ForTreeSearchpartialView']");
+    objDialog1.dialog({
+        autoOpen: false,
+        modal: true,
+        width: 850,
+        height: 650
+    });
+
+    function View(type) {
+        debugger;
+        var grid;
+        grid = $("#grid").data("kendoGrid");
+        model = grid.dataItem($(event.target).closest("tr"));
+        $("#hdn_filegid").val("");
+        //filegid = (model.entries[2]);
+        filegid = (model.entries[4]);
+        $("#hdn_filegid").val(filegid);
+        var mode = type;
+        objDialog5.load('../TreeSearch/ViewIndexedDocDetails?filegid=' + filegid);
+        objDialog5.dialog({ title: 'Archival Details' });
+        objDialog5.dialog("open");
+    }
+
+    function forbulkMail() {
+        debugger;
+        //var grid = $("#grid").data("kendoGrid");
+        //var model = grid.dataItem($(event.target).closest("tr"));
+        //var attachedid = (model.entries[0]);
+        //$("#hdn_attachid").val(" ");
+        //$("#hdn_linkorinterfile").val(" ");
+        $("#hdn_mailtype").val("");
+        $("#hdn_mailtype").val("multiple");
+        //$("#hdn_attachid").val(attachedid);
+        //$("#hdn_linkorinterfile").val("index");
+        objDialog.load('../TreeSearch/Showmailpartialview');
+        objDialog.dialog({ title: 'Send Mail' });
+        objDialog.dialog("open");
+        return false;
+    }
+
+    function ClearData() {
+        window.location.href = '@Url.Action("Index","TreeSearch")';
+    }
+
+    function downloadfile() {
+        debugger;
+        var downloadpath = $("#hdn_filelocation").val();
+        $.ajax({
+            url: '@Url.Action("Downloadmailfile", "TreeSearch")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'downloadpath': downloadpath },
+        }).done(function (data) {
+            debugger;
+            //get the file name for download
+            if (data.downloadpath != "") {
+                //use window.location.href for redirect to download action for download the file
+                window.location.href = "@Url.RouteUrl(new { Controller = "TreeSearch", Action = "DownloadMailFile1" })/?downloadpath=" + data.downloadpath;
+            }
+        });
+    }
+
+    function ViewDocument(type) {
+        debugger;
+        var grid;
+        var model;
+        var viewid;
+        if (type == "link") {
+            grid = $("#Linktable").data("kendoGrid");
+            model = grid.dataItem($(event.target).closest("tr"));
+            viewid = (model.entries[0]);
+        }
+        if (type == "interfiling") {
+            grid = $("#interFiletable").data("kendoGrid");
+            model = grid.dataItem($(event.target).closest("tr"));
+            viewid = (model.entries[0]);
+        }
+
+        var mode = type;
+        //objDialog12.load('../TreeSearch/showdocuments?viewid=' + viewid + '&mode=' + mode);
+        var url = '../TreeSearch/showdocuments?viewid=' + viewid + '&mode=' + mode;
+        window.open(url, "popupWindow", "width=800,height=650,scrollbars=yes");
+        //objDialog12.dialog({ title: 'view' });
+        //objDialog12.dialog("open");
+    }
+
+
+    @*function LinkFilesMulti() {
+        debugger;
+
+        var grid1 = $("#grid").data("kendoGrid");
+
+        // Get checked row by getting the input and then the row containing the input
+        var row1 = $("#attributecheckbox:checked", grid1.tbody).closest("tr");
+        if (row1.length == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select any one records in MainGrid to get Attributes.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        var Attribid = [];
+        var Attribid1;
+        for (var i = 0; i < row1.length; i++) {
+            var item1 = grid1.dataItem(row1[i]);
+            var Grid1ID = item1.entries[2];
+            Attribid.push(Grid1ID);
+        }
+        var count1 = row1.length;
+        if (Attribid != 0 && Attribid != null && Attribid != "") {
+            Attribid1 = Attribid.join(",");
+        }
+
+        $.ajax({
+            url: '@Url.Action("LinkFilesMultiple", "DocumentLinking")',
+            data: { 'Attribid': Attribid1 },
+            success: function () {
+                debugger;
+                $.alert({
+                    title: 'DMS',
+                    content: 'Documents are linked successfully.!',
+                    type: 'green',
+                });
+                return false;
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred.!',
+                    type: 'red',
+                });
+            }
+        })
+    }
+
+    function DeLinkFilesMulti() {
+        debugger;
+        var grid1 = $("#grid").data("kendoGrid");
+        // Get checked row by getting the input and then the row containing the input
+        var row1 = $("#attributecheckbox:checked", grid1.tbody).closest("tr");
+        if (row1.length == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select any one records in MainGrid to get Attributes.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        var Attribid = [];
+        var Attribid1;
+        for (var i = 0; i < row1.length; i++) {
+            var item1 = grid1.dataItem(row1[i]);
+            var Grid1ID = item1.entries[2];
+            Attribid.push(Grid1ID);
+        }
+        var count1 = row1.length;
+        if (Attribid != 0 && Attribid != null && Attribid != "") {
+            Attribid1 = Attribid.join(",");
+        }
+        $.ajax({
+            url: '@Url.Action("DeLinkFilesMultiples", "DocumentLinking")',
+            data: { 'Attribid': Attribid1 },
+            success: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Documents are delinked successfully.!',
+                    type: 'green',
+                });
+                return false;
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred.!',
+                    type: 'red',
+                });
+            }
+        })
+    }*@
+
+    //function RequestRetrivalPopup() {
+    //    objDialogRR.load('../TreeSearch/ShowRequestReterivalview');
+    //    objDialogRR.dialog({ title: 'Create' });
+    //    objDialogRR.dialog("open");
+    //    return false;
+    //}
+
+
+    $(".accordion_head").click(function () {
+        if ($('.accordion_body').is(':visible')) {
+            $(".accordion_body").slideUp(300);
+            $(".plusminus").text('+');
+        }
+        if ($(this).next(".accordion_body").is(':visible')) {
+            $(this).next(".accordion_body").slideUp(300);
+            $(this).children(".plusminus").text('+');
+        } else {
+            $(this).next(".accordion_body").slideDown(300);
+            $(this).children(".plusminus").text('-');
+        }
+
+    });
+    $(document).ready(function () {
+        if ($('.accordion_body').is(':visible')) {
+            $(".accordion_body").slideUp(300);
+            $(".plusminus").text('+');
+        }
+        if ($(this).next(".accordion_body").is(':visible')) {
+            $(this).next(".accordion_body").slideUp(300);
+            $(this).children(".plusminus").text('+');
+        } else {
+            $(this).next(".accordion_body").slideDown(300);
+            $(this).children(".plusminus").text('-');
+        }
+    });
+</script>

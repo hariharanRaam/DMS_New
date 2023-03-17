@@ -1,0 +1,90 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.DocGroupMaster_Model
+ 
+<style>
+
+</style>
+<div style="width:25px"></div>
+<div>
+    <table>
+        @Html.HiddenFor(model => model.DgroupId, new { style = "height:25px;width:225px;font-weight: normal;" })
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">
+                @Html.Label("DgroupName", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DgroupName, new { style = "height:25px;width:225px;font-weight: normal;" })
+                @Html.ValidationMessageFor(model => model.DgroupName)
+            </td>
+            
+        </tr>
+        <tr style="height:10px"></tr>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">
+                @Html.Label("Short Name", new { style = "width:120px;font-weight: normal;"})
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Dgroup_shortname, new { style = "height:25px;width:225px;font-weight: normal;" })
+                @Html.ValidationMessageFor(model => model.Dgroup_shortname)
+            </td>
+
+        </tr>
+        <tr>
+            @Html.Partial("BindOrgLevels")
+        </tr>
+        @*@for (int i = 0; i < labellist.Count; i++)
+        {
+            <tr style="height:10px"></tr>
+            <tr>
+                <td style="left:15px; position:relative">
+                    @Html.Label(labellist[i].orghierarchy_name, new { style = "width:120px;font-weight: normal;" })
+                </td>
+                <td>
+                    @(Html.Kendo().DropDownList()
+                          .Name(labellist[i].orghierarchy_code)
+                              .DataTextField("master_name")
+                              .DataValueField("master_code")
+                              .Events(e => e.Change("onChangeunit"))
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" , id = labellist[i].orghierarchy_code})
+              .DataSource(source => { source.Read(read => { read.Action("DocGroupNames", "DocGroupMaster", new { parentcode = labellist[i].orghierarchy_code, dependcode = "" }); }).ServerFiltering(true); }))
+                   
+                </td>
+            </tr>
+        }*@
+        @*<tr style="height:10px"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Unit", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("UnitID")
+                              .DataTextField("Unit")
+                              .DataValueField("UnitID")
+                              .Events(e => e.Change("onChangeunit"))
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                              .DataSource(source => { source.Read(read => { read.Action("DocGroupNames", "DocGroupMaster", new { CommonVal = "U" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.UnitID)
+            </td>
+        </tr>
+
+        <tr style="height:10px"></tr>
+        <tr>
+            <td style="left:15px; position:relative">
+                @Html.Label("Department", new { style = "width:120px;font-weight: normal;" })
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("Dept_Id")
+                              .DataTextField("Dept_Name")
+                              .DataValueField("Dept_Id")                              
+                              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                              .DataSource(source => { source.Read(read => { read.Action("DocGroupNames", "DocGroupMaster", new { CommonVal = "D" }); }).ServerFiltering(true); }))
+                @Html.ValidationMessageFor(model => model.Dept_Id)
+            </td>
+        </tr>*@
+
+    </table>
+</div>

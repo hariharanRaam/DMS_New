@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1acxweb",
+  "CachePdfKey": "1acxweb/1acxweb-1k3kk2s.pdf",
+  "CacheXpzKey": "1acxweb/1acxweb-bnfpo6.xpz",
+  "CacheInfoKey": "1acxweb/1acxweb-bnfpo6.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\ClientInv001(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv001(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1acxweb",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

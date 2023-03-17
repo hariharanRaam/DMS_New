@@ -1,0 +1,433 @@
+﻿@model DMS.Model.PhysicalArchival_Model
+@using System.Web.UI.WebControls;
+@{
+    int i = 0;
+    int colcnt = 0;
+}
+<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+    label {
+        font-size: 13px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box-body">
+            <div class="row">
+                <table>
+                    <tr style="height:5px;"></tr>
+
+                    @foreach (var category in Model.dept)
+                    {
+                        <tr style="height:40px;">
+
+                            <td style="left:15px; position:relative">
+                                <label style="width:200px;font-weight: normal;">@category.Satrname </label>
+                            </td>
+
+                            @if (category.Satrtype == "Datetime")
+                            {
+                                <td>
+                                    @Html.Editor("ctl" + i, @category.Satrdesc, new { htmlAttributes = new { @class = "form-control", style = "height:30px;width:300px;font-weight: normal;font-size:medium;font-family:Cambria;" } })
+
+                                </td>
+                            }
+                            @if (category.Satrtype == "Alpha Numeric")
+                            {
+                                <td style="width:120px">
+                                    @Html.TextBox("ctl" + i, @category.Satrdesc, new { @class = "form-control", style = "height:30px;width:300px;font-weight: normal;font-size:medium;font-family:Cambria;" })
+                                </td>
+                            }
+                            @if (category.Satrtype == "Numeric")
+                            {
+                                <td style="width:120px">
+                                    @Html.TextBox("ctl" + i, @category.Satrdesc, new { @class = "form-control", style = "height:30px;width:300px;font-weight: normal;font-size:medium;font-family:Cambria;", onkeypress = "return NumersOnly(event)" })
+                                </td>
+                            }
+                            @if (category.Satrtype == "Amount")
+                            {
+                                <td style="width:120px">
+                                    @Html.TextBox("ctl" + i, @category.Satrdesc, new { @class = "form-control", style = "height:30px;width:300px;font-weight: normal;font-size:medium;font-family:Cambria;", onkeypress = "return isNumberKey(event)" })
+                                </td>
+                            }
+                            @if (category.Satrtype == "Logical")
+                            {
+
+                                <td style="width:120px">
+                                    <div class="radio" style="left:25px; position:relative"> @Html.RadioButton("ctl" + i, "Yes") Yes &nbsp;&nbsp;&nbsp;&nbsp;  @Html.RadioButton("ctl" + i, "No") No</div>
+                                </td>
+                            }
+
+                            @if (category.SatrMand == "Y")
+                            {
+                                <td><label style="width:5px;color:red;font-size:larger">*</label> </td>
+                            }
+                        </tr>
+                            i++;
+                            colcnt++;
+                    }
+
+                </table>
+            </div>
+        </div>
+        <div><input type="hidden" id="ctlcount" value="@i" /></div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <div class="row text-center mt20">
+                <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange" />
+                <input type="button" value="Save" id="btn_save" onclick="return Save();" class="btn btn-orange" />
+            </div>
+
+            <div class="row text-center mt20">
+                <span class="errormessage"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var UsersList = @Html.Raw(Json.Encode(@Model.dept))
+        var i=0;
+        var mode =  $("#action").val();
+        if(mode=="Edit")
+        {
+            $("#btn_save").prop('value', 'Update');
+        }
+        if(mode=="Delete")
+        {
+            $("#btn_save").prop('value', 'Delete');
+        }
+        $.each(UsersList, function (index, item) {
+            debugger;
+            var Atrtype = item.Satrtype;
+            if (Atrtype == "Datetime") {
+                $('#ctl' + i).datepicker({
+                    dateFormat:"dd-mm-yy",
+                    changeMonth :true,
+                    changeYear: true  })
+                if(mode=="Edit" || mode=="Delete")
+                {
+                    $('#ctl'+i).datepicker('setDate', item.Satrdesc)
+
+                }
+                else
+                {
+                    $('#ctl'+i).datepicker('setDate', 'today')
+                }
+            }
+            i++;
+        });
+    });
+
+    function Close() {
+        debugger;
+        objDialog.dialog("close");
+    }
+
+    function Save() {
+        debugger;
+        var person = {};
+        person.SatrCount = $("#ctlcount").val();
+        person.Atrgid=$("#Atrgid").val();
+        person.action=$("#action").val();
+
+        var mode=$("#action").val();
+
+        var UsersList = @Html.Raw(Json.Encode(@Model.dept))
+        var count = $("#ctlcount").val();
+
+        var ret = 0;
+        var Dyntextvalues = [];
+        var i = 0;
+
+        $.each(UsersList, function (index, item) {
+            debugger;
+
+            var Atrtype = item.Satrtype;
+            var Atrlength = item.Satrlen;
+            var Atrmandotry = item.SatrMand;
+
+            if (Atrtype == "Logical") {
+                var gettxtdesval = $('input[id=ctl' + i + ']:checked').val()
+                if (Atrmandotry == "Y") {
+                    if (gettxtdesval == undefined) {
+                        $.alert({
+                            title: 'DMS',
+                            content: item.Satrname + ' ' + 'field must have some input because it is mandtory field.!',
+                            type: 'blue',
+                        });
+
+                        return false;
+                    }
+                    else {
+                        Dyntextvalues.push(gettxtdesval);
+                    }
+                }
+                else {
+                    if (gettxtdesval == undefined) {
+                        gettxtdesval = "";
+                        Dyntextvalues.push(gettxtdesval);
+                    }
+                    else {
+                        Dyntextvalues.push(gettxtdesval);
+                    }
+                }
+
+            }
+            else {
+                var gettxtdesval = $('#ctl' + i).val();
+                Dyntextvalues.push(gettxtdesval);
+                var findtxtlen = gettxtdesval.length;
+            }
+
+            if (Atrtype == "Alpha Numeric") {
+                if (findtxtlen > Atrlength) {
+                    $.alert({
+                        title: 'DMS',
+                        content: item.Satrname + ' ' + 'field length should not be greater then' + ' ' + Atrlength,
+                        type: 'blue',
+                    });
+
+                    ret = 0;
+                    return false;
+
+                }
+            }
+
+            if (Atrmandotry == "Y") {
+                if (gettxtdesval == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: item.Satrname + ' ' + 'field must have some input because it is mandotry field.!',
+                        type: 'blue',
+                    });
+
+                    ret = 0;
+                    return false;
+                }
+
+                if (Atrtype == "Datetime") {
+                    var isDate = (new Date(gettxtdesval) !== "Invalid Date")
+                    if (isDate == false) {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Please enter the date value into' + ' ' + item.Satrname + ' ' + 'field because it is datetime type.!',
+                            type: 'blue',
+                        });
+
+                        ret = 0;
+                        return false;
+                    }
+                }
+            }
+            i++;
+            ret = 1;
+        });
+
+        var postData = " form : [ "
+        $.each(Dyntextvalues, function (index, item) {
+            debugger;
+            if (index == Dyntextvalues.length - 1) {
+                postData = postData + "'" + Dyntextvalues[index] + "'";
+            } else {
+                postData = postData + "'" + Dyntextvalues[index] + "',";
+            }
+        });
+        postData = postData + "]";
+
+        var attribid=$("#Atrgid").val();
+        var cmd=$("#action").val();
+        var grid = $("#grid").data("kendoGrid");
+        var attachid = [];
+        if(cmd=="Insert")
+        {
+            var row = $("input:checked", grid.tbody).closest("tr");
+            //var checked=row.length;
+            for (var i = 0; i < row.length; i++) {
+                var item = grid.dataItem(row[i]);
+                var GridID = item.entries[0];
+                attachid.push(GridID);
+            }
+
+            var griddata = " form1 : [ "
+            $.each(attachid, function (index, item) {
+                debugger;
+                if (index == row.length - 1) {
+                    griddata = griddata + "'" + attachid[index] + "'";
+                } else {
+                    griddata = griddata + "'" + attachid[index] + "',";
+                }
+            });
+            griddata = griddata + "]";
+
+        }
+        else
+        {
+            attachid.push(attribid);
+
+            var griddata = " form1 : [ "
+            $.each(attachid, function (index, item) {
+                debugger;
+                griddata = griddata + "'" + attachid[index] + "'";
+            });
+            griddata = griddata + "]";
+        }
+        //var grid = $("#grid").data("kendoGrid");
+        //// Get checked row by getting the input and then the row containing the input
+        //var row = $("input:checked", grid.tbody).closest("tr");
+        //var checked=row.length;
+
+        //var attachid = [];
+        //for (var i = 0; i < row.length; i++) {
+        //    var item = grid.dataItem(row[i]);
+        //    var GridID = item.entries[0];
+        //    attachid.push(GridID);
+        //}
+
+        //var griddata = " form1 : [ "
+        //$.each(attachid, function (index, item) {
+        //    debugger;
+        //    if (index == checked - 1) {
+        //        griddata = griddata + "'" + attachid[index] + "'";
+        //    } else {
+        //        griddata = griddata + "'" + attachid[index] + "',";
+        //    }
+        //});
+        //griddata = griddata + "]";
+
+        if(mode=="Insert"||mode=="Edit")
+        {
+            if (ret == "1" || UsersList.length == "0") {
+                debugger;
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: '@Url.Action("Save", "PhysicalArchival")',
+                    data: '{modelObj: ' + JSON.stringify(person) + ',' + postData + ',' + griddata + '}',
+                    success: function (data) {
+                        debugger;
+                        if (data.status == 1) {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Storage Attributes saved successfully.!',
+                                type: 'green',
+                            });
+                            setTimeout(function () {
+                                //window.location.reload(1);
+                                Close();
+                                CheckUserInputs();
+                            }, 500);
+                        }
+                        if (data.status == 2) {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'Storage Attributes Updated successfully.!',
+                                type: 'green',
+                            });
+                            setTimeout(function () {
+                                Close();
+                                CheckUserInputs();
+                            }, 500);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+
+        }
+        if(mode=="Delete")
+        {
+            $.confirm({
+                icon: 'fa fa-warning',
+                title: 'DMS',
+                autoClose: 'cancel|10000',
+                theme: 'dark',
+                animationSpeed: 700,
+                content: 'Are you sure do you want to delete this record!',
+                type: 'orange',
+                buttons: {
+                    confirm: function () {
+                        if (ret == "1" || UsersList.length == "0") {
+                            debugger;
+                            $.ajax({
+                                type: "POST",
+                                cache: false,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                url: '@Url.Action("Save", "PhysicalArchival")',
+                                data: '{modelObj: ' + JSON.stringify(person) + ',' + postData + ',' + griddata + '}',
+                                success: function (data) {
+                                    debugger;
+                                    if (data.status == 3) {
+                                        $.alert({
+                                            title: 'DMS',
+                                            content: 'Storage Attributes Deleted successfully.!',
+                                            type: 'green',
+                                        });
+                                        setTimeout(function () {
+                                            Close();
+                                            CheckUserInputs();
+                                            //window.location.reload(1);
+                                        }, 500);
+                                    }
+
+                                },
+                                error: function () {
+                                }
+                            });
+                        }
+                    },
+                    cancel: function () {
+                        $.alert({
+                            icon: 'fa fa-success',
+                            title: 'DMS',
+                            theme: 'dark',
+                            content: 'Delete Canceled.!',
+                            type: 'blue',
+                            animationSpeed: 700,
+                        });
+                    },
+                }
+            });
+
+        }
+
+    }
+
+    function isNumberKey(evt) {
+        debugger;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+          && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function NumersOnly(evt) {
+        debugger;
+        if (evt.keyCode == '9' || evt.keyCode == '16') {
+            return;
+        }
+        evt.keyCode
+        var code;
+        if (evt.keyCode) code = evt.keyCode;
+        else if (evt.which) code = evt.which;
+        if (evt.which == 46)
+            return false;
+        if (code == 8 || code == 46)
+            return true;
+        if (code < 48 || code > 57)
+            return false;
+    }
+</script>

@@ -1,0 +1,1733 @@
+﻿@model  List<DMS.Model.ViewDocuments_Model>
+@{
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        div.ex1 {
+            background-color: white;
+            height: 170px;
+            width: 1000px;
+            overflow-y: auto;
+            column-span: all;
+        }
+
+        .Name1 {
+            right: 350px;
+            width: 800px;
+            display: inline-block;
+            text-align: right;
+            position: relative;
+            color: #FF0000;
+        }
+    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card-body" style="margin-top:-9px;">
+                <h5 class="mobile-card-header">Trainer Master</h5>
+                <form id="formAccountSettings" method="POST" onsubmit="return false">
+                    <div class="row" id="header">
+                        <div class="mb-3 col-md-5">
+                            <div class="row">
+                                <div class="mb-3 col-md-4">
+                                    <select onchange="mode_change(this)" id="mode" class="form-select">
+                                        <option value="I" selected>Create</option>
+                                        <option value="U">Modify</option>
+                                        <option value="V">View</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <input class="form-control"
+                                           type="text"
+                                           id="docatrid"
+                                           name="docatrid"
+                                           value="Doc. Attribute ID"
+                                           readonly
+                                           style="text-align:center" />
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <input class="form-control"
+                                           type="text"
+                                           id="docstat"
+                                           name="docstat"
+                                           value="Doc. Attribute Status"
+                                           style="text-align:center;font-size: 11px !important;"
+                                           readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                        </div>
+                        <div class="mb-3 col-md-3">
+
+                        </div>
+                    </div>
+                    <div class="row" id="header">
+                        <div class="col-sm-3" style="width: 23.5%;">
+                            <label class="form-label" for="subCatgery">Document Type</label>
+                            <select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-select"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </div>
+                        <div class="col-sm-3" style="width: 23.5%;">
+                            <label class="form-label" for="Catgery">Document Group</label>
+                            <select id="Catgery" name="Catgery" onchange="fetchDocGroup()" class="form-select"></select>
+                            <span class="errormessage" id="erridmsg"></span>
+                        </div>
+                        <div class="col-sm-2" style="margin-top:33px;width:21%;margin-left:30px">
+                            <label class="switch form-label" style="font-size:13px;">
+                                Clone Attributes&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span>&nbsp;&nbsp;
+                                <input type="checkbox" id="iscloneAtr" value="Y" class="switch-input allDay-switch" />
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on"></span>
+                                    <span class="switch-off"></span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-sm-3" style="width: 23.5%;">
+                            <label class="form-label" for="sdocname">Document Type to be cloned&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                            <select class="form-select" id="sdocname" name="sdocname"></select>
+                        </div>
+                        <div class="col-sm-1" style="margin-top:33px;width: 5%;">
+                            <img src="~/Assets/images/viewicons.png" id="btnView" hidden onclick="return Storageattributeview();" style="margin-left: -10px;cursor:pointer;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Attribute">
+                            <img src="~/Assets/images/login-refresh.png" id="showcoursetable2" hidden  onclick="fetchattributes()" style="float: right;margin-top: -3px;margin-right: -14px;cursor:pointer;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Load Grid">
+                        </div>
+                    </div>
+                    <hr style="margin-top: 40px;margin-bottom: 7px;">
+                    <div class="row" style="margin-top:20px;display:none;" id="showcoursetables2s">
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-sm btn-info me-2" id="addrow" style="background: #1061b1;border-color: #1061b1;margin-top:-22px;">Add</button>
+                            <table class="table table-bordered table-sm" id="myTable">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Attribute Name</th>
+                                        <th>Data Type</th>
+                                        <th>Length / LoV Reference</th>
+                                        <th>Mandatory</th>
+                                        <th>Order By</th>
+                                        @*<th>Key</th>*@
+                                        <th>Status</th>
+                                        <th id="th_action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:-14px;">
+                        <center>
+                            <button type="submit" name="btnsubmit" value="submit" id="btnsubmit" class="btn btn-sm btn-primary me-2">Save</button><button type="button" class="btn btn-sm btn-danger me-2" onclick="location.reload()">Cancel</button>
+                        </center>
+                    </div>
+                </form>
+                <div id="ForPartialViewStorageAttribute"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    var maxorglvl = 0;
+    var slno = 0;
+    var loadflag = 0;
+    //function onChangeunit(sel, idval) {
+    //    //    alert(this.value());
+    //    debugger;
+    //    var id = idval;
+    //    // alert(idval);
+
+    //    try {
+
+    //        var mastercode = sel.value;
+    //        var master = ""
+    //        if (mastercode == "" || mastercode == null || mastercode == "undefined" || mastercode == 0) {
+    //            return false;
+    //        }
+    //        else {
+    //            debugger;
+    //            $.getJSON("DocGroupNames/DocGroupMaster?parentcode=" + master + "&dependcode=" + mastercode, function (data) {
+    //                debugger;
+    //                var dept = data;
+    //                // maxorglvl = dept.length;
+
+    //                //$("#Dept_Id").data("kendoDropDownList").dataSource.data(data[1]);
+    //                if (dept.length > 1) {
+    //                    var ee = data[1].parent_code;
+
+    //                    $("#" + idval).empty();
+    //                    //   for (var i = 0; i < dept.length; i++) {
+    //                    var selopt = new Option("select", "select");
+    //                    $("#" + idval).append(selopt);
+    //                    var opt = new Option(data[1].master_name, data[1].master_code);
+    //                    //    var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+    //                    $("#" + idval).append(opt);
+    //                    //     }
+    //                    $("#" + idval).val($("#" + idval + " option").eq(1).val()).change();
+    //                    ////$("#" + ee).data("kendoDropDownList").dataSource.data(data);
+    //                    //$("#" + ee).data("kendoDropDownList").value(data[1].master_code);
+    //                    ////$("#" + ee).data("kendoDropDownList").select(1)
+    //                    // $("#" + ee).data("select").trigger("change");
+    //                    //$("#Dept_Id").data("kendoDropDownList").refresh();
+    //                }
+    //                else {
+    //                    var ee = data[0].parent_code;
+    //                    //  $("#" + ee).data("kendoDropDownList").select(0)
+    //                }
+
+    //            });
+    //        }
+    //    } catch (er) {
+    //        hideProgress();
+    //    }
+    //}
+    var objDialog;
+    var counter = 1;
+    var countdata = [];
+    $(document).ready(function () {
+        $("#navhead").text("Storage Hierarchy");
+        $("#docatrid").val("0");
+        $("#docstat").val("Active");
+        loaddynamiccolumns();
+        objDialog = $("[id$='ForPartialViewStorageAttribute']");
+        objDialog.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 600,
+            height: 350
+        });
+
+        //addrowsameas
+        $("#addrowsameas").on("click", function () {
+            debugger;
+            var sameasdocnameid = $("#sdocname").val();
+            if (sameasdocnameid == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Same as DocName.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+
+            //   var dpnm = $("#DeptID").val();
+            //    var uname = $("#Unit").val();
+            var docgroup = $("#Catgery").val();
+            var docname = $("#subCatgery").val();
+
+            if (docgroup == "0" || docname == "0") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Dropdowns.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+
+            var retval = null;
+            $.ajax({
+                url: '@Url.Action("CheckStorageattribute", "StorageAttributes")',
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: { 'DgroupID': docgroup, 'DNameID': docname },
+                success: function (data) {
+                    retval = data;
+                }
+            });
+            if (retval == "0") {
+                $.ajax({
+                    url: '@Url.Action("GetSameasAttributeplusdata", "StorageAttributes")',
+                    type: "POST",
+                    datatype: "json",
+                    async: false,
+                    data: { 'sameasdocnameid': sameasdocnameid },
+                    success: function (data) {
+                        debugger;
+                        if (data.Data1 == "") {
+                            $.alert({
+                                title: 'DMS',
+                                content: 'There is No Records.!',
+                                type: 'blue',
+                            });
+                            return false;
+                        }
+                        else {
+                            var data2 = JSON.parse(data.Data1);
+                            for (i = 0; i < data2.length; i++) {
+                                var newRow = $("<tr  width='100%'>");
+                                var cols = "";
+                                var radname = "mandatory" + counter;
+                                var orderby = counter + 1;
+
+                                cols += '<td style="display:none"><input type="hidden" name="gid' + orderby + '" id="gid' + orderby + '"/></td>';
+                                cols += '<td style="padding-left:0px;width:50px;"><input style="width:50px; type="text" ; maxlength ="2"; value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                                cols += '<td style="width:150px;"><input style="width:150px;"  type="text"  name="name' + orderby + '" id="name' + orderby + '"/></td>';
+                                cols += '<td style="width:100px;"><select onchange="test(' + orderby + ')"  id="drpvalue' + orderby + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+                                cols += '<td style="width:200px;"><select  id="tdlov' + orderby + '" style="form-control;display:none;onkeypress = "return NumersOnly(event)""><option value="0">Select Master</option></select><input style="width:100%;"  type="text" onchange="test1()" style="width:60%;" onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + orderby + '" id="Length' + orderby + '"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                                cols += '<td style="width:125px;"><input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="N"/>&nbsp;&nbsp;No</td>'
+                                cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td>';
+                                countdata.push(orderby);
+                                newRow.append(cols);
+                                $("#myTable > tbody:last-child").append(newRow);
+                                $('#orderbyid' + orderby).val(data2[i].Storage_orderid);
+                                $("#name" + orderby).val(data2[i].Satr_Name);
+                                $("#drpvalue" + orderby).val(data2[i].Satr_Type);
+                                $("#Length" + orderby).val(data2[i].Satr_Length);
+                                $('input:radio[name="mandatory' + orderby + '"][value=' + data2[i].Satr_Mandotry + ']').prop('checked', true);
+                                counter++;
+                                $("#counter").val(counter);
+                            }
+                        }
+                    },
+                    error: function () {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Failed to create..!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                });
+
+            }
+            else {
+                $.alert({
+                    title: 'DMS',
+                    content: 'This combination of attributes is already available.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+
+        });
+
+
+        /*------ */
+
+        $("#addrow").on("click", function () {
+            debugger;
+            //   var dpnm = $("#DeptID").val();
+            //   var uname = $("#Unit").val();
+            var docgroup = $("#Catgery").val();
+            var docname = $("#subCatgery").val();
+
+            if ( docgroup == "0" || docname == "0") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Dropdowns.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+
+            var retval = null;
+            $.ajax({
+                url: '@Url.Action("CheckStorageattribute", "StorageAttributes")',
+                @*url: '@Url.Action("checkconfigattrib", "ConfigureAttributes")',*@
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: {  'DgroupID': docgroup, 'DNameID': docname },
+                success: function (data) {
+
+                    retval = data;
+                }
+            });
+
+            if (retval == "0" || modeval == "U") {
+                $("#btnsubmit").prop('disabled', false);
+                var newRow = $("<tr  width='100%'>");
+                var cols = "";
+                var radname = "mandatory" + counter;
+
+                var orderby = counter + 1;
+
+                cols += '<td hidden><input type="hidden" name="gid' + orderby + '" id="gid' + orderby + '"/></td>';
+                cols += '<td>' + orderby + '</td>';
+                cols += '<td><input class = "form-control" type="text"  name="name' + orderby + '" id="name' + orderby + '"/></td>';
+                cols += '<td><select class="form-select" onchange="test(' + orderby + ')"  id="drpvalue' + orderby + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+                cols += '<td><select class="form-select" id="tdlov' + orderby + '" style="display:none;"><option value="0">Select Master</option></select><input class = "form-control" style="width:100%;"  type="text" onchange="test1()" style="width:60%;" onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + orderby + '" id="Length' + orderby + '"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                //  cols += '<td><input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mandatory' + orderby + '" id="mandatory' + orderby + '" value="N"/>&nbsp;&nbsp;No</td>'
+                cols += '<td><select class="form-select" name="mandatory' + orderby + '" id="mandatory' + orderby + '"><option value="0">Select</option><option value="Y">Yes</option><option value="N">No</option></select></td>'
+                cols += '<td><input type="text" class = "form-control" maxlength ="2" value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                cols += '<td><label id="status' + orderby + '">Active</label></td>';
+                cols += '<td align="center"><img src="../Assets/images/del.png" class="ibtnDel"></td>';
+                countdata.push(orderby);
+
+                newRow.append(cols);
+                // $("table.order-list").append(newRow);
+                $("#myTable > tbody:last-child").append(newRow);
+                counter++;
+                $("#counter").val(counter);
+            }
+            else {
+                $.alert({
+                    title: 'DMS',
+                    content: 'This combination of attributes is already available.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+
+        $("#myTable > tbody:last-child").on("click", ".ibtnDel", function (event) {
+            debugger;
+
+            $(this).closest('tr').find('.gid').text()
+            $(this).closest("tr").remove();
+            counter -= 1
+            $("#counter").val(counter);
+            // alert($(this).closest('tr').find('input').val());
+            var strid = $(this).closest('tr').find('input').val();
+
+            $.ajax({
+                url: '@Url.Action("DeleteAttribute", "StorageAttributes")',
+                @*url: '@Url.Action("checkconfigattrib", "ConfigureAttributes")',*@
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: { 'strid': strid },
+                success: function (data) {
+                    if (data.success == 1) {
+                        debugger;// if true (1)
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Attributes are Deleted successfully.!',
+                            type: 'green',
+                        });
+
+                    }
+                },
+                error: function (er) {
+                    alert(er);
+                }
+            });
+        });
+
+        $("#btnsubmit").on("click", function () {
+            debugger;
+            if (counter == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please add the attribute row.!',
+                    type: 'blue',
+                });
+                $("#btnsubmit").prop('disabled', true);
+                return false;
+            }
+            var docgroup = $("#Catgery").val();
+            var docname = $("#subCatgery").val();
+            if (docgroup == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Doc Group.!',
+                    type: 'blue',
+                });
+                $("#erridmsg").show();
+                return false;
+            } if (docname == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select Doc Name.!',
+                    type: 'blue',
+                });
+                $("#erridmsg").show();
+                return false;
+            }
+
+
+            if (modeval == "I") {
+                saveAttributes();
+            } else if (modeval == "U") {
+                updateAttributes();
+            }
+        });
+    });
+
+    function saveAttributes() {
+        debugger;
+        //Loop through the Table rows and build a JSON array.
+        //   var DeptID = $("#DeptID").val();
+        //   var UnitID = $("#Unit").val();
+        var DgroupID = $("#Catgery").val();
+        var DNameID = $("#subCatgery").val();
+        var attributes1 = new Array();
+        var attributes2 = new Array();
+        var attributes3 = new Array();
+        var attributes4 = new Array();
+        var attributes5 = new Array();
+        var z = 0;
+        //alert(counter);
+        for (j = 0; j < counter; j++) {
+            var i = countdata[j];
+
+            if ($("#name" + i).val() == "") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - name.!',
+                    type: 'blue',
+                });
+                return;
+            }
+            if ($("#drpvalue" + i).val() == "0") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                    type: 'blue',
+                });
+                return;
+            }
+
+            if ($("#drpvalue" + i).val() == "Alpha Numeric") {
+                if ($("#Length" + i).val() == "0") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'enter the length greater then zero.!',
+                        type: 'blue',
+                    });
+                    document.getElementById(ctrl.id).value = "";
+                    return;
+                }
+            }
+            var Check = $("#drpvalue" + i).val();
+            if (Check == "Alpha Numeric") {
+                if ($("#Length" + i).val() == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - length.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+            }
+
+            if ($("#mandatory" + i).val() == "undefined" || $("#mandatory" + i).val() == "0" || $("#mandatory" + i).val() == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - mandatory.!',
+                    type: 'blue',
+                });
+                return;
+            }
+            //}
+
+
+            debugger;
+            if (counter < $("#orderbyid" + i).val()) {
+                alert('orderby should not exeed ' + counter);
+                return false;
+            }
+            var attribute = [];
+            attributes1[z] = $("#name" + i).val();
+            attributes2[z] = $("#drpvalue" + i).val();
+            attributes3[z] = $("#Length" + i).val();
+            attributes4[z] = $("#mandatory" + i).val();
+            //attributes5[z] = $("#tdlov" + i).val();
+            attributes5[z] = $("#orderbyid" + i).val();
+            z++;
+        }
+
+
+
+        //for (i = 0; i < counter; i++) {
+        //    var attribute = {};
+        //    attributes1[i] = $("#name" + i).val();
+        //    attributes2[i] = $("#drpvalue" + i).val();
+        //    attributes3[i] = $("#Length" + i).val();
+        //    attributes4[i] = $('input[id=mandatory' + i + ']:checked').val();
+
+        //}
+
+
+        var sorted_arr = attributes5.sort();
+        debugger;
+        var results = [];
+        var duplicate = "false";
+        for (var i = 0; i < attributes5.length - 1; i++) {
+            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                results.push(sorted_arr[i]);
+                duplicate = "true";
+            }
+        }
+
+        var uniqueNames = [];
+        $.each(results, function (i, el) {
+            if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+        });
+
+        if (duplicate == "true") {
+            $.alert({
+                title: 'DMS',
+                content: 'Duplicate Values:' + uniqueNames,
+                type: 'green',
+            });
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                contentType: "application/json;charset=utf-8",
+                url: "../StorageAttributes/Save",
+                type: "POST",
+                dataType: "json",
+                data: '{"DgroupID":"' + DgroupID + '","DNameID":"' + DNameID + '","attributes1":"' + attributes1 + '","attributes2":"' + attributes2 + '","attributes3":"' + attributes3 + '","attributes4":"' + attributes4 + '","attributes5":"' + attributes5 + '"}',
+                success: function (data) {
+                    debugger;
+                    if (data.success == 1) {
+                        debugger;// if true (1)
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Attributes are saved successfully.!',
+                            type: 'green',
+                        });
+                        setTimeout(function () {// wait for 5 secs(2)
+                            location.reload(); // then reload the page.(3)
+                        }, 2500);
+                    }
+                }
+
+            });
+        }
+    }
+
+    function updateAttributes() {
+        debugger;
+        var strid = $("#hdn_ugrp_gid").val();
+    //    var orderid = $("#orderbyid").val();
+        //   var DeptID = $("#departmentid").val();
+        //   var UnitID = $("#unitid").val();
+        var DgroupID = $("#Catgery").val();
+        var DNameID = $("#subCatgery").val();
+
+        var attributes0 = new Array();
+        var attributes1 = new Array();
+        var attributes2 = new Array();
+        var attributes3 = new Array();
+        var attributes4 = new Array();
+        var attributes5 = new Array();
+
+        var z = 0;
+
+        //for (var i = 0; i < counter; i++) {
+        for (var j = 0; j < counter; j++) {
+
+            var i = countdata[j];
+
+
+            if ($("#name" + i).val() == "") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - name.!',
+                    type: 'blue',
+                });
+                return;
+            }
+            if ($("#drpvalue" + i).val() == "0") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                    type: 'blue',
+                });
+                return;
+            }
+
+            if ($("#Length" + i).val() == "") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                    type: 'blue',
+                });
+                return;
+            }
+
+            if ($('#mandatory' + i).val() == undefined || $('#mandatory' + i).val() == "" || $('#mandatory' + i).val() == "0" || $('#mandatory' + i).val() == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the values in the attribute row/Delete the empty row - mandatory.!',
+                    type: 'blue',
+                });
+                return;
+            }
+
+            var attribute = [];
+            attributes0[z] = $("#gid" + i).val();
+            attributes1[z] = $("#name" + i).val();
+            attributes2[z] = $("#drpvalue" + i).val();
+            attributes3[z] = $("#Length" + i).val();
+            attributes4[z] = $("#mandatory" + i).val();
+            attributes5[z] = $("#orderbyid" + i).val();
+            if (attributes5[z] == "") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Please fill all the order by values in the attribute row!',
+                    type: 'blue',
+                });
+                return;
+            }
+            z++;
+        }
+
+
+        $.ajax({
+            contentType: "application/json;charset=utf-8",
+            url: "../ViewStorageAttributes/Update",
+            type: "POST",
+            dataType: "json",
+            //data: '{"DeptID":"' + DeptID + '","UnitID":"' + UnitID + '","DgroupID":"' + DgroupID + '","DNameID":"' + DNameID + '","attributes1":"' + attributes1 + '","attributes2":"' + attributes2 + '","attributes3":"' + attributes3 + '","attributes4":"' + attributes4 + '","attributes5":"' + attributes5 + '"}',
+            data: '{"attributes0":"' + attributes0 + '","DgroupID":"' + DgroupID + '","DNameID":"' + DNameID + '","attributes1":"' + attributes1 + '","attributes2":"' + attributes2 + '","attributes3":"' + attributes3 + '","attributes4":"' + attributes4 + '","attributes5":"' + attributes5 + '"}',
+            success: function (data) {
+                debugger;
+                if (data.success == 1) {
+                    debugger;// if true (1)
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Attributes are Update successfully.!',
+                        type: 'green',
+                    });
+                    setTimeout(function () {// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 2500);
+                }
+            }
+        });
+    }
+
+    @*function loaddynamiccolumns() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    maxorglvl = data.length;
+                    //   alert(maxorglvl);
+                    if (maxorglvl > 2) {
+                        $("#sct1").show();
+                        $("#sct2").hide();
+                    } else {
+                        $("#sct2").show();
+                        $("#sct1").hide();
+                    }
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        var org1val = data[0].orghierarchy_name;
+                        if (orglevelcode1 != null && orglevelcode1 != "" && orglevelcode1 != "undefined") {
+                            $("#orglvl1lbl").text(org1val);
+                            //orglevelval1 = $("#" + orglevelcode1).val();
+                            $("#orgcol1").show()
+                            $("#thlbl1").text(org1val);
+                            $("#thlbl1").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode1, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl1val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        var org1va2 = data[1].orghierarchy_name;
+                        if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                            $("#orglvl2lbl").text(org1va2);
+                            //   orglevelval2 = $("#" + orglevelcode2).val();
+                            $("#orgcol2").show();
+                            $("#thlbl2").text(org1va2);
+                            $("#thlbl2").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode2, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl2val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        var org1va3 = data[2].orghierarchy_name;
+                        if (orglevelcode3 != null && orglevelcode3 != "" && orglevelcode3 != "undefined") {
+                            $("#orglvl3lbl").text(org1va3);
+                            // orglevelval3 = $("#" + orglevelcode3).val();
+                            $("#orgcol3").show();
+                            $("#thlbl3").text(org1va3);
+                            $("#thlbl3").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode3, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl3val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        var org1va4 = data[3].orghierarchy_name;
+                        if (orglevelcode4 != null && orglevelcode4 != "" && orglevelcode4 != "undefined") {
+                            $("#orglvl4lbl").text(org1va4);
+                            //orglevelval4 = $("#" + orglevelcode4).val();
+                            $("#orgcol4").show();
+                            $("#thlbl4").text(org1va4);
+                            $("#thlbl4").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode4, "dependcode": "" },
+                                success: function (data) {
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl4val').append(opt);
+
+                                        //$("#sdocname").find('option').each(function (i, opt) {
+
+                                        //    // if (opt.value === Draft)
+                                        //    $(opt2).attr('selected', 'selected');
+                                        //});
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }*@
+
+    function Storageattributeview() {
+        debugger;
+        var sameasdocnameid = $("#sdocname").val();
+        if (sameasdocnameid == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Same as DocName.!',
+                type: 'blue',
+            });
+            //$("#erridmsg").show();
+            //objDialog.dialog("Close");
+            return false;
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("GetSameasattributesdata", "StorageAttributes")',
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: { 'sameasdocnameid': sameasdocnameid },
+                success: function (data) {
+                    debugger;
+                    var counter = data.count;
+                    if (counter != 0) {
+                        objDialog.load('../StorageAttributes/ViewPartialViewEdit?sameasdocnameid=' + sameasdocnameid);
+                        objDialog.dialog({ title: 'View' });
+                        objDialog.dialog("open");
+                    }
+                    else {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'There is no storage attributes found..!',
+                            type: 'blue',
+                        });
+                        return false;
+                    }
+                },
+                error: function () {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Some error has occured..!',
+                        type: 'red',
+                    });
+                    return false;
+                }
+            });
+        }
+    }
+
+
+
+</script>
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+       
+
+        @*var custid = 0;
+        var type = "CateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dgroup_Name, data[i].Dgroup_Id);
+                    var opt2 = new Option(data[0].Dgroup_Name, data[0].Dgroup_Id);
+                    $('#Catgery').append(opt);
+
+                    $("#Catgery").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });
+
+        var custid = 0;
+        var type = "SubCateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dname_Name, data[i].Dname_Id);
+                    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                    $('#subCatgery').append(opt);
+                    // $('#samesubcategory').append(opt);
+                    $("#subCatgery").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });*@
+
+
+        //for sameas subcategory
+        var custid = 0;
+        var type = "SubCateGory";
+        var actiontype = "GetAll";
+        $.ajax({
+            url: '@Url.Action("DepartmentEdit", "ConfigureAttributes")',
+            type: "GET",
+            data: { 'custid': custid, "type": type, "actiontype": actiontype },
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var opt = new Option(data[i].Dname_Name, data[i].Dname_Id);
+                    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+
+                    $('#sdocname').append(opt);
+                    $("#sdocname").find('option').each(function (i, opt) {
+
+                        // if (opt.value === Draft)
+                        $(opt2).attr('selected', 'selected');
+                    });
+
+                }
+            }
+        });
+
+
+        $("#showcoursetable").click(function () {
+            var subCatgery = $("#subCatgery").val();
+            var Catgery = $("#Catgery").val();
+            var orglvl4val = $("#orglvl4val").val();
+            var orglvl3val = $("#orglvl3val").val();
+            var orglvl2val = $("#orglvl2val").val();
+            var orglvl1val = $("#orglvl1val").val();
+
+            if (subCatgery != 0 && Catgery != 0 && subCatgery != "" && subCatgery != "undefined" && Catgery != "" && Catgery != "undefined") {
+
+                var subCatgeryname = $("#subCatgery option:selected").text();
+                var Catgeryname = $("#Catgery option:selected").text();
+                var orglvl4valname = $("#orglvl4val option:selected").text();
+                var orglvl3valname = $("#orglvl3val option:selected").text();
+                var orglvl2valname = $("#orglvl2val option:selected").text();
+                var orglvl1valname = $("#orglvl1val option:selected").text();
+
+                slno++;
+                var newRow = $("<tr>");
+                var cols = "";
+                cols = '<td style="background-color: #eceef1;">' + slno + '</td>';
+                cols += '<td style="background-color: #eceef1;">' + subCatgeryname + '</td>';
+                cols += '<td style="background-color: #eceef1;">' + Catgeryname + '</td>';
+                if (orglvl4val != null && orglvl4val != "" && orglvl4val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl4valname + '</td>';
+                }
+                if (orglvl3val != null && orglvl3val != "" && orglvl3val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl3valname + '</td>';
+                }
+                if (orglvl2val != null && orglvl2val != "" && orglvl2val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl2valname + '</td>';
+                }
+                if (orglvl1val != null && orglvl1val != "" && orglvl1val != "undefined") {
+                    cols += '<td style="background-color: #eceef1;">' + orglvl1valname + '</td>';
+                }
+                cols += '<td align="center"><input name="default-radio-1" class="form-check-input" type="radio" value="" id="defaultRadio1" /></td>';
+
+                newRow.append(cols);
+                $("#tbodydtl").append(newRow);
+            } else {
+                debugger;
+
+                if (orglvl4val == "" || orglvl4val == null || orglvl4val == "undefined") {
+                    orglvl4val = 0;
+                }
+                if (orglvl3val == "" || orglvl3val == null || orglvl3val == "undefined") {
+                    orglvl3val = 0;
+                }
+                if (orglvl2val == "" || orglvl2val == null || orglvl2val == "undefined") {
+                    orglvl2val = 0;
+                }
+                if (orglvl1val == "" || orglvl1val == null || orglvl1val == "undefined") {
+                    orglvl1val = 0;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("Headerfetch", "DocArchival")',
+                    type: "GET",
+                    data: { 'orglvl4val': orglvl4val, "orglvl3val": orglvl3val, "orglvl2val": orglvl2val, "orglvl1val": orglvl4val },
+                    success: function (data) {
+                        debugger;
+                        var value1 = data;
+                        for (var i = 0; i < value1.length; i++) {
+
+                            var subCatgeryname = value1[i].SubCategory_name;
+                            var Catgeryname = value1[i].Category_name;
+                            var orglvl4valname = value1[i].Orglvl4name;
+                            var orglvl3valname = value1[i].Orglvl3name;
+                            var orglvl2valname = value1[i].Orglvl2name;
+                            var orglvl1valname = value1[i].Orglvl1name;
+
+                            slno++;
+                            var newRow = $("<tr>");
+                            var cols = "";
+                            cols = '<td style="background-color: #eceef1;">' + slno + '</td>';
+                            cols += '<td style="background-color: #eceef1;">' + subCatgeryname + '</td>';
+                            cols += '<td style="background-color: #eceef1;">' + Catgeryname + '</td>';
+                            if (orglvl4val != null && orglvl4val != "" && orglvl4val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl4valname + '</td>';
+                            }
+                            if (orglvl3val != null && orglvl3val != "" && orglvl3val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl3valname + '</td>';
+                            }
+                            if (orglvl2val != null && orglvl2val != "" && orglvl2val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl2valname + '</td>';
+                            }
+                            if (orglvl1val != null && orglvl1val != "" && orglvl1val != "undefined") {
+                                cols += '<td style="background-color: #eceef1;">' + orglvl1valname + '</td>';
+                            }
+                            cols += '<td align="center"><input name="default-radio-1" class="form-check-input" type="radio" value="" id="defaultRadio1" /></td>';
+
+                            newRow.append(cols);
+                            $("#tbodydtl").append(newRow);
+                        }
+                    }
+                });
+            }
+
+        });
+
+        $("#btn_transfer").click(function () {
+            var subCatgery = $("#subCatgery").val();
+            var Catgery = $("#Catgery").val();
+            var orglvl4val = $("#orglvl4val").val();
+            var orglvl3val = $("#orglvl3val").val();
+            var orglvl2val = $("#orglvl2val").val();
+            var orglvl1val = $("#orglvl1val").val();
+
+
+            var subCatgeryname = $("#subCatgery option:selected").text();
+            var Catgeryname = $("#Catgery option:selected").text();
+            var orglvl4valname = $("#orglvl4val option:selected").text();
+            var orglvl3valname = $("#orglvl3val option:selected").text();
+            var orglvl2valname = $("#orglvl2val option:selected").text();
+            var orglvl1valname = $("#orglvl1val option:selected").text();
+
+            $("#doctype").val(subCatgeryname);
+            $("#doctypecode").val(subCatgery);
+            $("#subdoctype").val(Catgeryname);
+            $("#subdoctypecode").val(Catgery);
+            $("#orglvl4valh").val(orglvl4valname);
+            $("#orglvl3valh").val(orglvl3valname);
+            $("#orglvl2valh").val(orglvl2valname);
+            $("#orglvl1valh").val(orglvl1valname);
+        });
+
+        $("#transfer").click(function () {
+            $("#filter").show();
+        })
+        $("#btnShowResult").click(function () {
+            $("#showresult").show();
+            $("#showresult1").show();
+        })
+
+        getScreenAccess(15, "Storage Hierarchy");
+    });
+
+</script>
+
+<script>
+    function getScreenAccess(screenID, screenName) {
+        debugger;
+        var result_;
+        $.ajax({
+            // type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //   async: false,
+            url: '@Url.Action("getScreenData", "UserGroupsMapping")',
+            data: { 'screen_id': screenID, 'screen_name': screenName },
+            success: function (data) {
+                debugger;
+                //  var grid = $("#kdropdownwindow").data("kendoGrid");
+
+                var data1 = JSON.parse(data.Data1);
+                if (data1[0].add_perm == "1" || data1[0].mod_perm == "1") {
+                    if (data1[0].add_perm == "1" && data1[0].mod_perm == "0") {
+                        $("#mode option[value='U']").remove();
+                        $("#mode option[value='V']").remove();
+                        $('#showcoursetable2').removeAttr('hidden');
+                        $('#btnView').removeAttr('hidden');
+                    } else if (data1[0].add_perm == "0" && data1[0].mod_perm == "1") {
+                        $("#mode option[value='V']").remove();
+                        $("#mode option[value='I']").remove();
+                        $('#showcoursetable2').removeAttr('hidden');
+                        $('#btnView').removeAttr('hidden');
+                       // $('#dn_div').addClass('input-group input-group-merge');
+                        modeval = "U";
+                    } else {
+                        $("#mode option[value='V']").remove();
+                        $('#showcoursetable2').removeAttr('hidden');
+                        $('#btnView').removeAttr('hidden');
+                    }
+                }
+                else if (data1[0].inactivate_perm == "1") {
+                    $("#mode").attr('disabled', true);
+                    $("#btnsubmit").attr('disabled', true);
+                    // $('#showcoursetable2').removeAttr('hidden');
+                    $("#btnView").prop('disabled', true);
+                    $("#showcoursetable2").prop('disabled', true);
+                }
+
+                else if (data1[0].view_perm == "1") {
+                    //showresult1flag = 'N';
+                    //addrow
+                    $("#btnsubmit").attr('disabled', true);
+                    $("#mode option[value='U']").remove();
+                    $("#mode option[value='I']").remove();
+                    $('#showcoursetable2').removeAttr('hidden');
+                    $('#btnView').removeAttr('hidden');
+                    $("#addrow").attr('disabled', true);
+                    //$('#docsearch').removeAttr('hidden');
+                    //$('#dn_div').addClass('input-group input-group-merge');
+                    modeval = "V";
+                }
+
+                else if (data1[0].deny_perm == "1") {
+                    //  showcoursetable2
+                    $("#mode").attr('disabled', true);
+                    $("#btnsubmit").attr('disabled', true);
+                   // $('#showcoursetable2').removeAttr('hidden');
+                    $("#btnView").prop('disabled', true);
+                    $("#showcoursetable2").prop('disabled', true);
+                }
+                else {
+                    $("#mode").attr('disabled', true);
+                    $("#showcoursetable2").attr('disabled', true);
+                }
+                // Getsummary();
+                //for (var i = 0; i < grid.columns.length; i++) {
+                //    if (i != grid.columns.length) {
+                //        grid.autoFitColumn(i);  //autofit each column.
+
+                //    }
+                //}
+            },
+            error: function (data) {
+
+
+            }
+        });
+    }
+
+    function fetchDocGroup() {
+        debugger;
+        var DocGroupID = $("#Catgery").val();
+        if (DocGroupID == "" || DocGroupID == null || DocGroupID == "undefined" || DocGroupID == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocGroup", "ConfigureAttributes")',
+
+                data: { 'DocGroupID': DocGroupID },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.Get_dept2;
+                    var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docname2;
+
+                    var length1 = value1.length;
+                //    var length2 = value2.length;
+                    var length3 = value3.length;
+
+                    var CheckDocNameId = $("#subCatgery").val();
+                   // if (CheckDocNameId == "0") {
+                        $('#subCatgery').empty();
+                        for (var i = 0; i < value3.length; i++) {
+                            var opt = new Option(value3[i].Dname_Name, value3[i].Dname_Id);
+                            var opt2 = new Option(value3[0].Dname_Name, value3[0].Dname_Id);
+
+                            $('#subCatgery').append(opt);
+                        }
+                        if (length3 == 2) {
+                            $("#subCatgery").val($("#subCatgery option").eq(1).val());
+                        }
+                   // }
+
+                }
+            });
+        }
+    }
+
+
+
+    function fetchDocName() {
+        debugger;
+        var DocNameId = $("#subCatgery").val();
+        if (DocNameId == "" || DocNameId == null || DocNameId == "undefined" || DocNameId == 0) {
+            return false;
+        }
+
+        else {
+            $.ajax({
+                type: "GET",
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("GetDocName", "ConfigureAttributes")',
+
+                data: { 'DocNameId': DocNameId },
+                success: function (data) {
+
+                    debugger;
+                    var value1 = data.Get_dept3;
+                    var value2 = data.Get_Orglevel;
+                    var value3 = data.Get_docgroup3;
+
+                    var length1 = value1.length;
+                    var length2 = value2.length;
+                    var length3 = value3.length;
+
+               
+                    var CheckDocGroupId = $("#Catgery").val();
+                    //if (CheckDocGroupId == "0") {
+                    $('#Catgery').empty();
+                    for (var i = 0; i < value3.length; i++) {
+                        var opt = new Option(value3[i].Dgroup_Name, value3[i].Dgroup_Id);
+                        var opt2 = new Option(value3[0].Dgroup_Name, value3[0].Dgroup_Id);
+
+                        $('#Catgery').append(opt);
+                    }
+                    if (length3 == 2) {
+                        $("#Catgery").val($("#Catgery option").eq(1).val());
+                    }
+
+                    if (length2 == 2) {
+                        var orglvlid = "";
+                        if (maxorglvl == 4) {
+                            orglvlid = "orglvl4val";
+                        } else if (maxorglvl == 3) {
+                            orglvlid = "orglvl3val";
+                        } else if (maxorglvl == 2) {
+                            orglvlid = "orglvl2val";
+                        } else if (maxorglvl == 1) {
+                            orglvlid = "orglvl1val";
+                        }
+
+
+                        $("#" + orglvlid).empty();
+                        var optsel = new Option("select", "select");
+
+                        $("#" + orglvlid).append(optsel);
+                        var opt = new Option(value2[1].master_name, value2[1].master_code);
+
+                        $("#" + orglvlid).append(opt);
+                        $("#" + orglvlid).val($("#" + orglvlid + " option").eq(1).val()).change();
+                    }
+
+                    //}
+
+                }
+            });
+        }
+    }
+
+</script>
+
+<script type="text/javascript">
+    var counter = 0;
+    var modeval = "I";
+    var specialKeys = new Array();
+    specialKeys.push(8); //Backspace
+    specialKeys.push(9); //Tab
+    specialKeys.push(46); //Delete
+    specialKeys.push(36); //Home
+    specialKeys.push(35); //End
+    specialKeys.push(37); //Left
+    specialKeys.push(39); //Right
+    function IsAlphaNumeric(e) {
+        var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+        var ret = ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (specialKeys.indexOf(e.keyCode) != -1 && e.charCode != e.keyCode));
+        document.getElementById("error").style.display = ret ? "none" : "inline";
+        return ret;
+    }
+
+    function isNumber(evt, ctrl) {
+        $(ctrl).val($(ctrl).val().replace(/[^\d].+/, ""));
+        if ((evt.which < 48 || evt.which > 57)) {
+            evt.preventDefault();
+        }
+    }
+
+    function myFunction(ctrl) {
+        var x = document.getElementById(ctrl.id).value;
+        if (x <= 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter greater than zero.!',
+                type: 'green',
+            });
+            document.getElementById(ctrl.id).value = "";
+
+        }
+    }
+
+    function NumersOnly(evt) {
+        debugger;
+        if (evt.keyCode == '9' || evt.keyCode == '16') {
+            return;
+        }
+        evt.keyCode
+        var code;
+        if (evt.keyCode) code = evt.keyCode;
+        else if (evt.which) code = evt.which;
+        if (evt.which == 46)
+            return false;
+        if (code == 8 || code == 46)
+            return true;
+        if (code < 48 || code > 57)
+            return false;
+    }
+
+    function test(SeltVal) {
+        debugger;
+        var lovname;
+        //var counter = 0;
+        for (i = 1; i < counter + 1; i++) {
+            var type = $("#drpvalue" + i).val();
+            if (type == "Alpha Numeric") {
+                $("#Length" + i).val("500");
+                //$("#Length" + i).prop("readonly").disabled = false;
+                $("#Length" + i).prop("readonly", false);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Numeric") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Datetime") {
+                //$("#Length" + i).prop("readonly").value = "0";
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Amount") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+
+            if (type == "Logical") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+        }
+        //var seltvaltxt = $("#drpvalue" + SeltVal + ' :selected').text();
+        //if (seltvaltxt == "Lov Name") {
+        //    $("#tdlov" + SeltVal).css('display', 'inline');
+        //    $("#Length" + SeltVal).css('display', 'none');
+        //}
+    }
+
+    function sameastest(SeltVal) {
+        debugger;
+        var lovname;
+        //var counter = 0;
+        for (i = 1; i < counter + 1; i++) {
+            var type = $("#type" + i).val();
+            if (type == "Alpha Numeric") {
+                $("#Length" + i).val("500");
+
+                $("#Length" + i).prop("readonly", false);
+                //  $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Numeric") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                //  $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Datetime") {
+                //$("#Length" + i).prop("readonly").value = "0";
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                //$("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Amount") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                //$("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+
+            if (type == "Logical") {
+                $("#Length" + i).val("0");
+                $("#Length" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#Length" + SeltVal).css('display', 'inline');
+            }
+        }
+
+    }
+
+    function test1() {
+        debugger;
+        // var counter = 0;
+        for (i = 0; i < counter; i++) {
+            var txtlenval = $("#Length" + i).val()
+            if (txtlenval > 500) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'The given string length should not be greater than 500.!',
+                    type: 'blue',
+                });
+            }
+        }
+    }
+
+    function mode_change(sel) {
+        debugger;
+        modeval = sel.value;
+        if (modeval == "V") {
+            $("#iscloneAtr").prop('disabled', true);
+            $("#sdocname").prop('disabled', true);
+            $("#btnView").prop('disabled', true);
+            $("#showcoursetable2").prop('disabled', true);
+            $("#addrow").prop('hidden', true);
+            $("#btnsubmit").prop('hidden', true);
+            $("#showcoursetables2s").hide();
+            //   fetchattributes();
+        } else if (modeval == "U") {
+            $("#iscloneAtr").prop('disabled', true);
+            $("#sdocname").removeAttr('disabled');
+            $("#btnView").removeAttr('disabled');
+            $("#showcoursetable2").removeAttr('disabled');
+            $("#addrow").removeAttr('hidden');
+            $("#btnsubmit").removeAttr('hidden');
+            $("#sdocname").prop('disabled', true);
+            $("#btnView").prop('disabled', true);
+            $("#showcoursetables2s").hide();
+            //  fetchattributes();
+        } else {
+            $("#iscloneAtr").removeAttr('disabled');
+            $("#sdocname").removeAttr('disabled');
+            $("#btnView").removeAttr('disabled');
+            $("#showcoursetable2").removeAttr('disabled');
+            $("#addrow").removeAttr('hidden');
+            $("#btnsubmit").removeAttr('hidden');
+            $("#showcoursetables2s").hide();
+        }
+    }
+
+    function fetchattributes() {
+        debugger;
+        var cloneatr = $('input[id=iscloneAtr]:checked').val();
+        $('#myTable tbody').empty();
+        counter = 0;
+        countdata = [];
+        if (modeval == "U" || modeval == "V") {
+            GetdataN("");
+        } else {
+            if (cloneatr == "Y") {
+                GetdataN("clone");
+            }
+        }
+    }
+
+    function GetdataN(sel) {
+        debugger;
+        var Attrbid = 0;
+        var Dognameid = $("#sdocname").val();
+
+
+        var docgroup = $("#Catgery").val();
+        var docname = "";
+
+        if (sel == "clone") {
+            docname = $("#sdocname").val();
+            var retval = null;
+            var docname1 = $("#subCatgery").val();
+            $.ajax({
+                url: '@Url.Action("CheckStorageattribute", "StorageAttributes")',
+                type: "POST",
+                datatype: "json",
+                async: false,
+                data: { 'DgroupID': docgroup, 'DNameID': docname1 },
+                success: function (data) {
+                    retval = data;
+                }
+            });
+            if (retval != "0") {
+                $.alert({
+                    title: 'DMS',
+                    content: 'This combination of attributes is already available.!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        } else {
+            docname = $("#subCatgery").val();
+        }
+
+        if (docgroup == "0" || docname == "0") {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Dropdowns.!',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        var retval = "0";
+
+        $.ajax({
+            url: '@Url.Action("GetSameasAttributeplusdata", "StorageAttributes")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'sameasdocnameid': docname },
+            success: function (data) {
+                debugger;
+                if (data.Data1 == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'There is No Records.!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                else {
+                    var data2 = JSON.parse(data.Data1);
+                    $("#docatrid").val(data2[0].Satr_Id);
+                    if (data2[0].Satr_Active == "Y") {
+                        $("#docstat").val("Active");
+                    }
+                    else {
+                        $("#docstat").val("");
+                    }
+                    for (i = 0; i < data2.length; i++) {
+                        var newRow = $("<tr  width='100%'>");
+                        var cols = "";
+                        var radname = "mandatory" + counter;
+                        var orderby = counter + 1;
+                        var disabledflag = "";
+                        if (modeval == "V") {
+                            disabledflag = "disabled";
+                            $("#th_action").prop('hidden', true);
+                        }
+                        else {
+                            $("#th_action").removeAttr('hidden');
+                        }
+                        cols += '<td hidden><input  type="hidden"   name="gid' + orderby + '" id="gid' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+                        cols += '<td>' + orderby + '</td>';
+                        cols += '<td><input class = "form-control" type="text"   name="name' + orderby + '" id="name' + orderby + '" ' + disabledflag + '/></td>';
+                        cols += '<td><select class="form-select" onchange="test(' + orderby + ')" name="drpvalue' + orderby + '" id="drpvalue' + orderby + '" ' + disabledflag + '><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+                        cols += '<td><select class="form-select" id="tdlov' + orderby + '" onkeypress = "return NumersOnly(event)"  style="display:none" ' + disabledflag + '><option value="0">Select Master</option></select><input  class = "form-control" type="text" onchange="test1()" onkeypress="return IsAlphaNumeric(event);" ondrop="return false;" name="Length' + orderby + '" id="Length' + orderby + '" ' + disabledflag + '/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                        cols += '<td><select class="form-select" name="mandatory' + orderby + '" id="mandatory' + orderby + '" ' + disabledflag + '><option value="0">Select</option><option value="Y">Yes</option><option value="N">No</option></select></td>'
+                        cols += '<td><input class = "form-control" type="text"  maxlength ="2" value="' + orderby + '" name="orderbyid' + orderby + '" id="orderbyid' + orderby + '"  ' + disabledflag + '  onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                        cols += '<td><label id="status' + orderby + '" ' + disabledflag + '>Active</label></td>';
+                        if (modeval == "U" || sel == "clone") {
+                            cols += '<td align="center"><img src="/Assets/images/del.png" class="ibtnDel"></td></tr>';
+                        }
+                        countdata.push(orderby);
+                        newRow.append(cols);
+                        // $("table.order-list").append(newRow);
+                        $("#myTable > tbody:last-child").append(newRow);
+                        var strorderid = data2[i].Storage_orderid;
+                        if (data2[i].Storage_orderid == null || data2[i].Storage_orderid == "" || data2[i].Storage_orderid == "undefined") {
+                            strorderid = orderby;
+                        }
+                        $("#gid" + orderby).val(data2[i].Satr_Id);
+                        $('#orderbyid' + orderby).val(strorderid);
+                        $("#name" + orderby).val(data2[i].Satr_Name);
+                        $("#drpvalue" + orderby).val(data2[i].Satr_Type);
+                        $("#Length" + orderby).val(data2[i].Satr_Length);
+                        // $('input:radio[name="mandatory' + orderby + '"][value=' + data2[i].Satr_Mandotry + ']').prop('checked', true);
+                        $('#mandatory' + orderby).val(data2[i].Satr_Mandotry);
+                        counter++;
+                        $("#counter").val(counter);
+                    }
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Failed to create..!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+
+    }
+    function load_doctype(_sel) {
+        loadflag = 1;
+        debugger;
+        var org1condition = getconcatval($('#orglvl1valO').val());
+        var org2condition = getconcatval($('#orglvl2valO').val());
+        var org3condition = getconcatval($('#orglvl3valO').val());
+        var org4condition = getconcatval($('#orglvl4valO').val());
+
+        if (org1condition != "" || org2condition != "" || org3condition != "" || org4condition != "") {
+            $.ajax({
+                url: '@Url.Action("DepartmentEditNew", "DocArchival")',
+                type: "GET",
+                data: { 'type': _sel, "condition_1": org1condition, "condition_2": org2condition, "condition_3": org3condition, "condition_4": org4condition },
+                success: function (data) {
+                    debugger;
+                    var value1 = data.dept;
+                    if (_sel == 'CAT') {
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dgroup_Name, value1[i].Dgroup_Id);
+                            var opt2 = new Option(value1[0].Dgroup_Name, value1[0].Dgroup_Id);
+                            $('#Catgery').append(opt);
+                        }
+                    } else {
+                        for (var i = 0; i < value1.length; i++) {
+                            var opt = new Option(value1[i].Dname_Name, value1[i].Dname_Id);
+                            var opt2 = new Option(value1[0].Dname_Name, value1[0].Dname_Id);
+                            $('#subCatgery').append(opt);
+                        }
+                    }
+
+                }, error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+
+
+    }
+
+    $(document).ajaxStop(function () {
+        // $('#loader').hide();
+        // alert('hi');
+        if (loadflag == 0) {
+            load_doctype('SUBCAT');
+            load_doctype('CAT');
+        }
+        //hideProgress();
+    });
+</script>
+<script>
+    function btnview() {
+        debugger;
+        var url = '@Url.Action("ViewStorageAttributes", "ViewStorageAttributes")'
+        window.location.href = url;
+    }
+</script>

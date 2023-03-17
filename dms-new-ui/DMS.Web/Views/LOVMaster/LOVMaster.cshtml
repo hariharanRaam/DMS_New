@@ -1,0 +1,281 @@
+﻿@model DMS.Model.LOVMaster_Model
+
+
+@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+
+@*@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+<style>
+    .error_show {
+        color: red;
+        margin-left: 10px;
+    }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+
+        .k-content {
+            font-weight: normal;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">LOV for Attributes</h3>
+                        </div>
+                        <form class="form-horizontal" id="form" method="post" enctype="multipart/form-data" style="height:450px">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label" style="font-weight:normal">Master Name</label>
+                                            <div class="col-md-6">
+                                                @*<select id="subCatgery" name="subCatgery" onchange="fetchDocName()" class="form-control"></select>*@
+                                                @Html.TextBoxFor(m => m.LovName, null, new { @class = "form-control", style = "font-weight:normal;" })
+                                                <span class="errormessage" id="erridmsg"></span>
+                                            </div>
+                                        </div>
+
+                                        
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label" style="font-weight:normal">Browse File</label>
+                                            <div class="col-md-6">
+                                                <input type="file" class="form-control input-lg browse btn btn-primary input-lg " name="File" id="File">
+                                                <label class="col-md-6 control-label"> </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-9">
+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="col-md-6 control-label"> Master Name</label>
+
+                                            @Html.TextBoxFor(m => m.LovName, null, new { style = "width:165px;font-weight:normal;" })
+
+                                            <span class="errormessage" id="erridmsg"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div style="left:200px;position:relative" class="col-md-4">
+
+                                            <table>
+                                                <tr>
+                                                    <td style="left:100px; position:relative">
+                                                        <label class="col-md-6 control-label"> </label>
+                                                        <input type="file" class="form-control input-lg browse btn btn-primary input-lg " name="File" id="File">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="box-footer">
+                                <table align="center" style="position:relative">
+                                    <tr>
+                                        <td width="200px"></td>
+                                        <td>
+                                            <input type="submit" name="btnsubmit" value="Upload" id="btnsubmit" class="btn btn-orange pull-right" onclick="return textval()" />
+                                        </td>
+                                        <td width="15px"></td>
+                                        <td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger pull-right" onclick="Cancel()">Cancel</button>
+                                        </td>
+                                        <td width="15px"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger pull-right" value="View" id="btnsubmit" onclick="btnview()">View</button>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <div style="color:green">
+                                    <table align="center" style="right:50px; top:20px; position:relative" id="msgtbl">
+                                        <tr>
+                                            <td>
+                                                <span class="Error_show">@ViewBag.Message</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div style="height:10px">
+
+                                </div>
+                                <div id="example" style="top:10px;width:500px;position:relative;margin: auto;" class="k-content">
+                                    <table id="grid" data-bind="source: gridRows"></table>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+<script>
+    //kendo grid Bind
+    $(document).ready(function () {
+        debugger;
+        if ('@ViewBag.Message' == "File uploaded successfully") {
+
+            var Filename = $("#LovName").val();
+
+            $('#LovName').val('');
+            debugger;
+            $.ajax({
+                url: '@Url.Action("Getfile", "LOVMaster")',
+                data: { Filename: Filename },
+                type: 'Post',
+                datatype: 'json',
+                async: false,
+                success: function (result) {
+
+                    var columns = [];
+                    var data = JSON.parse(result.Data1);
+                    var data1 = JSON.parse(result.Data2);
+                    var i = 0;
+                    var entryIndex = "entries[" + i + "]";
+                    for (var key in data[0]) {
+                        var val = data1[0][key];
+                        columns.push({
+                            field: entryIndex,
+                            title: key,
+                            width: 20,
+                            type: val
+                        });
+                        i = i + 1;
+                        entryIndex = "entries[" + i + "]";
+                    }
+                    var rows = [];
+                    var data1 = JSON.parse(result.Data1);
+
+                    $.each(data1, function (i, e) {
+                        var entryArray = [];
+                        $.each(e, function (key, val) {
+                            entryArray.push(val);
+
+                        });
+                        rows.push(kendo.observable({
+                            entries: entryArray
+                        }));
+
+                    });
+
+                    var viewModel = kendo.observable({
+                        gridRows: rows
+                    });
+
+                    var configuration = {
+                        editable: false,
+                        sortable: true,
+                        scrollable: false,
+                        filterable: true,
+                        pagable: true,
+                        resizable: true,
+                        pageable: {
+                            pageSize: 10,
+                            buttonCount: 4
+                        },
+                        columns: columns,
+                        rows: viewModel,
+                        height: '95%'
+
+                    };
+
+                    var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                    kendo.bind($("#grid"), viewModel);
+
+                },
+                error: function (result) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Error.!',
+                        type: 'blue',
+                    });
+                }
+            })
+        }
+    });
+
+    //validation for textbox and excelfile
+    function textval() {
+        debugger;
+        var dpnm = $("#LovName").val();
+        var dpnm = $("#LovName").val();
+        var dpnmlen = dpnm.length;
+        var filesize = $('#File').val();
+        if (dpnm == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter Master Name.!',
+                type: 'blue',
+            });
+            $("#erridmsg").show();
+            return false;
+        }
+        else if (dpnmlen < 5) {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter name max 5 letters above.!',
+                type: 'blue',
+            });
+            //alert('please enter the name max 5 letters above');
+            return false;
+        }
+
+        else if (filesize == "" || filesize == null) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select File.!',
+                type: 'blue',
+            });
+            //alert('Please select the file');
+            return false;
+        }
+        else {
+            $("#form").submit();
+        }
+    }
+    function Cancel() {
+
+        //viewbag msg remove
+        $("#msgtbl").remove();
+        $('#LovName').val('');
+        $('#File').val('');
+        //kendo grid remove
+        var grid = $("#grid").data('kendoGrid');
+        grid.dataSource.read();
+        $("#example").remove();
+    }
+
+    function btnview() {
+        debugger;
+        var url = '@Url.Action("ViewAttributeLOV", "ViewAttributeLOV")'
+        window.location.href = url;
+    }
+</script>

@@ -1,0 +1,38 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.UnitMaster_Model
+
+<div>
+    <table>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Unit Code", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+                @Html.TextBoxFor(m => m.UnitCode, new { style = "height:25px;width:225px;font-weight: normal;" })
+                @Html.ValidationMessageFor(m => m.UnitCode)
+            </td>
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Unit Name", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+                @Html.TextBoxFor(m => m.UnitName, new { style = "height:25px;width:225px;font-weight: normal;" })
+                @Html.ValidationMessageFor(m => m.UnitName)
+            </td>
+        </tr>
+        <tr style="height:10px;"></tr>
+        <tr style="height:30px;">
+            <td style="left:15px; position:relative">@Html.Label("Department", new { style = "width:120px;font-weight: normal;" })</td>
+            <td>
+              @(Html.Kendo().DropDownList()
+              .Name("Dept_Id")
+              .DataTextField("Dept_Name")
+              .DataValueField("Dept_Id")
+              .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+              .DataSource(source => { source.Read(read => { read.Action("GetDepartment", "UnitMaster", new { CommonVal = "D" }); }).ServerFiltering(true); }))
+              @Html.ValidationMessageFor(model => model.Dept_Id)
+            </td>
+        </tr>
+    </table>
+
+</div>

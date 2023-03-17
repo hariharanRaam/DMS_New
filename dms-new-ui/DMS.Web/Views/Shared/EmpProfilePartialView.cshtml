@@ -1,0 +1,161 @@
+﻿
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 style="text-align:center;font-weight:bolder;font-size:large" class="modal-title">Employee Details</h4>
+            </div>
+            <div class="modal-body">
+                @*<div class="panel panel-default">
+                    <div class="panel-heading text-center">EmployeeProfile</div>
+                    <div class="panel-body">*@
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+
+                        <div class="col-lg-6 form-inline">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <label>Employee Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</label>
+                            <span class="minwith">&nbsp; @ViewBag.EmpCode</span>
+                            @*<input type="text" name="EmpCode" placeholder="Emp Code" class="form-control" id="EmpCode" value="@ViewBag.EmpCode">*@
+
+                        </div>
+                        <div class="col-lg-6 form-inline">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <label>Employee Name &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;</label>
+                            <span class="minwith">@ViewBag.EmpName</span>
+                            @*<input type="text" name="EmpName" placeholder="Emp Name" class="form-control" id="EmpName" value="@ViewBag.EmpName">*@
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-lg-6  form-inline">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Grade Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</label>
+                            <span class="minwith">@ViewBag.Grade</span>
+                            @*<input type="text" name=" gradename" placeholder="gradename" class="form-control" id="gradename" value=" ViewBag.Grade">*@
+
+                        </div>
+                        <div class="col-lg-6 form-inline">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Title  &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;:  &nbsp;</label>
+                            <span class="minwith">@ViewBag.EmpTitle</span>
+                            @*<input type="text" name="EmpDOJ" placeholder="Emp DOJ" class="form-control" id="EmpDOJ" value="@ViewBag.EmpDOJ">*@
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-lg-6  form-inline">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Dept Name  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:  &nbsp;</label>
+                            <span class="minwith">@ViewBag.Dept</span>
+                            @*<input type="text" name="Address" placeholder="Address" class="form-control" id="Address" value="@ViewBag.Address">*@
+
+                        </div>
+                        <div class="col-lg-6 form-inline">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Unit Name  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;</label>
+                            <span class="minwith">@ViewBag.Unit</span>
+                            @*<input type="text" name="Pin" placeholder="Pin Code" class="form-control" id="Pin" value="@ViewBag.Pin">*@
+
+                        </div>
+
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6  form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <label> Date Of Joining  &nbsp; &nbsp; &nbsp;:  &nbsp;</label>
+                                <span class="minwith">@ViewBag.EmpDOJ</span>
+                                @*<input type="text" name="Address" placeholder="Address" class="form-control" id="Address" value="@ViewBag.Address">*@
+
+                            </div>
+                            <div class="col-lg-6 form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label> Address  &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;</label>
+                                <span class="minwith">@ViewBag.Address</span>
+                                @*<input type="text" name="Pin" placeholder="Pin Code" class="form-control" id="Pin" value="@ViewBag.Pin">*@
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6  form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <label>City Name &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:  &nbsp;</label>
+                                <span class="minwith">@ViewBag.City</span>
+                                @*<input type="text" name="Address" placeholder="Address" class="form-control" id="Address" value="@ViewBag.Address">*@
+
+                            </div>
+                            <div class="col-lg-6 form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <label>Pin Code  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;</label>
+                                <span class="minwith">@ViewBag.Pin</span>
+                                @*<input type="text" name="Pin" placeholder="Pin Code" class="form-control" id="Pin" value="@ViewBag.Pin">*@
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6  form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>State Name &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:  &nbsp;</label>
+                                <span class="minwith">@ViewBag.State</span>
+                                @*<input type="text" name="Address" placeholder="Address" class="form-control" id="Address" value="@ViewBag.Address">*@
+
+                            </div>
+                            <div class="col-lg-6 form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <label>Region Name  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;</label>
+                                <span class="minwith">@ViewBag.Region </span>
+                                @*<input type="text" name="Pin" placeholder="Pin Code" class="form-control" id="Pin" value="@ViewBag.Pin">*@
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-6  form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label> Mobile No &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;:  &nbsp;</label>
+                                <span class="minwith">@ViewBag.EmpMobileNo</span>
+                                @*<input type="text" name="Address" placeholder="Address" class="form-control" id="Address" value="@ViewBag.Address">*@
+
+                            </div>
+                            <div class="col-lg-6 form-inline">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Email Id &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;</label>
+                                <span class="minwith">@ViewBag.EmpMailId </span>
+                                @*<input type="text" name="Pin" placeholder="Pin Code" class="form-control" id="Pin" value="@ViewBag.Pin">*@
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

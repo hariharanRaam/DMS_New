@@ -1,0 +1,46 @@
+D:\DMS\Prakash\DMS-HtmlDesign\Latest Sln\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+D:\DMS\Prakash\DMS-HtmlDesign\Latest Sln\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+D:\DMS\Prakash\DMS-HtmlDesign\Latest Sln\DMS.Web\DMS.Model\bin\Release\MySql.Data.dll
+D:\DMS\Prakash\DMS-HtmlDesign\Latest Sln\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+D:\DMS\Prakash\DMS-HtmlDesign\Latest Sln\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+D:\DMS\Prakash\DMS-HtmlDesign\Final solution\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+D:\DMS\Prakash\DMS-HtmlDesign\Final solution\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+D:\DMS\Prakash\DMS-HtmlDesign\Final solution\DMS.Web\DMS.Model\bin\Release\MySql.Data.dll
+D:\DMS\Prakash\DMS-HtmlDesign\Final solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+D:\DMS\Prakash\DMS-HtmlDesign\Final solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+F:\Final SOLUTION\12-09-2018 DMS Final Solution Prakash\Final Solution\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+F:\Final SOLUTION\12-09-2018 DMS Final Solution Prakash\Final Solution\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+F:\Final SOLUTION\12-09-2018 DMS Final Solution Prakash\Final Solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.csprojResolveAssemblyReference.cache
+F:\Final SOLUTION\12-09-2018 DMS Final Solution Prakash\Final Solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+F:\Final SOLUTION\12-09-2018 DMS Final Solution Prakash\Final Solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+C:\Users\muthu\Desktop\29-01-2019\DMS\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+C:\Users\muthu\Desktop\29-01-2019\DMS\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+C:\Users\muthu\Desktop\29-01-2019\DMS\DMS.Web\DMS.Model\obj\Release\DMS.Model.csprojResolveAssemblyReference.cache
+C:\Users\muthu\Desktop\29-01-2019\DMS\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+C:\Users\muthu\Desktop\29-01-2019\DMS\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+C:\Users\muthu\Desktop\20190215\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+C:\Users\muthu\Desktop\20190215\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+C:\Users\muthu\Desktop\20190215\DMS.Web\DMS.Model\obj\Release\DMS.Model.csprojResolveAssemblyReference.cache
+C:\Users\muthu\Desktop\20190215\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+C:\Users\muthu\Desktop\20190215\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.Razor.dll
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.WebPages.Razor.dll
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.WebPages.dll
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.WebPages.Deployment.dll
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.Razor.xml
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.WebPages.Razor.xml
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.WebPages.xml
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\bin\Release\System.Web.WebPages.Deployment.xml
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+D:\DMS FEB 2019\19.02.2019\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+D:\Prakash\20190305\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+D:\Prakash\20190305\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+D:\Prakash\20190305\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+D:\Prakash\20190305\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Model\bin\Release\DMS.Model.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Model\bin\Release\DMS.Model.pdb
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Model\bin\Release\MySql.Data.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.dll
+D:\DMS\Prakash\Final Solution\DMS.Web\DMS.Model\obj\Release\DMS.Model.pdb

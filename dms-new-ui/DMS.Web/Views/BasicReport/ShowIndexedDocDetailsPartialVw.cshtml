@@ -1,0 +1,1280 @@
+﻿@model DMS.Model.SetDocAttributes_Model
+@using GleamTech.AspNet.Mvc
+@using GleamTech.DocumentUltimate
+@using GleamTech.DocumentUltimate.AspNet
+@using GleamTech.DocumentUltimate.AspNet.UI
+@using GleamTech.FileSystems
+@using GleamTech.Examples
+@using System.Web.UI.WebControls;
+@using System.IO;
+@using System.Management.Automation;
+
+@{
+    int i = 0;
+}
+@{
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+        .tab-content {
+    padding: 0;
+    border-radius: 0.375rem;
+}
+input[type="date"]:in-range::-webkit-datetime-edit-year-field, input[type="date"]:in-range::-webkit-datetime-edit-month-field, input[type="date"]:in-range::-webkit-datetime-edit-day-field, input[type="date"]:in-range::-webkit-datetime-edit-text { 	color: transparent; }
+.select2-selection--multiple .select2-search__field{
+  width:100%!important;
+}
+
+    .panel {
+        margin-bottom: 1px;
+    }
+
+
+          .k-dropdown-wrap.k-state-default{
+            background-clip: padding-box;
+           
+    display: block;
+    height:90%;
+    width:initial;
+    padding: 0.4375rem 1.875rem 0.4375rem 0.875rem;
+    -moz-padding-start: calc(0.875rem - 3px);
+    font-size: 0.7075rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #697a8d;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 17px 12px;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+        .k-item{
+             background-color: #fff;
+             background-position: right 0.875rem center;
+             
+             
+        }
+        .k-content{
+            width:100%;
+        }
+        /*.k-button{
+             background-color: transparent;
+              color: blue;
+              border: aliceblue;
+
+        }*/
+        .k-grid{
+             color: #697a8d;
+    background-color: #fff;
+        }
+        .k-grid-header th.k-header{
+            text-overflow: ellipsis;
+    text-align: center;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+        }
+        .k-pager-info {
+    float: right;
+    text-transform: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 0 1.333em;
+}
+        .k-pager-sizes {
+    display: inline-block;
+    padding-top: 1px;
+    text-transform: none;
+    font-size: 0.90rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+         .k-footer{
+             background-color: #fff;
+        }
+ .k-widget{
+      background-color: #fff;
+ }
+        .k-header {
+        background-color: #fff;
+        }
+        .k-grid td {
+    white-space: nowrap;
+    background-color: #eceef1;
+    border-color: inherit;
+    /* text-align: center; */
+}
+        
+    .k-state-selected {
+        color: #000;
+        border-color: inherit;
+    }
+
+
+</style>
+@*<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />*@
+@*<div class="panel panel-primary">
+    <div class="panel-heading">
+        <table>
+            <tr>
+                <td><button type="button" id="btnclose" style="color:black;font-weight:bold;" onclick="return Close_ForDetails();">X</button></td>
+            </tr>
+        </table>
+    </div>
+</div>*@
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="card-body" style="margin-top:-9px;">
+        <h5 class="mobile-card-header">Trainer Master</h5>
+        <form id="formAccountSettings" method="POST" onsubmit="return false">
+            <div class="row">
+                <div class="col-sm-3" style="width: 23.5%;">
+                    <label class="form-label" for="SubCateName">Doc Name</label>
+                    @Html.TextBoxFor(m => m.SubCateName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "Id", "SubCateName" } })
+                </div>
+                <div class="col-sm-3" style="width: 23.5%;">
+                    <label class="form-label" for="CateName">Doc Group</label>
+                    @Html.TextBoxFor(m => m.CateName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "Id", "CateName" } })
+                </div>
+                <div class="col-sm-3" id="Orgcol1" style="display:none;width: 23.5%;">
+                    <label class="form-label" for="Orglvl1val" id="Orglvl1lbl">Unit</label>
+                    <input type="text" class="form-control" placeholder="" readonly id="Orglvl1val">
+                </div>
+                <div class="col-sm-3" id="Orgcol2" style="display:none;width: 23.5%;">
+                    <label class="form-label" for="Orglvl2val" id="Orglvl2lbl">Unit</label>
+                    <input type="text" class="form-control" placeholder="" readonly id="Orglvl2val">
+                </div>
+                <div class="col-sm-3" id="Orgcol3" style="display:none;width: 23.5%;margin-top:10px">
+                    <label class="form-label" for="Orglvl3val" id="Orglvl3lbl">Unit</label>
+                    <input type="text" class="form-control" placeholder="" readonly id="Orglvl3val">
+                </div>
+                <div class="col-sm-3" id="Orgcol4" style="display:none;width: 23.5%;margin-top:10px">
+                    <label class="form-label" for="Orglvl4val" id="Orglvl4lbl">Unit</label>
+                    <input type="text" class="form-control" placeholder="" readonly id="Orglvl4val">
+                </div>
+            </div>
+            <div class="nav-align-top mb-3 mt-3">
+                <ul class="nav nav-pills mb-2" role="tablist">
+
+                    <li class="nav-item">
+                        <button type="button"
+                                class="nav-link active"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-top-trainers"
+                                aria-controls="navs-pills-top-trainers"
+                                aria-selected="true">
+                            Primary Document
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button"
+                                class="nav-link"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-top-english"
+                                aria-controls="navs-pills-top-english"
+                                aria-selected="true"
+                                onclick="return getlinkinterfiledocuments()">
+                            Linked Document
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button"
+                                class="nav-link"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-top-trainers1"
+                                aria-controls="navs-pills-top-trainers1"
+                                aria-selected="true">
+                            Physical Storage
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button"
+                                class="nav-link"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-top-geo"
+                                aria-controls="navs-pills-top-geo"
+                                aria-selected="true"
+                                onclick="return getauditdocuments()">
+                            Audit Trial
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="navs-pills-top-trainers" role="tabpanel" style="margin-top:12px;">
+                        <!-- Bordered Table -->
+                        <div class="row" style="width: 104%;">
+                            <div class="col-sm-4" style="border: 1px solid #000;padding:20px;width: 30%;">
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label class="form-label" for="FileName" style="width:140%">File Name</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.FileName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                        @*<input type="text" class="form-control" placeholder="" readonly style="width: 180%;margin-left: -52px;">*@
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-sm-4">
+                                        <label class="form-label" for="FileType" style="width:140%">File Type</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        @*<input type="text" class="form-control" placeholder="" readonly>*@
+                                        @Html.TextBoxFor(m => m.FileType, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:10px" hidden>
+                                    <div class="col-sm-4">
+                                        <label class="form-label" for="FileSize" style="width:140%">File Size</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.FileSize, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                        @Html.HiddenFor(m => m.VersionName, new Dictionary<string, object>() { { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                        @Html.HiddenFor(model => model.VersionDate, new { htmlAttributes = new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;" } })
+                                        @Html.HiddenFor(m => m.Signature, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" } })
+                                        @Html.HiddenFor(m => m.HideDocArchId, new { @class = "form-control", style = "height:25px;" })
+                                        @Html.HiddenFor(m => m.Filepathfrom, new { @class = "form-control", style = "height:25px;" })
+                                    </div>
+                                </div>
+                                @*<hr />*@
+                                @foreach (var category in Model.dept)
+                                {
+                                    if (category.attrbname != " " && category.attrbname != "0" && category.attrbname != null)
+                                    {
+                                        <div class="row" style="margin-top:10px;">
+                                            <div class="col-sm-4">
+                                                <label class="form-label" for="ctl@i" style="width:140%">@category.attrbname</label>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("ctl" + i, @category.attrbdesc, new { @class = "form-control", @readonly = true })
+                                            </div>
+                                        </div>
+                                        @*@if (category.attrbMand == "Y")
+                         {
+                          <td><label style="width:5px;color:red;font-size:larger">*</label> </td>
+                        }*@
+                                    }
+                                    i++;
+
+                                }
+                                <div class="row" style="margin-top:10px;display:none">
+                                    <center><button type="submit" class="btn btn-sm btn-primary me-2">Save</button><button type="submit" class="btn btn-sm btn-danger me-2">Cancel</button></center>
+                                </div>
+                            </div> 
+                            <div class="col-sm-7" style="border: 1px solid #000;margin-left: 10px;width: 68%;overflow-y:scroll;max-height:410px">
+                                <div class="row" style="margin-top:10px" id="docloaddd">
+                                   
+                                    @{
+                                        DocumentInfo objdocinfo = new DocumentInfo(@Model.DocArchID.ToString(),@Model.FileName);
+                                        DocumentSource objdoc = new DocumentSource(objdocinfo, @Model.filedata);
+                                      
+                                        var documentViewer = new DocumentViewer
+                   {
+                        // Width = 700,
+                        Height = 540,
+                        
+                       Document =@ViewBag.FilePath,//"www.tailorbrands.com/wp-content/uploads/2020/07/mcdonalds-logo.jpg"
+                       Width=700,
+                       // Document = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                        //   Document =@"D:\Hariharan\UploadandDownloadFiles\UploadandDownloadFiles\image010.jpg"
+                       // DocumentSource = objdoc
+                    };
+                                        // documentViewer.DocumentSource. = Byte.Parse(@Model.filedata.ToString())
+                                            
+                                    }
+                                    @this.RenderBody(documentViewer)
+                                    @this.RenderHead(documentViewer)
+                                </div>*
+
+                           
+                            </div>
+                        </div>
+
+                        <!--/ Bordered Table -->
+                    </div>
+
+                    
+
+                    <div class="tab-pane fade" id="navs-pills-top-english" role="tabpanel" style="margin-top:12px;" >
+                        <!-- Bordered Table -->
+                        @if(ViewBag.mode == "link"){
+                        <button type="button" class="btn btn-sm btn-info me-2" id="btn_add" onclick="newdoclink()" style="background: #1061b1;border-color: #1061b1;margin-top: 2px;margin-bottom: 10px;">Add</button>
+                        }
+                        <div class="table-responsive text-nowrap" id="chk1" >
+                            @*<table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr class="text-nowrap">
+                                        <th>Document Type</th>
+                                        <th>Document Group</th>
+                                        <th>Department</th>
+                                        <th>Unit</th>
+                                        <th style="width:5%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td><img src="/dms/images/viewicons.png">&nbsp;<i class='bx bx-download'></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td><img src="/dms/images/viewicons.png">&nbsp;<i class='bx bx-download'></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td><img src="/dms/images/viewicons.png">&nbsp;<i class='bx bx-download'></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td><img src="/dms/images/viewicons.png">&nbsp;<i class='bx bx-download'></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>*@
+                            <div id="Linkdiv" >
+
+                            </div>
+                        </div>
+
+                        <!--/ Bordered Table -->
+                    </div>
+
+                    <div class="tab-pane fade" id="navs-pills-top-trainers1" role="tabpanel" style="margin-top:12px;">
+                        <!-- Bordered Table -->
+                        <div class="table-responsive text-nowrap" id="chk1">
+                            <table class="table table-bordered table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px">
+                                <thead>
+                                    <tr class="text-nowrap">
+                                        @*<th>Storage Attribute 1</th>
+                    <th>Storage Attribute 2</th>
+                    <th>Storage Attribute 3</th>
+                    <th>Storage Attribute 4</th>*@
+                                        @foreach (var category in Model.dept)
+                                        {
+                                            if (category.Satr_Name != " " && category.Satr_Name != "0" && category.Satr_Name != null)
+                                            {
+                                                <th>@category.Satr_Name </th>
+                                            }
+                                            i++;
+
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="height:30px;">
+                                        @*<td style="background-color: #eceef1;"></td>
+                    <td style="background-color: #eceef1;"></td>
+                    <td style="background-color: #eceef1;"></td>
+                    <td style="background-color: #eceef1;"></td>*@
+                                        @foreach (var category in Model.dept)
+                                        {
+                                            if (category.Satr_Name != " " && category.Satr_Name != "0" && category.Satr_Name != null)
+                                            {
+                                                <td style="background-color: #eceef1;">@category.Sattribdtl_Description </td>
+                                            }
+                                            // i++;
+
+                                        }
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--/ Bordered Table -->
+                    </div>
+
+                    <div class="tab-pane fade" id="navs-pills-top-geo" role="tabpanel" style="margin-top:12px;">
+                        <!-- Bordered Table -->
+                        <div class="table-responsive text-nowrap" id="chk1">
+                            @*<table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr class="text-nowrap">
+                                        <th>Sl.No</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Tran Type</th>
+                                        <th>Transaction Details</th>
+                                        <th>Status</th>
+                                        <th>User ID</th>
+                                        <th>User Name</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="height:30px;">
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                    </tr>
+                                    <tr style="height:30px;">
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                        <td style="background-color: #eceef1;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>*@
+                            <div id="Audit"></div>
+                        </div>
+
+                        <!--/ Bordered Table -->
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+                                <div class="row" id="ForDocAttributePartialview"></div>
+                                <div class="row" id="FormailPartialview"></div>
+
+                                <script>
+                                    var objDialog10;
+                                    var objDialog11;
+                                    var objDialog5;
+                                    var checkedIds = {};
+                                    $(document).ready(function() {
+                                        debugger;
+                                        $("#navhead").text("Document View");
+                                        loaddynamiccolumns3();
+                                        var orglvl4 = "@ViewBag.Orglvlval4";
+                                        var orglvl3 = "@ViewBag.Orglvlval3";
+                                        var orglvl2 = "@ViewBag.Orglvlval2";
+                                        var orglvl1 = "@ViewBag.Orglvlval1";
+                                        // alert(orglvl4);
+                                        if(orglvl4 != "" && orglvl4 != null && orglvl4 != "undefined"){
+                                            $("#Orglvl4val").val(orglvl4);
+                                            $("#Orgcol4").show()
+                                        }
+                                        if(orglvl3 != "" && orglvl3 != null && orglvl3 != "undefined"){
+                                            $("#Orglvl3val").val(orglvl3);
+                                            $("#Orgcol3").show()
+                                        }
+                                        if(orglvl2 != "" && orglvl2 != null && orglvl2 != "undefined"){
+                                            $("#Orglvl2val").val(orglvl2);
+                                            $("#Orgcol2").show()
+                                        }
+                                        if(orglvl1 != "" && orglvl1 != null && orglvl1 != "undefined"){
+                                            $("#Orglvl1val").val(orglvl1);
+                                            $("#Orgcol1").show()
+                                        }
+                                        $("#tabs").tabs();
+                                        objDialog10 = $("[id$='ForDocAttributePartialview']");
+                                        objDialog10.dialog({
+                                            autoOpen: false,
+                                            modal: true,
+                                            width: 450,
+                                            height: 300
+                                        });
+
+                                        objDialog11 = $("[id$='FormailPartialview']");
+                                        objDialog11.dialog({
+                                            autoOpen: false,
+                                            modal: true,
+                                            width: 550,
+                                            height: 550
+                                        });
+                                        $("#VersionName").val("0.1");
+                                        $("#Signature").val("Test");
+                                        var UsersList = @Html.Raw(Json.Encode(@Model.dept));
+                                        var i=0;
+                                        var mode
+                                        $.each(UsersList, function (index, item) {
+                                            debugger;
+                                            var Atrtype = item.attrbtype;
+                                            mode = item.attrbmode;
+                                            if (Atrtype == "Datetime") {
+                                                //$('#ctl' + i).datepicker({
+                                                //    dateFormat:"dd-mm-yy",
+                                                //    changeMonth :true,
+                                                //    changeYear: true  })
+
+                                               // $('#ctl'+i).datepicker('setDate', item.attrbdesc)
+                                            }
+                                            i++;
+                                        });
+
+                                        $("#VersionDate").datepicker({dateFormat:"dd-mm-yy",
+                                            changeMonth :true,
+                                            changeYear: true  });
+                                    });
+                                    function loaddynamiccolumns3() {
+                                        try {
+                                            $.ajax({
+                                                type: "POST",
+                                                contentType: "application/json; charset=utf-8",
+                                                async: false,
+                                                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                                                data: "{}",
+                                                success: function (data) {
+                                                    debugger;
+                                                    // var orglevelcode1 = data[0].orghierarchy_code;
+                                                    if (data.length >= 1) {
+                                                        orglevelcode1 = data[0].orghierarchy_code;
+                                                        var org1val = data[0].orghierarchy_name;
+                                                        $("#Orglvl1lbl").text(org1val);
+                                                        // orglevelval1 = $("#" + orglevelcode1).val();
+                                                    }
+                                                    if (data.length >= 2) {
+                                                        orglevelcode2 = data[1].orghierarchy_code;
+                                                        var org1va2 = data[1].orghierarchy_name;
+                                                        $("#Orglvl2lbl").text(org1va2);
+                                                        // orglevelval2 = $("#" + orglevelcode2).val();
+                                                    }
+                                                    if (data.length >= 3) {
+                                                        orglevelcode3 = data[2].orghierarchy_code;
+                                                        var org1va3 = data[2].orghierarchy_name;
+                                                        $("#Orglvl3lbl").text(org1va3);
+                                                        //orglevelval3 = $("#" + orglevelcode3).val();
+                                                    }
+                                                    if (data.length == 4) {
+                                                        orglevelcode4 = data[3].orghierarchy_code;
+                                                        var org1va4 = data[3].orghierarchy_name;
+                                                        $("#Orglvl4lbl").text(org1va4);
+                                                        //orglevelval4 = $("#" + orglevelcode4).val();
+                                                    }
+
+
+                                                    // alert(orglevelcode1);
+                                                    //setTimeout(function () {
+                                                    //    window.location.reload(1);
+                                                    //}, 2500);
+                                                },
+                                            });
+                                        } catch (er) {
+                                            alert(er);
+                                        }
+                                    }
+                                    function Close_ForDetails() {
+                                        debugger;
+                                        objDialog5.dialog("close");
+                                    }
+
+                                    function getlinkinterfiledocuments()
+                                    {
+                                        debugger;
+                                        var grid;
+
+                                      //  Attribid = $("#hdn_filegid").val();
+                                        Attribid = "@ViewBag.filegid";
+                                        var interFile = $("#interFiletable").data("kendoGrid");
+                                        var Link = $("#Linktable").data("kendoGrid");
+                                        var method = "ShowlinkandInterfileDocs/";
+                                        var Contol = "TreeSearch";
+                                        $.ajax({
+                                            url: method + Contol,
+                                            data: {'Attribid': Attribid },
+                                            success: function (result) {
+                                                debugger
+                                                if (result.Data1 != 0) {
+                                                    LinkGridbind(result);
+                                                }
+                                                if (result.Data3 != 0) {
+                                                    debugger
+                                                    InterFileGridbind(result);
+                                                }
+                                            },
+                                            error: function () {
+                                                $.alert({
+                                                    title: 'DMS',
+                                                    content: 'Some error has occurred!',
+                                                    type: 'red',
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    function DeLinkFilesMulti() {
+                                        debugger;
+                                        var Attribid = [];
+                                        var Attribid1 = "";
+                                        var row1 = 0;
+                                        for (var i in checkedIds) {
+                                            if (checkedIds[i]) {
+                                                Attribid.push(i);
+                                            }
+                                        }
+                                        if (Attribid != 0 && Attribid != null && Attribid != "") {
+                                            Attribid1 = Attribid.join(",");
+                                            row1 = Attribid1.split(",")
+                                        }
+
+                                        //if (row1.length == 1 || row1.length == 1 || row1 == 0) {
+                                        //    $.alert({
+                                        //        title: 'DMS',
+                                        //        content: 'Select any two records to De-Link.!',
+                                        //        type: 'blue',
+                                        //    });
+                                        //    return false;
+                                        //}
+                                        $.ajax({
+                                            url: '@Url.Action("DeLinkFilesMultiples", "DocumentLinking")',
+                                            data: { 'Attribid': Attribid1 },
+                                            success: function () {
+                                                $.alert({
+                                                    title: 'DMS',
+                                                    content: 'Documents are delinked successfully.!',
+                                                    type: 'green',
+                                                });
+                                                return false;
+                                            },
+                                            error: function () {
+                                                $.alert({
+                                                    title: 'DMS',
+                                                    content: 'Select one files!',
+                                                    type: 'red',
+                                                });
+                                            }
+                                        })
+                                    }
+
+
+                                    function LinkGridbind(result) {
+                                        debugger
+                                        $("#Link").remove();
+                                        $('#Linkdiv').append('<div id="Link" class="table-responsive text-nowrap" ><table id="Linktable" data-bind="source: gridRows" class="table table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px;"></table></div></div>');
+                                        var chkval = JSON.parse(result.Data1);
+                                        var arr = [];
+                                        $.each(chkval, function (i, e) {
+                                            $.each(e, function (key, val) {
+                                                arr.push(val);
+                                            });
+                                        });
+
+                                        var columns = [];
+                                        var data = JSON.parse(result.Data1);
+                                        var data2 = JSON.parse(result.Data2);
+                                        debugger;
+                                        var i = 0;
+                                        var entryIndex = "entries[" + i + "]";
+                                        columns.push({
+                                                title: "Select",
+                                                template: '<input type="checkbox"  class="checkbox" name="attributecheckbox" id="attributecheckbox" value="" class="checkbox" ></span>',
+                                                width:'60px'
+                                            });
+                                        for (var key in data[0]) {
+                                            var val = data2[0][key];
+                                            if(key == 'File Name'){
+                                                columns.push({
+                                                    field: entryIndex,
+                                                    title: key,
+                                                    //width: '300px',
+                                                    type: val
+                                                });
+                                            }else{
+                                                columns.push({
+                                                    field: entryIndex,
+                                                    title: key,
+                                                    width: '200px',
+                                                    type: val
+                                                });
+                                            }
+                                            i = i + 1;
+                                            entryIndex = "entries[" + i + "]";
+                                        }
+                                        if (arr != "NoRecords") {
+                                            //columns.push({
+                                            //    field: entryIndex + 1,
+                                            //    title: 'View',
+                                            //    template: '<span class="fa fa-eye eye" name="Download" id="Download" value="Download" onclick="viewlinkfile()"></span>',
+                                            //    filterable: false,
+                                            //    sortable: true,
+                                            //    editable: true,
+                                            //});
+
+                                            //columns.push({
+                                            //    field: entryIndex + 1,
+                                            //    title: 'Mail',
+                                            //    template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick=Grid2Mail("link")></span>',
+                                            //    filterable: false,
+                                            //    sortable: true,
+                                            //    editable: true,
+                                            //});
+                                            if("@ViewBag.mode" == "link"){
+                                                columns.push({
+                                                    field: entryIndex + 1,
+                                                    title: 'Action',
+                                                    //template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick= ViewDocument("link")></span>',
+                                                    template:'<img src="../Assets/images/viewicons.png" name="view" id="view" value="view" onclick= ViewDocument("link")>&nbsp;<i class="bx bx-download" name="Download" id="Download" value="Download" onclick="viewlinkfile()"></i>&nbsp;<img src="../Assets/images/del.png" id="btngrid" onclick="return DeLinkFilesMulti()" >',
+                                                    filterable: false,
+                                                    sortable: true,
+                                                    editable: true,
+                                                    width:'90px'
+                                                });
+                                            }else{
+                                                columns.push({
+                                                    field: entryIndex + 1,
+                                                    title: 'Action',
+                                                    //template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick= ViewDocument("link")></span>',
+                                                    template:'<img src="../Assets/images/viewicons.png" name="view" id="view" value="view" onclick= ViewDocument("link")>&nbsp;<i class="bx bx-download" name="Download" id="Download" value="Download" onclick="viewlinkfile()"></i>',
+                                                    filterable: false,
+                                                    sortable: true,
+                                                    editable: true,
+                                                    width:'90px'
+                                                });
+                                            }
+                                        }
+
+                                        var rows = [];
+                                        var data1 = JSON.parse(result.Data1);
+
+                                        $.each(data1, function (i, e) {
+                                            var entryArray = [];
+                                            $.each(e, function (key, val) {
+                                                entryArray.push(val);
+
+                                            });
+                                            rows.push(kendo.observable({
+                                                entries: entryArray
+                                            }));
+
+                                        });
+
+                                        var viewModel = kendo.observable({
+                                            gridRows: rows
+                                        });
+
+                                        var configuration = {
+                                            editable: false,
+                                            sortable: true,
+                                            scrollable: true,
+                                            filterable: true,
+                                            pagable: true,
+                                            resizable: true,
+                                         //   selectable: 'row',
+                                            pageable: {
+                                                pageSize: 3,
+                                                buttonCount: 4
+                                            },
+                                            columns: columns,
+                                            rows: viewModel,
+                                        };
+
+                                        var timeEditGrid = $("#Linktable").kendoGrid(configuration).data("kendoGrid");
+                                        kendo.bind($("#Linktable"), viewModel);
+                                        var grid = $("#Linktable").data("kendoGrid");
+                                        grid.table.on("click", ".checkbox", selectRow);
+                                        if (arr != "NoRecords") {
+                                            grid.hideColumn(1);
+                                        }
+                                        //for (var i = 0; i < grid.columns.length; i++) {
+                                        //    if (i != grid.columns.length - 1) {
+                                        //        grid.autoFitColumn(i);  //autofit each column.
+
+                                        //    }
+                                        //}
+                                    }
+
+                                    function selectRow() {
+                                        //alert(e.value);
+                                        debugger;
+
+                                        try {
+                                            //alert(this.value);
+                                            var gridid = this.value;
+                                            var grid1 = $('#Linktable').data("kendoGrid");
+                                            var checked = this.checked,
+                                            row = $(this).closest("tr"),//$("input:checked", grid1.tbody).closest("tr");//$(this).closest("tr"),
+
+                                            gridss = $('#Linktable').data("kendoGrid"),
+                                            dataItem = gridss.dataItem(row);
+
+        
+                                            debugger;
+                                            var testArray = dataItem.entries[0] in checkedIds;
+                                            if (testArray) {
+                                                if (checked = false) {
+                                                    checkedIds[dataItem.entries[0]] = false;
+                                                } else {
+                                                    checked = false;
+                                                }
+                                            } else {
+                                                checkedIds[dataItem.entries[0]] = checked;
+                                            }
+                                            if (checked) {
+                                                //-select the row
+                                                //row.addClass("k-state-selected");
+                                                row.addClass("k-gridtest");
+                                            }
+                                            else {
+                                                //-remove selection
+                                                //row.removeClass("k-state-selected");
+                                                row.removeClass("k-gridtest");
+                                            }
+                                        } catch (e) {
+
+                                        }
+                                    }
+
+                                    function InterFileGridbind(result) {
+                                        debugger
+                                        $("#interFile").remove();
+                                        $('#interfilediv').append('<div id="interFile" style="position:relative;background-color:#ecf0f5;" class="k-content"> <table id="interFiletable" data-bind="source: gridRows"></table></div></div>');
+                                        var chkval = JSON.parse(result.Data3);
+                                        var arr = [];
+                                        $.each(chkval, function (i, e) {
+                                            $.each(e, function (key, val) {
+                                                arr.push(val);
+                                            });
+                                        });
+
+                                        var columns = [];
+                                        var data = JSON.parse(result.Data3);
+                                        var data2 = JSON.parse(result.Data4);
+                                        debugger;
+                                        var i = 0;
+                                        var entryIndex = "entries[" + i + "]";
+
+                                        for (var key in data[0]) {
+                                            var val = data2[0][key];
+                                            columns.push({
+                                                field: entryIndex,
+                                                title: key,
+                                                width: 20,
+                                                type: val
+                                            });
+                                            i = i + 1;
+                                            entryIndex = "entries[" + i + "]";
+                                        }
+                                        if (arr != "NoRecords") {
+                                            columns.push({
+                                                field: entryIndex + 1,
+                                                title: 'View',
+                                                template: '<span class="fa fa-eye eye" name="Download" id="Download" value="Download" onclick="viewinterfilingfile()"></span>',
+                                                filterable: false,
+                                                sortable: true,
+                                                editable: true,
+
+                                            });
+
+                                            columns.push({
+                                                field: entryIndex + 1,
+                                                title: 'Mail',
+                                                template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick=Grid2Mail("interfile")></span>',
+                                                filterable: false,
+                                                sortable: true,
+                                                editable: true,
+                                            });
+
+                                            columns.push({
+                                                field: entryIndex + 1,
+                                                title: 'View File',
+                                                template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick=ViewDocument("interfiling")></span>',
+                                                filterable: false,
+                                                sortable: true,
+                                                editable: true
+                                            });
+                                        }
+
+                                        var rows = [];
+                                        var data1 = JSON.parse(result.Data3);
+
+                                        $.each(data1, function (i, e) {
+                                            var entryArray = [];
+                                            $.each(e, function (key, val) {
+                                                entryArray.push(val);
+
+                                            });
+                                            rows.push(kendo.observable({
+                                                entries: entryArray
+                                            }));
+
+                                        });
+
+                                        var viewModel = kendo.observable({
+                                            gridRows: rows
+                                        });
+
+                                        var configuration = {
+                                            editable: false,
+                                            sortable: true,
+                                            scrollable: true,
+                                            filterable: true,
+                                            pagable: true,
+                                            resizable: true,
+                                            selectable: 'row',
+                                            pageable: {
+                                                pageSize: 3,
+                                                buttonCount: 4
+                                            },
+                                            columns: columns,
+                                            rows: viewModel,
+                                        };
+
+                                        var timeEditGrid = $("#interFiletable").kendoGrid(configuration).data("kendoGrid");
+                                        kendo.bind($("#interFiletable"), viewModel);
+                                        var grid = $("#interFiletable").data("kendoGrid");
+                                        if (arr != "NoRecords") {
+                                            grid.hideColumn(0);
+                                        }
+                                        if(viewModel.length>0)
+                                            {
+                                            for (var i = 0; i < grid.columns.length; i++) {
+                                                if (i != grid.columns.length - 1) {
+                                                    grid.autoFitColumn(i);  //autofit each column.
+
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    function viewlinkfile() {
+                                        debugger;
+                                        var grid = $("#Linktable").data("kendoGrid");
+                                        var model = grid.dataItem($(event.target).closest("tr"));
+                                        var linkgid = (model.entries[0]);
+                                        $("#hdn_type").val("link");
+                                        $("#hdn_gridgid").val(linkgid);
+                                        //objDialog10.load('../TreeSearch/showlinkinterfilingattributes');
+                                        objDialog10.load('../TreeSearch/showlinkinterfilingattributes?type=link'+'&gid='+linkgid);
+                                        objDialog10.dialog({ title: 'View Link Attributes' });
+                                        objDialog10.dialog("open");
+                                    }
+                                    function viewinterfilingfile() {
+                                        debugger;
+                                        var grid = $("#interFiletable").data("kendoGrid");
+                                        var model = grid.dataItem($(event.target).closest("tr"));
+                                        var interfilinggid = (model.entries[0]);
+                                        $("#hdn_type").val("interfiling");
+                                        $("#hdn_gridgid").val(interfilinggid);
+                                        // objDialog10.load('../TreeSearch/showlinkinterfilingattributes');
+                                        objDialog10.load('../TreeSearch/showlinkinterfilingattributes?type=interfiling'+'&gid='+interfilinggid);
+                                        objDialog10.dialog({ title: 'View InterFiling Attributes' });
+                                        objDialog10.dialog("open");
+                                    }
+                                    function Grid2Mail(type) {
+                                        debugger;
+                                        var grid;
+                                        var model;
+                                        var attachedid;
+                                        var mode;
+                                        if (type == "link") {
+                                            grid = $("#Linktable").data("kendoGrid");
+                                            model = grid.dataItem($(event.target).closest("tr"));
+                                            attachedid = (model.entries[0]);
+                                            mode = "link";
+                                        }
+                                        if (type == "interfile") {
+                                            grid = $("#interFiletable").data("kendoGrid");
+                                            model = grid.dataItem($(event.target).closest("tr"));
+                                            attachedid = (model.entries[0]);
+                                            mode = "interfile";
+                                        }
+                                        //var grid = $("#grid2").data("kendoGrid");
+                                        //var model = grid.dataItem($(event.target).closest("tr"));
+                                        //var attachedid = (model.entries[0]);
+                                        $("#hdn_attachid").val("");
+                                        $("#hdn_mode").val("")
+                                        $("#hdn_attachid").val(attachedid);
+                                        $("#hdn_linkorinterfile").val(mode);
+                                        //objDialog11.load('../TreeSearch/Showmailpartialview1');
+                                        objDialog11.load('../TreeSearch/Showmailpartialview1?attachedid='+attachedid + '&mode=' + mode);
+                                        objDialog11.dialog({ title: 'Send Mail' });
+                                        objDialog11.dialog("open");
+                                        return false;
+                                    }
+
+                                    function SendMail() {
+                                        debugger;
+                                        // var mailfrom = $("#MailFrom").val();
+                                        var mailto = $("#MailTo").val();
+                                        var mailcc = $("#MailCc").val();
+                                        if (mailto == "") {
+                                            $.alert({
+                                                title: 'DMS',
+                                                content: 'Enter email address..!!',
+                                                icon: 'fa fa-success',
+                                                type: 'green',
+                                            });
+                                            return false;
+                                        }
+                                        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+                                        if (!emailReg.test(mailto)) {
+                                            $.alert({
+                                                title: 'DMS',
+                                                content: 'Enter valid email address..!!',
+                                                icon: 'fa fa-success',
+                                                type: 'red',
+                                            });
+                                            return false;
+                                        }
+                                        var subject = $("#MailSubject").val();
+                                        var content = $("#MailContent").val();
+                                        var filelocation = $("#hdn_filelocation").val();
+                                        var mailtype = $("#hdn_mailtype").val();
+                                        $.ajax({
+                                            url: '@Url.Action("SendMail", "TreeSearch")',
+                                            type: "POST",
+                                            datatype: "json",
+                                            async: false,
+                                            data: { 'mailto': mailto, 'subject': subject, 'content': content, 'filelocation': filelocation, 'mailcc': mailcc, 'mailtype': mailtype },
+                                            success: function (data) {
+                                                debugger;
+                                                if (data == "success") {
+                                                    $.alert({
+                                                        title: 'DMS',
+                                                        content: 'Mail sent successfully!',
+                                                        icon: 'fa fa-success',
+                                                        type: 'blue',
+                                                    });
+                                                    setTimeout(function () {
+                                                        //window.location.reload(1);
+                                                        objDialog.dialog("close");
+                                                    }, 2500);
+                                                }
+                                                else {
+                                                    $.alert({
+                                                        title: 'DMS',
+                                                        content: 'Mail could not be sent!!',
+                                                        icon: 'fa fa-success',
+                                                        type: 'orange',
+                                                    });
+                                                }
+                                            },
+                                        });
+                                    }
+
+                                    function getphysicalstorage()
+                                    {
+                                        debugger;
+                                        //var deptid = $("#DeptID").val();
+                                        //var unit = $("#Unit").val();
+                                        //var docgroup = $("#Catgery").val();
+                                        //var docname = $("#subCatgery").val();
+
+                                        //var grid = $("#grid").data("kendoGrid");
+                                        //var model = grid.dataItem($(event.target).closest("tr"));
+                                        //var gid = (model.entries[0]);
+                                     //   var Attribid = $("#hdn_filegid").val();
+                                        var Attribid = "@ViewBag.filegid";
+                                        $.ajax({
+                                            //url: '@Url.Action("checkvalidone", "PhysicalArchival")',
+                                            data: { 'GridID': Attribid },
+                                            success: function (data) {
+                                                debugger;
+                                                //if (data == "Not Exist") {
+                                                //    $.alert({
+                                                //        title: 'DMS',
+                                                //        content: 'Please create physical Attributes than edit.!!',
+                                                //        type: 'blue',
+                                                //    });
+                                                //    return false;
+                                                //}
+                                                // else {
+                                                $("#Atrgid").val(gid);
+                                                $("#action").val("Edit");
+                                                $("#btn_save").val("Update")
+                                                var Aaction = "Edit";
+                                                var attribgid = gid;
+                                                objDialog.load('../TreeSearch/viewstorageattributes?deptid=' + deptid + '&unit=' + unit + '&docgroup=' + docgroup + '&docname=' + docname + '&Aaction=' + Aaction + '&attribgid=' + attribgid);
+                                                objDialog.dialog({ title: 'Edit' });
+                                                objDialog.dialog("open");
+                                                var count = $("#SatrCount").val();
+                                                return false;
+                                                //}
+                                            },
+                                        });
+                                    }
+
+                                    function getauditdocuments()
+                                    {
+                                        debugger
+                                        var grid;
+                                        Attribid = '@Model.HideDocArchId';//$("#hdn_filegid").val();
+                                        var interFile = $("#interFiletable").data("kendoGrid");
+                                        var Link = $("#Linktable").data("kendoGrid");
+                                        var method = "ShowlinkandInterfileDocs/";
+                                        var Contol = "TreeSearch";
+                                        $.ajax({
+                                            //url: method + Contol,
+                                            url: '@Url.Action("ShowlinkandInterfileDocs", "TreeSearch")',
+                                            data: {'Attribid': Attribid },
+                                            success: function (result) {
+                                                debugger
+                                                if(result.Data5 != 0){
+                                                    debugger
+                                                    RetrievalAudit(result);
+                                                }
+                                            },
+                                            error: function () {
+                                                $.alert({
+                                                    title: 'DMS',
+                                                    content: 'Some error has occurred!',
+                                                    type: 'red',
+                                                });
+                                            }
+                                        });
+                                    }
+
+
+                                    function RetrievalAudit(result){
+                                        debugger;
+                                        $("#RetAudit").remove();
+                                        $('#Audit').append('<div id="RetAudit"  class="table-responsive text-nowrap"> <table id="RetAudittable" data-bind="source: gridRows" class="table table-sm" style="width:100%;height:auto;line-height:1em;font-size:12px;"></table></div></div>');
+
+                                        var chkval = JSON.parse(result.Data5);
+                                        var arr = [];
+                                        $.each(chkval, function (i, e) {
+                                            $.each(e, function (key, val) {
+                                                arr.push(val);
+                                            });
+                                        });
+
+                                        var columns = [];
+                                        var data = JSON.parse(result.Data5);
+                                        var data2 = JSON.parse(result.Data6);
+                                        debugger;
+                                        var i = 0;
+                                        var entryIndex = "entries[" + i + "]";
+
+                                        for (var key in data[0]) {
+                                            var val = data2[0][key];
+                                            columns.push({
+                                                field: entryIndex,
+                                                title: key,
+                                                width: 0,
+                                                type: val
+                                            });
+                                            i = i + 1;
+                                            entryIndex = "entries[" + i + "]";
+                                        }
+
+                                        var rows = [];
+                                        var data1 = JSON.parse(result.Data5);
+
+                                        $.each(data1, function (i, e) {
+                                            var entryArray = [];
+                                            $.each(e, function (key, val) {
+                                                entryArray.push(val);
+
+                                            });
+                                            rows.push(kendo.observable({
+                                                entries: entryArray
+                                            }));
+
+                                        });
+
+                                        var viewModel = kendo.observable({
+                                            gridRows: rows
+                                        });
+
+                                        var configuration = {
+                                            editable: false,
+                                            sortable: true,
+                                            scrollable: true,
+                                            filterable: true,
+                                            pagable: true,
+                                            resizable: true,
+                                            persistSelection: true,
+                                            selectable: "false",
+                                            pageable: {
+                                                pageSize: 10,
+                                                buttonCount: 4,
+                                                pageSizes: [10,20, 30, 40, 50]
+                                            },
+                                            columns: columns,
+                                            rows: viewModel,
+
+                                        };
+
+                                        var timeEditGrid = $("#RetAudittable").kendoGrid(configuration).data("kendoGrid");
+                                        kendo.bind($("#RetAudittable"), viewModel);
+                                        var grid = $("#RetAudittable").data("kendoGrid");
+                                        //grid.hideColumn(0);
+                                        //for (var i = 0; i < grid.columns.length; i++) {
+                                        //    if (i != grid.columns.length) {
+                                        //        grid.autoFitColumn(i);  //autofit each column.
+
+                                        //    }
+                                        //}
+                                    }
+
+                                    function newdoclink(){
+                                        debugger;
+                                        var fileid = "@ViewBag.filegid";
+                                        window.location.href = '../TreeSearch/linkanddelinkNew?fileid=' + fileid;
+                                    }
+                                    function ViewDocument(type) {
+                                        debugger;
+                                        var grid;
+                                        var model;
+                                        var viewid;
+                                        if (type == "link") {
+                                            grid = $("#Linktable").data("kendoGrid");
+                                            model = grid.dataItem($(event.target).closest("tr"));
+                                            viewid = (model.entries[0]);
+                                        }
+                                        if (type == "interfiling") {
+                                            grid = $("#interFiletable").data("kendoGrid");
+                                            model = grid.dataItem($(event.target).closest("tr"));
+                                            viewid = (model.entries[0]);
+                                        }
+
+                                        var mode = type;
+                                        $.ajax({
+                                            url: '@Url.Action("Check_Document_Under_Modification", "TreeSearch")',
+                                            type: "POST",
+                                            datatype: "json",
+                                            data: { 'Doc_GID': viewid },
+                                            success: function (data) {
+                                                debugger;
+                                                if (data == 'Under Checker Queue') {
+                                                    $.alert({
+                                                        title: 'DMS',
+                                                        content: "This document is waiting for checker approval, Please review the checker queue.!",
+                                                        type: 'blue',
+                                                    });
+                                                    return false;
+                                                }
+                                                else {
+                                                    //objDialog12.load('../TreeSearch/showdocuments?viewid=' + viewid + '&mode=' + mode);
+                                                    var url = '../TreeSearch/showdocuments?viewid=' + viewid + '&mode=' + mode;
+                                                    window.open(url, "popupWindow", "width=800,height=650,scrollbars=yes");
+                                                    //objDialog12.dialog({ title: 'view' });
+                                                    //objDialog12.dialog("open");
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                </script>
+

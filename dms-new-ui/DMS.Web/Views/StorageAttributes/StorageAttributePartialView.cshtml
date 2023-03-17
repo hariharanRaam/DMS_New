@@ -1,0 +1,92 @@
+﻿
+<style>
+    .ui-dialog-titlebar-close:after {
+        content: 'X';
+    }
+</style>
+<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />
+
+<table id="myTable1" style="width:100%;">
+    <tr style="width:100%">
+        <td style="width:25%"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Storage Type</label></td>
+        <td style="width:20%"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Data Type</label></td>
+        <td style="width:10%"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Length</label></td>
+        <td style="width:15%"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Mandatory</label></td>
+    </tr>
+</table>
+
+<div style="width:100%">
+    <table id="myTable1" class="table order-listview" style="width:100% ;font-weight:normal;"></table>
+
+    <div class="row text-center mt20">
+        <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange fa-align-center" />
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var sameasdocnameid = '@ViewBag.samednameid'//$("#hdn_ugrp_gid").val();
+
+        if (sameasdocnameid == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select Same as DocName.!',
+                type: 'blue',
+            });
+            $("#erridmsg").show();
+            return false;
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetSameasattributesdata", "StorageAttributes")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'sameasdocnameid': sameasdocnameid },
+            success: function (data) {
+                //debugger;
+                var counter = data.count;
+                //if (counter == 0) {
+                //    $.alert({
+                //        title: 'DMS',
+                //        content: 'There is No Records.!',
+                //        type: 'blue',
+                //    });
+                //    objDialog.dialog("close");
+
+                //}
+                //else {
+                var data2 = JSON.parse(data.Data1);
+                for (i = 0; i < counter; i++) {
+                    var newRow = $("<tr  width='100%'>");
+                    var cols = "";
+                    cols += '<td style="width:25%"><label  name="name' + i + '" id="name' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;">' + data2[i].Satr_Name + '</label></td>';
+                    cols += '<td style="width:20%"><label name="type' + i + '" id="type' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;">' + data2[i].Satr_Type + '</label></td>';
+                    cols += '<td style="width:10%"><label name="len' + i + '" id="len' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;">' + data2[i].Satr_Length + '</label></td>';
+                    cols += '<td style="width:15%"><label name="mand' + i + '" id="mand' + i + '" style="font-weight:normal;font-size: 13px;height:3px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;">' + data2[i].Satr_Mandotry + '</label></td>';
+
+                    newRow.append(cols);
+                    $("table.order-listview").append(newRow);
+                }
+                //}
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Failed to create..!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+    });
+</script>
+
+<script>
+    function Close() {
+        debugger;
+        objDialog.dialog("close");
+    }
+</script>

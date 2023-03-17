@@ -1,0 +1,1818 @@
+﻿@using System.Configuration;
+@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@using Kendo.Mvc.Resources;
+@{
+    List<DMS.Model.UserGroups_Model.menu> asidemenuList = new List<DMS.Model.UserGroups_Model.menu>();
+    List<DMS.Model.UserGroups_Model.menu> navmenuList = new List<DMS.Model.UserGroups_Model.menu>();
+    //menuList = DMS.Service.UserGroups_Service.GetMenu();
+    asidemenuList = DMS.Service.UserGroups_Service.GetMenu(Session["UserGroup_ID"].ToString(),"aside",0);
+    navmenuList = DMS.Service.UserGroups_Service.GetMenu(Session["UserGroup_ID"].ToString(), "nav", 2);
+}
+<!DOCTYPE html>
+<html lang="en"
+      class="light-style layout-navbar-fixed layout-menu-fixed layout-menu-collapsed"
+      dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="~/Assets/assets/"
+      data-template="vertical-menu-template">
+<head>
+    <style type="text/css">
+        /*.multi-select-container {
+              display: inline-block;
+              position: relative;
+            }
+
+            .multi-select-menu {
+              position: absolute;
+              left: 0;
+              top: 0.8em;
+              float: left;
+              min-width: 100%;
+              background: #fff;
+              margin: 1em 0;
+              padding: 0.4em 0;
+              border: 1px solid #aaa;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+              display: none;
+            }
+
+            .multi-select-menu input {
+              margin-right: 0.3em;
+              vertical-align: 0.1em;
+            }
+
+            .multi-select-button {
+              display: inline-block;
+              font-size: 0.875em;
+              padding: 0.2em 0.6em;
+              max-width: 20em;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              vertical-align: -0.5em;
+              background-color: #fff;
+              border: 1px solid #aaa;
+              border-radius: 4px;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+              cursor: default;
+            }
+
+            .multi-select-button:after {
+              content: "";
+              display: inline-block;
+              width: 0;
+              height: 0;
+              border-style: solid;
+              border-width: 0.4em 0.4em 0 0.4em;
+              border-color: #999 transparent transparent transparent;
+              margin-left: 0.4em;
+              vertical-align: 0.1em;
+            }
+
+            .multi-select-container--open .multi-select-menu { display: block; }
+
+            .multi-select-container--open .multi-select-button:after {
+              border-width: 0 0.4em 0.4em 0.4em;
+              border-color: transparent transparent #999 transparent;
+            }*/
+
+        #overlayy {
+            background-color: transparent;
+            z-index: 999;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+
+        li {
+            display: block;
+        }
+
+        .ms-options {
+            min-height: 100px;
+            max-height: 100px;
+        }
+
+        ul {
+            padding-left: 0rem;
+        }
+
+        #loader {
+            position: absolute;
+            background: url('http://sampsonresume.com/labs/pIkfp.gif') no-repeat center center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        div#spinner {
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            position: fixed;
+            display: block;
+            opacity: 0.6;
+            background: #aaaaaa url('~/Content/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png');
+            z-index: 1006;
+            text-align: center;
+            display: none;
+            filter: Alpha(Opacity=30); /*{opacityOverlay}*/
+        }
+
+            div#spinner img {
+                position: absolute;
+                /*width: 100px;
+                height: 100px;*/
+                top: 40%;
+                left: 42%;
+                opacity: 4.5;
+                z-index: 1007;
+            }
+
+            div#spinner span {
+                font-family: Arial Tahoma;
+                font-size: large;
+                font-weight: bold;
+                opacity: 4.5;
+                margin-top: 100px;
+                color: white;
+            }
+
+        /*grid content should not be wrap*/
+        .k-grid td {
+            white-space: nowrap;
+        }
+
+        /*grid header should not be wrap*/
+        .k-grid-header table {
+            width: 100% !important;
+        }
+
+        /*Boostrap scroll bar*/
+        /*       ::-webkit-scrollbar {
+                            width: 12px;
+                            height: 12px;
+                        }
+
+                        ::-webkit-scrollbar-track {
+                            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                            border-radius: 10px;
+                        }
+
+                        ::-webkit-scrollbar-thumb {
+                            border-radius: 10px;
+                            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+                        }
+
+                        .dropdown-menu1 {
+                            position: absolute;
+                            z-index: 1000;
+                            display: none;
+                            min-width: 12rem;
+                            padding: 0.3125rem 0;
+                            margin-top: 14px;
+                            font-size: 1.5rem;
+                            color: #697a8d;
+                            text-align: left;
+                            list-style: none;
+                            background-color: #fff;
+                            background-clip: padding-box;
+                            border: 1px solid transparent;
+                            border-radius: 0.375rem;
+                            float: left;
+                            left: auto;
+                            right: 0;
+                            box-shadow: 0 0.25rem 1rem rgb(161 172 184 / 45%);
+                        }
+
+
+                        .dropdown-item1 a:hover {
+                            background-color: #ddd;
+                        }
+                     */
+        /*.dropbtn:hover .dropdown-menu1 {display: block;}*/
+        /*
+                        .dropdown:hover .dropbtn {
+                            background-color: #3e8e41;
+                        }
+
+                        .dropdown-divider {
+                            height: 0;
+                            margin: 0.5rem 0;
+                            overflow: hidden;
+                            border-top: 1px solid #d9dee3;
+                        }
+
+                        .dropdown-item1 {
+                            display: block;
+                            width: 100%;
+                            padding: 0.732rem 1.35rem;
+                            clear: both;
+                            font-weight: 400;
+                            color: #697a8d;
+                            text-align: inherit;
+                            white-space: nowrap;
+                            background-color: transparent;
+                            border: 0;
+                            font-family: sans-serif;
+                        }
+
+                            .dropdown-item1:hover, .dropdown-item1:focus {
+                                color: #5f6e7f;
+                                background-color: rgba(67, 89, 113, 0.04);
+                            }
+
+                            .dropdown-item1.active, .dropdown-item1:active {
+                                color: #fff;
+                                text-decoration: none;
+                                background-color: rgba(105, 108, 255, 0.08);
+                            }
+
+                            .dropdown-item1.disabled, .dropdown-item1:disabled {
+                                color: #c7cdd4;
+                                pointer-events: none;
+                                background-color: transparent;
+                            }
+
+                        .dropdown-menu1.show {
+                            display: block;
+                        }
+
+                        .dropdown-header {
+                            display: block;
+                            padding: 0.532rem 1.25rem;
+                            margin-bottom: 0;
+                            font-size: 0.75rem;
+                            color: #a1acb8;
+                            white-space: nowrap;
+                        }
+
+                        .dropdown-item-text {
+                            display: block;
+                            padding: 0.532rem 1.25rem;
+                            color: #697a8d;
+                        }
+
+                        .dropdown-menu-dark {
+                            color: rgba(67, 89, 113, 0.3);
+                            background-color: rgba(67, 89, 113, 0.8);
+                            border-color: transparent;
+                        }
+
+                            .dropdown-menu-dark .dropdown-item1 {
+                                color: rgba(67, 89, 113, 0.3);
+                            }
+
+                                .dropdown-menu-dark .dropdown-item1:hover, .dropdown-menu-dark .dropdown-item1:focus {
+                                    color: #fff;
+                                    background-color: rgba(255, 255, 255, 0.15);
+                                }
+
+                                .dropdown-menu-dark .dropdown-item1.active, .dropdown-menu-dark .dropdown-item1:active {
+                                    color: #fff;
+                                    background-color: rgba(105, 108, 255, 0.08);
+                                }
+
+                                .dropdown-menu-dark .dropdown-item1disabled, .dropdown-menu-dark .dropdown-item1:disabled {
+                                    color: rgba(67, 89, 113, 0.5);
+                                }
+
+                            .dropdown-menu-dark .dropdown-divider {
+                                border-color: #d9dee3;
+                            }
+
+                            .dropdown-menu-dark .dropdown-item-text {
+                                color: rgba(67, 89, 113, 0.3);
+                            }
+
+                            .dropdown-menu-dark .dropdown-header {
+                                color: rgba(67, 89, 113, 0.5);
+                            }
+
+                        .rounded-circle {
+                            border-radius: 50% !important;
+                            height: auto;
+                            width: 50px;
+                        }
+
+                        .icon-space {
+                            vertical-align: middle;
+                            font-size: 1.15rem;
+                            line-height: 1.3rem;
+                            margin-right: 0.5rem !important;
+                        }
+
+                        .align-middle {
+                            vertical-align: middle;
+                        }   */
+    </style>
+
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    @*<title id="ttl">Dashboard</title>*@
+    <meta name="description" content="" />
+    @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">*@
+    @*hariharan uncoment following three line to test spinner start*@
+    @*<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>*@
+    @*hariharan uncoment following three line to test spinner end*@
+    <!-- Bootstrap 3.3.7 -->
+    @*<link href="~/Content/css/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />*@
+    <!-- Ionicons -->
+    <link href="~/Content/css/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <!-- Morris chart -->
+    <!-- jvectormap -->
+    <!-- Date Picker -->
+    <link href="~/Content/css/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <!-- Daterange picker -->
+    <link href="~/Content/css/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link href="~/Content/css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+    <link href="~/Content/css/dist/css/dms.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo1/2015.1.318/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/Content/css/jquery-ui-datepicker.css")" rel="stylesheet" type="text/css" />
+    @*<link href="@Url.Content("~/Content/jquery-ui.css")" rel="stylesheet" type="text/css" />*@
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo1/2015.1.318/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-datepicker.js")" type="text/javascript"></script>
+    @*<script src="~/Content/css/dist/js/pages/dashboard.js"></script>*@
+    @*<script src="~/Scripts/bootstrap.js"></script>*@
+    @*@Scripts.Render("~/bundles/app")*@
+
+    @*side doggle bar script*@
+    <script src="~/Content/css/dist/js/adminlte.min.js"></script>
+
+    @*Css and Js for Jquery alert box*@
+    <script src="~/Scripts/jquery-confirm.min.js"></script>
+    <link href="~/Content/css/jquery-confirm.min.css" rel="stylesheet" />
+
+    @*/*dashboard chart*/*@
+    @*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link id="load-css-0" rel="stylesheet" type="text/css" href="https://www.gstatic.com/charts/51/css/core/tooltip.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/Assets/assets/img/favicon/favicon.ico" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="~/Assets/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="~/Assets/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="~/Assets/assets/vendor/fonts/flag-icons.css" />
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/Assets/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/Assets/assets/vendor/css/rtl/theme-default.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/Assets/assets/css/demo.css" />
+    <link rel="stylesheet" href="~/Assets/assets/css/styles.css" />
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="~/Assets/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="~/Assets/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <link rel="stylesheet" href="~/Assets/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="~/Assets/assets/vendor/js/helpers.js"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    @*<script src="~/Assets/assets/vendor/js/template-customizer.js"></script>*@
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="~/Assets/assets/js/config.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    @*<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>*@
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    @*<script type="text/javascript" src="~/Assets/assets/js/multiselect-dropdown.js"></script>*@
+    @*<script src="~/Assets/assets/js/jquery.multi-select.js"></script>*@
+    <script src="~/Assets/assets/js/jquery.multiselect.js"></script>
+    <link rel="stylesheet" href="~/Assets/assets/css/jquery.multiselect.css" />
+   
+
+</head>
+
+
+<body>
+    <!-- Layout wrapper -->
+    <div id="spinner">
+        <img src="~/Content/images/spinner.gif" /> <br /><span>Please Wait...</span>
+    </div>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="index.html" class="app-brand-link">
+                        <img class="logo" src="~/Assets/images/dmsweblogo.png">
+                    </a>
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    </a>
+                </div>
+                <div class="menu-inner-shadow"></div>
+                <ul class="menu-inner py-1">
+                    @*@Html.Partial("Menu")*@
+                    <!-- Dashboard -->
+                    @for (var k = 0; k < asidemenuList.Count; k++)
+                    {
+
+                        <li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="@asidemenuList[k].icon_path" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Insider"></i>
+                                <div data-i18n="Insider">@asidemenuList[k].menu_name</div>
+                            </a>
+                            <ul class="menu-sub">
+                                @{
+                        List<DMS.Model.UserGroups_Model.menu> submenulist = new List<DMS.Model.UserGroups_Model.menu>();
+                        submenulist = DMS.Service.UserGroups_Service.GetMenu(Session["UserGroup_ID"].ToString(), "aside", asidemenuList[k].menu_gid);
+                        for (int h = 0; h < submenulist.Count; h++)
+                        {
+                            <li class="menu-item">
+                                <a href="@submenulist[h].menu_url" class="menu-link">
+                                    <div data-i18n="Manage Insider">@submenulist[h].menu_name</div>
+                                </a>
+                            </li>
+                        }
+                                }
+                            </ul>
+                        </li>
+
+                    }
+
+                    @*<li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-notepad" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Insider"></i>
+                                <div data-i18n="Insider">Digitize Document</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a href="archival.html" class="menu-link">
+                                        <div data-i18n="Manage Insider">Archival</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="indexing-list.html" class="menu-link">
+                                        <div data-i18n="Approve Insider">Indexing</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="archival-indexing.html" class="menu-link">
+                                        <div data-i18n="Approve Insider">Archival & Indexing</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bxs-file-doc" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Event"></i>
+                                <div data-i18n="Event">Manage Documents</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a href="search-retrieval.html" class="menu-link">
+                                        <div data-i18n="Manage Event">Search & Retrieval</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="physical-storage.html" class="menu-link">
+                                        <div data-i18n="Approve Event">Physical Storage</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="physical-retrieval.html" class="menu-link">
+                                        <div data-i18n="Approve Event">Physical Retrieval</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bxs-report" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reports"></i>
+                                <div data-i18n="Feedback">Reports</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a href="doc-listing.html" class="menu-link">
+                                        <div data-i18n="Insider Listing">Document Listing</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="storage-listing.html" class="menu-link">
+                                        <div data-i18n="Event Listing">Storage Listing</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="original-tracker.html" class="menu-link">
+                                        <div data-i18n="View Mail">Original Tracker</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
+            </aside>
+            <!-- / Menu -->
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                     id="layout-navbar">
+
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                            <i class="bx bx-menu bx-sm"></i>
+                        </a>
+                    </div>
+                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                        <!-- Search -->
+                        <!-- /Search -->
+
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <li class="nav-item me-2 me-xl-50" style="margin-right: 20rem !important;">
+                                <h5 class="card-header" id="navhead">Dashboard</h5>
+                            </li>
+                            <!-- Place this tag where you want the button to render. -->
+                            <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
+                                @*<a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                        <button type="button" class="btn btn-sm btn-outline-success" onclick="loaddynamiccolumns()" data-bs-toggle="modal" data-bs-target="#searchorg">ORG</button>
+                                    </a>*@
+                                @*<ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0);" data-language="fr">
+                                                <i class="flag-icon flag-icon-fr flag-icon-squared rounded-circle fs-4 me-1"></i>
+                                                <span class="align-middle">हिंदी</span>
+                                            </a>
+                                        </li>
+                                    </ul>*@
+                            </li>
+                            <li class="nav-item lh-1 me-1">
+                                <i style="cursor:pointer;" class='bx bxs-home' data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" onclick="window.location.href='../Dashboard/Dashboard'"></i>
+                            </li>
+                            <li class="nav-item dropdown-language dropdown lh-1 me-1">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                    <i class='bx bxs-cog' data-bs-toggle="tooltip" data-bs-placement="bottom" title="Settings"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @for (int a = 0; a < navmenuList.Count; a++)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="@navmenuList[a].menu_url" data-language="fr">
+                                                <i class="@navmenuList[a].icon_path"></i>
+                                                <span class="align-middle">@navmenuList[a].menu_name</span>
+                                            </a>
+                                        </li>
+                                    }
+
+                                </ul>
+
+                                @*<ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="org-hierarchy.html" data-language="fr">
+                                                <i class="bx bx-home-alt fs-4 me-1"></i>
+                                                <span class="align-middle">Organisation Hierarchy</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="masters.html" data-language="fr">
+                                                <i class="bx bxs-user-pin fs-4 me-1"></i>
+                                                <span class="align-middle">Masters</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="doc-setup.html" data-language="fr">
+                                                <i class="bx bxs-notepad fs-4 me-1"></i>
+                                                <span class="align-middle">Document Setup</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="doc-attributes.html" data-language="fr">
+                                                <i class="bx bxs-notepad fs-4 me-1"></i>
+                                                <span class="align-middle">Document Attributes</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="storage-hierarchy.html" data-language="fr">
+                                                <i class="bx bxs-notepad fs-4 me-1"></i>
+                                                <span class="align-middle">Storage Hierarchy</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" data-language="fr">
+                                                <i class="bx bxs-notepad fs-4 me-1"></i>
+                                                <span class="align-middle">Auto Numbering</span>
+                                            </a>
+                                        </li>
+                                    </ul>*@
+                            </li>
+
+                            <li class="nav-item dropdown-language dropdown lh-1 me-1">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                    <i class='bx bxs-user-plus' data-bs-toggle="tooltip" data-bs-placement="bottom" title="User Admin"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @{
+                                        List<DMS.Model.UserGroups_Model.menu> navmenuuserList = new List<DMS.Model.UserGroups_Model.menu>();
+                                        navmenuuserList = DMS.Service.UserGroups_Service.GetMenu(Session["UserGroup_ID"].ToString(), "nav", 1);
+                                        for (int v = 0; v < navmenuuserList.Count; v++)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" href="@navmenuuserList[v].menu_url" data-language="fr">
+                                                    <i class="@navmenuuserList[v].icon_path"></i>
+                                                    <span class="align-middle">@navmenuuserList[v].menu_name</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                                @*<ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="user.html" data-language="fr">
+                                                <i class="bx bx-user fs-4 me-1"></i>
+                                                <span class="align-middle">User Mgmt</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="role-management.html" data-language="fr">
+                                                <i class="bx bx-user fs-4 me-1"></i>
+                                                <span class="align-middle">Role Mgmt</span>
+                                            </a>
+                                        </li>
+                                    </ul>*@
+                            </li>
+                            <li class="nav-item lh-1 me-3">
+                                <i class='bx bxs-bell' data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifications"></i>
+                            </li>
+                            <!-- User -->
+                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                    <div class="avatar avatar-online">
+                                        <i class='bx bxs-group' data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile"></i>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li style="margin-bottom:-22px;">
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <center>
+                                                        <div class="avatar avatar-online">
+                                                            <img src="~/Assets/images/profile.jpg" alt class="w-px-40 h-auto rounded-circle" />
+                                                        </div>
+                                                    </center>
+                                                </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bx bxs-smile me-2"></i>
+                                            <span class="align-middle" id="empname"></span>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                                            <span class="align-middle" id="empcode"></span>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bx bx-envelope me-2"></i>
+                                            <span class="align-middle" id="empemail"></span>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa fa-phone-square me-2"></i>
+                                            <span class="align-middle" id="empmobile"></span>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bx bx-user me-2"></i>
+                                            <span class="align-middle">Super Admin</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="showchangepasswordscreen();">
+                                            <i class="bx bxs-lock-alt me-2"></i>
+                                            <span class="align-middle">Change Password</span>
+                                        </a>
+                                        <a class="dropdown-item" href="#" onclick="return Signout();">
+                                            <i class="bx bx-power-off me-2"></i>
+                                            <span class="align-middle">Log Out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown-language dropdown lh-1 me-1">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                    <i class='bx bxs-notepad' data-bs-toggle="tooltip" data-bs-placement="bottom" title="Help" style="margin-left: -27px;"></i>
+                                </a>
+                            </li>
+                            <!--/ User -->
+                        </ul>
+                    </div>
+                </nav>
+                <!-- / Navbar -->
+                <!-- Content wrapper -->
+
+                <div class="container" style="
+    /* background: #fff; */
+    padding-right: 20px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+">
+                    <div class="row" style="background: #fff;border-radius: 5px;/* width: 103.6%; */margin-right: 5px;margin-left: 5px;/* margin-bottom: 20px; *//* padding-left: 3px; */">
+                        <div class="col-sm-12" style="
+    margin-left: 10px;
+">
+                            <div class="row" id="collapse_div">
+                                <div class="col-sm-4">
+
+                                </div>
+                                <div class="col-sm-4">
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <img src="../Assets/images/plus.png" id="collapse_img" style="float: right; height: 10px; width: 10px; margin: 1px; display: block;">
+                                    <img src="../Assets/images/minus.png" id="collapse_img2" style="float: right; height: 10px; width: 10px; margin: 1px; display: none;">
+                                </div>
+                            </div>
+                            <div class="row" id="collapse_org" style="margin-bottom: 22px; display:none">
+                                <div class="col-sm-3" style="width: 23%;">
+                                    <center><label for="orglvl1valO" id="orglvl1lblO">Department</label></center>
+                                    <select class="form-select" id="orglvl1valO" name="orglvl1valO" onchange="onChangeunit(1, 'orglvl1valO')"><option value="0">-Select-</option><option value="QCD_mst_tfinance_">Finance</option><option value="QCD_mst_thr_" selected="selected">HR</option><option value="QCD_mst_tadminn">Admin</option><option value="QCD_mst_tmarketting">Marketting</option><option value="QCD_mst_tprocurement">Procurement</option></select>
+                                </div>
+                                <div class="col-sm-3" style="width: 23%;">
+                                    <center><label for="orglvl2valO" id="orglvl2lblO">Unit</label></center>
+                                    <select class="form-select" id="orglvl2valO" name="orglvl2valO" onchange="onChangeunit(2, 'orglvl2valO')"><option value="0">-Select-</option><option value="QCD_mst_trecurement">Recurement</option><option value="QCD_mst_hrops" selected="selected">HR OPS</option></select>
+                                </div>
+                                <div class="col-sm-3" style="width: 23%;">
+                                    <center><label for="orglvl3valO" id="orglvl3lblO">Level 3</label></center>
+                                    <select class="form-select" id="orglvl3valO" name="orglvl3valO" onchange="onChangeunit(3, 'orglvl3valO')" disabled=""></select>
+                                </div>
+                                <div class="col-sm-3" style="width: 23%;">
+                                    <center><label for="orglvl4valO" id="orglvl4lblO">Level 4</label></center>
+                                    <select class="form-select" id="orglvl4valO" name="orglvl4valO" onchange="onChangeunit(4, 'orglvl4valO')" disabled="" style="/* width:143%; */"></select>
+
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="button" id="btn_transferorg" class="btn btn-sm btn-primary" onclick="storeheader()" style="float: right;margin-top: -33px;margin-right: 28px;">Apply</button>
+                                    <img src="../Assets/images/login-refresh.png" id="refreshOrg" style="float: right;margin-top: -30px;height: 21px;width: 21px;margin-right: 3px;" onclick="loaddynamiccolumns('R')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+<div class="content-wrapper">
+    @RenderBody()
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+                </div>
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+
+<!-- Drag Target Area To SlideIn Menu On Small Screens -->
+<div class="drag-target"></div>
+    </div>
+<!-- / Layout wrapper -->
+
+<div class="modal fade" id="searchcourse" tabindex="-1" aria-hidden="true" style="width:50%;margin-left:25%">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body" style="margin-top: -26px;">
+                <div class="row">
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Search Document Type</h4>
+                    </div>
+                    <div class="col-sm-4">
+
+                    </div>
+                </div>
+                <hr style="margin-top:-1px;">
+                <div class="row">
+                    <div class="col-sm-5" id="docname">
+                        <center><label for="subCatgeryS">Doc Type</label></center>
+                        <select class="form-select" id="subCatgeryS" name="subCatgery" onchange="fetchDocName()"></select>
+                    </div>
+                    <div class="col-sm-5">
+                        <center><label for="CatgeryS">Document Group</label></center>
+                        <select class="form-select" id="CatgeryS" name="Catgery" onchange="fetchDocGroup()"></select>
+                    </div>
+                    <div class="col-sm-2">
+                        <img src="~/Assets/images/login-refresh.png" id="showcoursetable" style="margin-top:25px">
+                    </div>
+                </div>
+
+                <div class="row" id="showcoursetables" style="display:none;margin-top:10px;">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Document Type</th>
+                                    <th>Document Group</th>
+                                    @*<th id="thlbl4" style="display:none">Unit</th>
+                                        <th id="thlbl3" style="display:none">Department</th>
+                                        <th id="thlbl2" style="display:none">Unit</th>
+                                        <th id="thlbl1" style="display:none">Department</th>*@
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodydtl"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;margin-bottom: -15px;">
+                        <button type="button" id="btn_transfer" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Transfer</button>
+                        <button type="button" id="btn_close" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="searchcourse1" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body" style="margin-top: -26px;">
+                <div class="row">
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Search Document Group</h4>
+                    </div>
+                    <div class="col-sm-4">
+
+                    </div>
+                </div>
+                <hr style="margin-top:-1px;">
+                <div class="row">
+                    @*<div class="col-sm-3" id="docname">
+                            <center><label for="subCatgery">Doc Type</label></center>
+                            <select class="form-select" id="subCatgery" name="subCatgery" onchange="fetchDocName()">
+                                @*<option value="">Select</option>
+                                    <option value="AK">Finance & Accounts</option>
+                                    <option value="HI">Human Resource</option>
+                                    <option value="HI">Marketing</option>
+                                    <option value="HI">Administration</option>
+                            </select>
+                        </div>*@
+                    <div class="col-sm-3">
+                        <center><label for="Catgery">Document Group</label></center>
+                        <select class="form-select" id="CatgeryN" name="Catgery" onchange="fetchDocGroup()">
+                            @*<option value="">Select</option>
+                                <option value="AK">Finance</option>
+                                <option value="HI">Accounts</option>
+                                <option value="HI">Taxation</option>
+                                <option value="HI">HR Sourcing</option>
+                                <option value="HI">HR Operations</option>*@
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="display:none" id="orgcol4N">
+                        <center><label for="orglvl4val" id="orglvl4lblN">Orglvl4</label></center>
+                        <select class="form-select" id="orglvl4valN" name="orglvl4val" onchange="onChangeunitDG(this, 'orglvl3valN')">
+                            @*<option value="">Select</option>
+                                <option value="AK">Invoice</option>
+                                <option value="HI">Vouchers</option>
+                                <option value="HI">Working File</option>
+                                <option value="HI">Assessment Order</option>
+                                <option value="HI">Employee Files</option>*@
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="display:none" id="orgcol3N">
+                        <center><label for="orglvl3val" id="orglvl3lblN">Orglvl3</label></center>
+                        <select class="form-select" id="orglvl3valN" name="orglvl3val" onchange="onChangeunitDG(this, 'orglvl2valN')">
+                            @*<option value="">Select</option>
+                                <option value="AK">Invoice</option>
+                                <option value="HI">Vouchers</option>
+                                <option value="HI">Working File</option>
+                                <option value="HI">Assessment Order</option>
+                                <option value="HI">Employee Files</option>*@
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="display:none" id="orgcol2N">
+                        <center><label for="orglvl2val" id="orglvl2lblN">Orglvl2</label></center>
+                        <select class="form-select" id="orglvl2valN" name="orglvl2val" onchange="onChangeunitDG(this, 'orglvl1valN')">
+                            @*<option value="">Select</option>
+                                <option value="AK">Invoice</option>
+                                <option value="HI">Vouchers</option>
+                                <option value="HI">Working File</option>
+                                <option value="HI">Assessment Order</option>
+                                <option value="HI">Employee Files</option>*@
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="display:none" id="orgcol1N">
+                        <center><label for="orglvl1val" id="orglvl1lblN">Orglvl1</label></center>
+                        <select class="form-select" id="orglvl1valN" name="orglvl1val" onchange="onChangeunitDG(this, '')">
+                            @*<option value="">Select</option>
+                                <option value="AK">Invoice</option>
+                                <option value="HI">Vouchers</option>
+                                <option value="HI">Working File</option>
+                                <option value="HI">Assessment Order</option>
+                                <option value="HI">Employee Files</option>*@
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="display:none" id="sct1N">
+                        <img src="~/Assets/images/login-refresh.png" id="showcoursetableDG1" onclick="docgrptable()" style="margin-top:25px;margin-left:400px">
+                    </div>
+                </div>
+                <div class="row" style="display:none" id="sct2N">
+                    <div class="col-sm-12">
+                        <img src="~/Assets/images/login-refresh.png" id="showcoursetableDG" onclick="docgrptable()" style="float: right;margin-top: -30px;margin-right: 241px;margin-left:300px">
+                    </div>
+                </div>
+                <div class="row" id="showcoursetablesDG" style="display:none;margin-top:10px;">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Document Group</th>
+                                    <th id="thlbl4N" style="display:none">Unit</th>
+                                    <th id="thlbl3N" style="display:none">Department</th>
+                                    <th id="thlbl2N" style="display:none">Unit</th>
+                                    <th id="thlbl1N" style="display:none">Department</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodydtlN"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;margin-bottom: -15px;">
+                        <button type="button" id="btn_transferN" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Transfer</button>
+                        <button type="button" id="btn_close" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="applyfilter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body" style="margin-top: -26px;">
+                <div class="row">
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Search Filter</h4>
+                    </div>
+                    <div class="col-sm-4">
+
+                    </div>
+                </div>
+                <div class="row" id="showcoursetables2s" style="margin-top:10px;">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Attributes</th>
+                                    <th>Extract Condition</th>
+                                    <th>Value</th>
+                                    <th>Join Condition</th>
+                                    @*<th>Action</th>*@
+                                </tr>
+                            </thead>
+                            <tbody id="add_attribute_table"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;margin-bottom: -15px;">
+                        <button type="button" id="transfer" data-bs-dismiss="modal" class="btn btn-sm btn-primary" onclick="return SaveAttributes();">Apply & Search</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                        <img src="../Assets/images/login-refresh.png" id="refreshFilter">
+                    </div>
+
+                </div>
+                <div class="row" id="filter" style="/*margin-top:45px;*/display:none;">
+                    <div class="col-sm-10">
+                        @*<textarea class="form-control" rows="5" id="comment"></textarea>*@
+                        <div id="myTable1" class="form-control"> </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" id="btnShowResult" class="btn btn-sm btn-info me-2" style="/*margin-top:10px;*/width: 75%;margin-left: 30px;" data-bs-dismiss="modal" onclick="return ShowResult();">Show Result</button>
+                        <button type="submit" class="btn btn-sm btn-danger me-2" style="margin-top: 15px;width: 75%;margin-left: 30px;" onclick="clearfilter()">Clear Filter</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="usersearch" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Search User</h4>
+                    </div>
+                    <div class="col-sm-4">
+                        <div style="float:right;">
+
+                        </div>
+
+                    </div>
+                </div>
+                <hr style="margin-top:-1px;">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label class="form-label" for="_username">User Name&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                        <input type="text" id="_username" class="form-control" placeholder="">
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="_usermobile">Mobile No.</label>
+                        <input type="text" id="_usermobile" class="form-control" placeholder="">
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="UGI">Role</label>
+                        <div>
+                            @(Html.Kendo().DropDownList()
+                                    .Name("UGI")
+                                    .DataTextField("UserGroup")
+                                    .DataValueField("UserGroupID")
+                                    .HtmlAttributes(new { @class = true })
+                                    .DataSource(source => { source.Read(read => { read.Action("GetEmployeeNames", "EmployeeMaster", new { CommonVal = "UG" }); }).ServerFiltering(true); }))
+
+                        </div>
+                    </div>
+                    @Html.Partial("BindOrgLevels4user", new DMS.Model.DocGroupMaster_Model())
+                    <div class="col-sm-1">
+                        <img src="../Assets/images/login-refresh.png" id="refresh4" style="float: right;margin-top: 29px;margin-right: -5px;">
+                    </div>
+                </div>
+                <div class="row" id="tableshow4" style="margin-top:15px;display:none;">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>User Name</th>
+                                    <th>Mobile No.</th>
+                                    <th>eMail ID</th>
+                                    <th>Role</th>
+                                    <th id="thlbl4N" style="display:none">Unit</th>
+                                    <th id="thlbl3N" style="display:none">Department</th>
+                                    <th id="thlbl2N" style="display:none">Unit</th>
+                                    <th id="thlbl1N" style="display:none">Department</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyusrdtl"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="margin-top:-10px;">
+                        <button type="button" id="btn_transferusr" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Transfer</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@*<div class="modal fade" id="searchorg" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body" style="margin-top: -26px;">
+                    <div class="row">
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-4">
+                            <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Search Organization</h4>
+                        </div>
+                        <div class="col-sm-4">
+
+                        </div>
+                    </div>
+                    <hr style="margin-top:-1px;">
+
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+
+@*<link href="https://kendo.cdn.telerik.com/2022.2.802/styles/kendo.default-main.min.css" rel="stylesheet" />*@
+@*<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>*@
+@*<script src="https://kendo.cdn.telerik.com/2022.2.802/js/kendo.all.min.js"></script>*@
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+@*<script src="~/Assets/assets/vendor/libs/jquery/jquery.js"></script>*@
+<script src="~/Assets/assets/vendor/libs/popper/popper.js"></script>
+<script src="~/Assets/assets/vendor/js/bootstrap.js"></script>
+<script src="~/Assets/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="~/Assets/assets/vendor/libs/hammer/hammer.js"></script>
+<script src="~/Assets/assets/vendor/js/menu.js"></script>
+<!-- endbuild -->
+<!-- Vendors JS -->
+<script src="~/Assets/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+<!-- Main JS -->
+<script src="~/Assets/assets/js/main.js"></script>
+<!-- Page JS -->
+<script src="~/Assets/assets/js/dashboards-analytics.js"></script>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script>
+    function openNav() {
+        $(document).ready(function () {
+            $('#layout-menu').toggleClass('active');
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    }
+   
+
+</script>
+
+<script>
+    var maxorglvl;
+    $(document).ready(function () {
+        //   $('select[multiple]').multiselect();
+        Editcustdetails();
+        loaddynamiccolumns1();
+        loaddynamiccolumns('');
+        //$.when(loaddynamiccolumns('')).then(restore_existingheader());
+        $("#showcoursetable").click(function () {
+            debugger;
+            $("#showcoursetables").show();
+        })
+        $("#showcoursetable2").click(function () {
+            $("#showcoursetables2s").show();
+        })
+        $("#showcoursetableDG").click(function () {
+            $("#showcoursetablesDG").show();
+        })
+        $("#showcoursetableDG1").click(function () {
+            $("#showcoursetablesDG").show();
+        })
+        $("#refresh4").click(function () {
+            $("#tableshow4").show();
+        });
+        $("#refresh41").click(function () {
+            $("#tableshow41").show();
+        });
+        $("#collapse_div").click(function () {
+            debugger;
+            if ($('#collapse_org').css('display') == 'none') {
+                $('#collapse_org').show();
+                $('#collapse_img2').css('display', 'block');
+                $('#collapse_img').css('display', 'none');
+            } else {
+                $('#collapse_org').css('display', 'none');
+                $('#collapse_img2').css('display', 'none');
+                $('#collapse_img').css('display', 'block');
+            }
+        });
+
+
+
+    });
+
+    // Show the loader icon
+    $(document).ajaxStart(function () {
+         $('#loader').show();
+      
+        showProgress();
+    });
+
+    // Hide the loader icon
+    $(document).ajaxStop(function () {
+        // $('#loader').hide();
+        hideProgress();
+    });
+
+    $(document).ajaxError(function () {
+        hideProgress();
+    })
+
+
+    var spinnerVisible = false;
+    function getconcatval(mastercode) {
+        debugger;
+        var master = "";
+        if (mastercode != null) {
+            master = "'" + mastercode + "'";
+        }
+        //if (mastercode != null) {
+        //    for (var p = 0; p < mastercode.length; p++) {
+        //        if (mastercode[p] != "0" && mastercode[p] != "" && mastercode[p] != null) {
+        //            if (master == "") {
+        //                master = "'" + mastercode[p] + "'";
+        //            } else {
+        //                master = master + ",'" + mastercode[p] + "'";
+        //            }
+        //        }
+        //    }
+        //}
+        return master;
+    }
+
+
+    function showProgress() {
+        debugger;
+        if (!spinnerVisible) {
+            $("div#spinner").fadeIn("fast");
+            spinnerVisible = true;
+        }
+    }
+    function hideProgress() {
+        debugger;
+        if (spinnerVisible) {
+            var spinner = $("div#spinner");
+            spinner.stop();
+            spinner.fadeOut("fast");
+            spinnerVisible = false;
+        }
+    }
+
+    function Editcustdetails() {
+        debugger;
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: {},
+            dataType: "html",
+            url: '@Url.Action("EmpProfilePartialView", "_Layout")',
+            success: function (data) {
+                debugger;
+                //  $("#Newcust1").html(data);
+                var obj = $.parseJSON(data);
+                $("#empname").text(obj['EmpName']);
+                $("#empcode").text(obj['EmpCode']);
+                $("#empemail").text(obj['EmpEmailId']);
+                $("#empmobile").text(obj['EmpMobileNo']);
+                $("#empstatus").text(obj['EmpStatus']);
+                $("#emprole").text(obj["EmpRole"]);
+                //  alert(obj['EmpName'] + " , " + obj['Emp_Code'] + " , " + obj['EmpEmailId'] + " , " + obj['Emp_MobileNo']);
+
+            },
+            error: function (data) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Error' + data,
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+    function storeheader() {
+        debugger;
+        var arr1 = [];
+        var arr2 = [];
+        var arr3 = [];
+        var arr4 = [];
+        var obj = {};
+        if (maxorglvl == 4) {
+            arr1 = get_orgarray('orglvl1valO');
+            arr2 = get_orgarray('orglvl2valO');
+            arr3 = get_orgarray('orglvl3valO');
+            arr4 = get_orgarray('orglvl4valO');
+        } else if (maxorglvl == 3) {
+            arr1 = get_orgarray('orglvl1valO');
+            arr2 = get_orgarray('orglvl2valO');
+            arr3 = get_orgarray('orglvl3valO');
+        } else if (maxorglvl == 2) {
+            arr1 = get_orgarray('orglvl1valO');
+            arr2 = get_orgarray('orglvl2valO');
+        } else if (maxorglvl == 1) {
+            arr1 = get_orgarray('orglvl1valO');
+        }
+
+        sessionStorage.setItem("arr1", JSON.stringify(arr1));
+        //date.setTime(date.getTime() + (30 * 60 * 1000));
+        sessionStorage.setItem("arr2", JSON.stringify(arr2));
+        //date.setTime(date.getTime() + (30 * 60 * 1000));
+        sessionStorage.setItem("arr3", JSON.stringify(arr3));
+        //date.setTime(date.getTime() + (30 * 60 * 1000));
+        sessionStorage.setItem("arr4", JSON.stringify(arr4));
+        // date.setTime(date.getTime() + (30 * 60 * 1000));
+
+        location.reload();
+    }
+
+    function get_orgarray(_idval) {
+        debugger;
+        var arr = [];
+        var obj = {};
+        $('#' + _idval + ' option').each(function () {
+            var ischecked_ = false;
+            if ($(this).is(':selected')) {
+                ischecked_ = true;
+            }
+            obj = {
+                name: $(this).text(),
+                value: $(this).val(),
+                checked: ischecked_
+            }
+            arr.push(obj);
+        });
+        return arr;
+    }
+
+    function Signout() {
+        debugger;
+        sessionStorage.removeItem('arr1');
+        sessionStorage.removeItem('arr2');
+        sessionStorage.removeItem('arr3');
+        sessionStorage.removeItem('arr4');
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: {},
+            dataType: "html",
+            url: '@Url.Action("Signout", "Login")',
+            success: function (data) {
+                var url = '@Url.Action("Login", "Login")'
+                window.location.href = url;
+            },
+            error: function (data) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Error' + data,
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+    function showchangepasswordscreen() {
+        debugger;
+        var url = '@Url.Action("ChangePassword", "Login")'
+        window.location.href = url;
+    }
+
+    function onChangeunit(sel, idval) {
+        //    alert(this.value());
+        debugger;
+        var id = idval;
+        // alert(idval);
+
+        try {
+            //alert($('#orglvl1valO').val());
+            //var mastercode = sel.value;
+            var mastercode = $('#' + idval).val();
+            var master1 = "";
+            //  var master = "";
+            var master = "'" + mastercode + "'";
+            //for (var p = 0; p < mastercode.length; p++) {
+            //    if (mastercode[p] != "0" && mastercode[p] != "" && mastercode[p] != null) {
+            //        if (master == "") {
+            //            master = "'" + mastercode[p] + "'";
+            //        } else {
+            //            master = master + ",'" + mastercode[p] + "'";
+            //        }
+            //    }
+            //}
+            var curentorg_ = sel;
+            if (mastercode == "" || mastercode == null || mastercode == "undefined" || mastercode == 0) {
+                return false;
+            }
+            else {
+                debugger;
+                $.getJSON("DocGroupNamesNew/DocGroupMaster?parentcode=" + master1 + "&dependcode=" + master + "&maxorg=" + maxorglvl + "&currentorg=" + curentorg_,
+                    function (result) {
+                        debugger;
+                        var _dt1 = JSON.parse(result.Data1);
+                        var _dt2 = JSON.parse(result.Data2);
+                        var _dt3 = JSON.parse(result.Data3);
+                        var _dt4 = JSON.parse(result.Data4);
+
+                        if (sel == 4) {
+                            assigndropdownvalue(_dt1, "orglvl1valO");
+                            assigndropdownvalue(_dt2, "orglvl2valO");
+                            assigndropdownvalue(_dt3, "orglvl3valO");
+                        } else if (sel == 3) {
+                            assigndropdownvalue(_dt4, "orglvl4valO");
+                            assigndropdownvalue(_dt1, "orglvl1valO");
+                            assigndropdownvalue(_dt2, "orglvl2valO");
+                        } else if (sel == 2) {
+                            assigndropdownvalue(_dt3, "orglvl3valO");
+                            assigndropdownvalue(_dt4, "orglvl4valO");
+                            assigndropdownvalue(_dt1, "orglvl1valO");
+                        } else {
+                            assigndropdownvalue(_dt2, "orglvl2valO");
+                            assigndropdownvalue(_dt3, "orglvl3valO");
+                            assigndropdownvalue(_dt4, "orglvl4valO");
+                        }
+                    });
+            }
+        } catch (er) {
+            hideProgress();
+        }
+    }
+    function assigndropdownvalue(dt_, idval_) {
+        debugger;
+        if (dt_.length > 0) {
+            //$("#" + idval_).removeAttr('multiple');
+            $("#" + idval_).empty();
+            for (var i = 0; i < dt_.length; i++) {
+                var opt = new Option(dt_[i].mastername, dt_[i].mastercode);
+                $('#' + idval_).append(opt);
+                $(opt).attr('selected', true);
+            }
+            //  $("#" + idval_).val($("#" + idval_ + " option").eq(1).val());
+            // $("#" + idval_).prop('multiple', true);
+            $("#" + idval_).multiselect('reload');
+            //$("#ms-opt-1").prop('checked',false);
+        }
+    }
+    function loaddynamiccolumns(_sel) {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    maxorglvl = data.length;
+                    // alert(maxorglvl);
+                    if (maxorglvl > 2) {
+                        $("#sct1").show();
+                        $("#sct2").hide();
+                        $("#sct1N").show();
+                        $("#sct2N").hide();
+                    } else {
+                        $("#sct2").show();
+                        $("#sct1").hide();
+                        $("#sct2N").show();
+                        $("#sct1N").hide();
+                    }
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        var org1val = data[0].orghierarchy_name;
+                        if (orglevelcode1 != null && orglevelcode1 != "" && orglevelcode1 != "undefined") {
+                            $("#orglvl1lblO").text(org1val);
+                            $("#thlbl1O").text(org1val);
+                            //orglevelval1 = $("#" + orglevelcode1).val();
+                            $("#orgcol1O").show();
+                            $("#thlbl1O").show();
+                            $("#orglvl1lblN").text(org1val);
+                            $("#thlbl1N").text(org1val);
+                            $("#orgcol1N").show();
+                            $("#thlbl1N").show();
+
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode1, "dependcode": "" },
+                                success: function (data) {
+                                    debugger;
+                                    $("#orglvl1valO option").remove();
+                                    $("#orglvl1valN option").remove();
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl1valO').append(opt);
+
+
+                                    }
+                                    if (_sel != 'R') {
+                                        //$("#orglvl1valO").prop('multiple', true);
+                                        //$("#orglvl1valO").multiselect({
+                                        //    columns: 1,
+                                        //    placeholder: 'Select',
+                                        //    search: true
+                                        //});
+                                        var arr1_ = JSON.parse(sessionStorage.getItem('arr1'));
+                                        bindmultiselectvalues(arr1_, 'orglvl1valO');
+                                    }
+                                    //else {
+                                    //    $("#orglvl1valO").multiselect('reload');
+                                    //}
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl1valN').append(opt);
+
+
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        var org1va2 = data[1].orghierarchy_name;
+                        if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                            $("#orglvl2lblO").text(org1va2);
+                            $("#orgcol2O").show();
+                            $("#thlbl2O").text(org1va2);
+                            $("#thlbl2O").show();
+
+                            $("#orglvl2lblN").text(org1va2);
+                            $("#thlbl2N").text(org1va2);
+                            $("#orgcol2N").show();
+                            $("#thlbl2N").show();
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode2, "dependcode": "" },
+                                success: function (data) {
+                                    debugger;
+                                    $("#orglvl2valO option").remove();
+                                    $("#orglvl2valN option").remove();
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl2valO').append(opt);
+
+                                    }
+                                    if (_sel != 'R') {
+                                        //$("#orglvl2valO").prop('multiple', true);
+                                        //$("#orglvl2valO").multiselect({
+                                        //    columns: 1,
+                                        //  placeholder: 'Select',
+                                        //    search: true
+                                        //});
+
+                                        var arr2_ = JSON.parse(sessionStorage.getItem('arr2'));
+                                        bindmultiselectvalues(arr2_, 'orglvl2valO');
+                                    }
+                                    //else {
+                                    //    $("#orglvl2valO").multiselect('reload');
+                                    //}
+
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl2valN').append(opt);
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        var org1va3 = data[2].orghierarchy_name;
+                        if (orglevelcode3 != null && orglevelcode3 != "" && orglevelcode3 != "undefined") {
+                            $("#orglvl3lblO").text(org1va3);
+                            // orglevelval3 = $("#" + orglevelcode3).val();
+                            $("#orgcol3O").show();
+                            $("#thlbl3O").text(org1va3);
+                            $("#thlbl3O").show();
+
+                            $("#orglvl3lblN").text(org1va3);
+                            $("#thlbl3N").text(org1va3);
+                            $("#orgcol3N").show();
+                            $("#thlbl3N").show();
+
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode3, "dependcode": "" },
+                                success: function (data) {
+                                    debugger;
+                                    $("#orglvl3valO option").remove();
+                                    $("#orglvl3valN option").remove();
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl3valO').append(opt);
+
+                                    }
+                                    if (_sel != 'R') {
+                                        //$("#orglvl3valO").prop('multiple', true);
+                                        //$("#orglvl3valO").multiselect({
+                                        //    columns: 1,
+                                        //    placeholder: 'Select',
+                                        //    search: true
+                                        //});
+
+                                        var arr3_ = JSON.parse(sessionStorage.getItem('arr3'));
+                                        bindmultiselectvalues(arr3_, 'orglvl3valO');
+                                    }
+                                    //else {
+                                    //    $("#orglvl3valO").multiselect('reload');
+                                    //}
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl3valN').append(opt);
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        var org1va4 = data[3].orghierarchy_name;
+                        if (orglevelcode4 != null && orglevelcode4 != "" && orglevelcode4 != "undefined") {
+                            $("#orglvl4lblO").text(org1va4);
+                            //orglevelval4 = $("#" + orglevelcode4).val();
+                            $("#orgcol4O").show();
+                            $("#thlbl4O").text(org1va4);
+                            $("#thlbl4O").show();
+                            $("#orglvl4lblN").text(org1va4);
+                            $("#thlbl4N").text(org1va4);
+                            $("#orgcol4N").show();
+                            $("#thlbl4N").show();
+
+                            $.ajax({
+                                url: '@Url.Action("DocGroupNames", "ConfigureAttributes")',
+                                type: "GET",
+                                data: { 'parentcode': orglevelcode4, "dependcode": "" },
+                                success: function (data) {
+                                    debugger;
+                                    $("#orglvl4valO option").remove();
+                                    $("#orglvl4valN option").remove();
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl4valO').append(opt);
+
+                                    }
+                                    if (_sel != 'R') {
+
+                                        //$("#orglvl4valO").prop('multiple', true);
+                                        //$("#orglvl4valO").multiselect({
+                                        //    columns: 1,
+                                        //    //   placeholder: 'Select',
+                                        //    search: true
+                                        //});
+
+                                        var arr4_ = JSON.parse(sessionStorage.getItem('arr4'));
+                                        bindmultiselectvalues(arr4_, 'orglvl4valO');
+                                    }
+                                    //else {
+                                    //    $("#orglvl4valO").multiselect('reload');
+                                    //}
+                                    for (var i = 0; i < data.length; i++) {
+                                        var opt = new Option(data[i].master_name, data[i].master_code);
+                                        //    var opt2 = new Option(data[0].Dname_Name, data[0].Dname_Id);
+                                        $('#orglvl4valN').append(opt);
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+
+
+    //function restore_existingheader() {
+    //    debugger;
+    //    var arr1_ = JSON.parse(sessionStorage.getItem('arr1'));
+    //    var arr2_ = JSON.parse(sessionStorage.getItem('arr2'));
+    //    var arr3_ = JSON.parse(sessionStorage.getItem('arr3'));
+    //    var arr4_ = JSON.parse(sessionStorage.getItem('arr4'));
+    //    if (arr1_.length > 0) {
+    //        bindmultiselectvalues(arr1_, 'orglvl1valO');
+    //    }
+    //    if (arr2_.length > 0) {
+    //        bindmultiselectvalues(arr2_, 'orglvl2valO');
+    //    }
+    //    if (arr3_.length > 0) {
+    //        bindmultiselectvalues(arr3_, 'orglvl3valO');
+    //    }
+    //    if (arr4_.length > 0) {
+    //        bindmultiselectvalues(arr4_, 'orglvl4valO');
+    //    }
+    //}
+
+    function bindmultiselectvalues(arr, _id) {
+        debugger;
+        if (arr != null) {
+            $("#" + _id).empty();
+            for (var t = 0; t < arr.length; t++) {
+                var opt = new Option(arr[t].name, arr[t].value);
+                $('#' + _id).append(opt);
+                if (arr[t].checked) {
+                    //$('#' + _id + "option: " + opt).attr('selected', 'selected');
+                    $(opt).attr('selected', true);
+
+                }
+            }
+            // $('#' + _id).multiselect('reload');
+        }
+    }
+
+    function loaddynamiccolumns1() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    maxorglvl = data.length;
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        $("#orglvl1lblh").text(data[0].orghierarchy_name);
+                        // orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        $("#orglvl2lblh").text(data[1].orghierarchy_name);
+                        // orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        $("#orglvl3lblh").text(data[2].orghierarchy_name);
+                        //orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        $("#orglvl4lblh").text(data[3].orghierarchy_name);
+                        //orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+    function testt() {
+        debugger;
+        alert($('#orglvl1valO').val());
+    }
+ 
+
+</script>
+
+</body>
+
+
+</html>
+

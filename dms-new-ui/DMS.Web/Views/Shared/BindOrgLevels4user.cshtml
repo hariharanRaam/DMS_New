@@ -1,0 +1,90 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.DocGroupMaster_Model
+@{
+    List<DMS.Model.DocGroupMaster_Model.DocGroupDynamicLabel> labellist = new List<DMS.Model.DocGroupMaster_Model.DocGroupDynamicLabel>();
+    var r = new DMS.Service.DocGroupMaster_Service();
+    labellist = r.GetDoclabelsrv();
+    string valuePassedIn = this.ViewData.ContainsKey("Layout") ? this.ViewData["Layout"].ToString() : string.Empty;
+}
+    @if (valuePassedIn == "Horizontal")
+    {
+       for (int i = labellist.Count - 1; i >= 0; i--)
+       {
+    if (labellist[i].orghierarchy_code != null && labellist[i].orghierarchy_code != "")
+    { 
+                <div class="col-sm-2">
+                    @Html.Label(labellist[i].orghierarchy_name, new { style = "width:120px;font-weight: normal;", @class = "cus-lbl" })
+                        @Html.Hidden("MaxorglevelPos", i.ToString(), new { style = "width:120px;font-weight: bold;" })
+                        @Html.Hidden("orglevel" + i.ToString(), labellist[i].orghierarchy_code, new { style = "width:120px;font-weight: bold;" })
+                        @(Html.Kendo().DropDownList()
+                          .Name(labellist[i].orghierarchy_code)
+                              .DataTextField("master_name")
+                              .DataValueField("master_code")
+                              .Events(e => e.Change("onChangeunit"))
+                  .HtmlAttributes(new { style = "height:25px;width:113%;font-weight: normal;", @id = labellist[i].orghierarchy_code })
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("DocGroupNames", "DocGroupMaster", new { parentcode = labellist[i].orghierarchy_code, dependcode = "" });
+                  }).ServerFiltering(true);
+              }))
+                    
+                    @*@Html.ValidationMessageFor(model => model.UnitID)*@
+        </div>
+    }
+}
+    }
+    else
+    {
+        for (int i = labellist.Count - 1; i >= 0; i--)
+           {
+               if (labellist[i].orghierarchy_code != null && labellist[i].orghierarchy_code != "")
+               {
+                <div class="col-sm-3">
+                    @Html.Label(labellist[i].orghierarchy_name, new { @class = "form-label" })
+                    @Html.Hidden("MaxorglevelPos", i.ToString(), new { style = "width:120px;font-weight: normal;" })
+                    @Html.Hidden("orglevelN" + i.ToString(), labellist[i].orghierarchy_code, new { style = "width:120px;font-weight: bold;" })
+                    <div>
+        @*@if (ViewBag.mode == "V")
+        { 
+                        @(Html.Kendo().DropDownList()
+                          .Name(labellist[i].orghierarchy_code + "N")
+                              .DataTextField("master_name")
+                              .DataValueField("master_code")
+                              .Events(e => e.Change("onChangeunit"))
+                                  .HtmlAttributes(new { id = (labellist[i].orghierarchy_code + "N") ,@disabled = true})
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("DocGroupNames", "DocGroupMaster", new { parentcode = labellist[i].orghierarchy_code, dependcode = "" });
+                  }).ServerFiltering(true);
+              }))
+        }
+        else
+        {*@
+            @(Html.Kendo().DropDownList()
+                              .Name(labellist[i].orghierarchy_code + "N")
+                              .DataTextField("master_name")
+                              .DataValueField("master_code")
+                              .Events(e => e.Change("onChangeunit"))
+                                      .HtmlAttributes(new { id = (labellist[i].orghierarchy_code + "N") })
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("DocGroupNames", "DocGroupMaster", new { parentcode = labellist[i].orghierarchy_code, dependcode = "" });
+                  }).ServerFiltering(true);
+              }))
+       @*}*@
+                    </div>
+                </div>
+               }
+           }
+
+    }
+
+ 

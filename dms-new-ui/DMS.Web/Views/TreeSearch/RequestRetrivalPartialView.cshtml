@@ -1,0 +1,392 @@
+﻿@model DMS.Model.ViewDocuments_Model
+
+<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+    .panel {
+        margin-bottom: 5px;
+    }
+    .row{
+        top:90px !important;      
+    }
+  
+</style>
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <table>
+            <tr>
+                <td width="25%"><label style="font-weight:normal">Request Retival</label></td>
+                <td width="85%"></td>
+                <td><button type="button" id="btnclose" style="color:black;font-weight:bold;" onclick="return Close_RequestRetrival();">X</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<input type="hidden" id="RequestFrom" value="@ViewBag.Employeeid" />
+<input type="hidden" id="Requestno" value="@ViewBag.ArNo1" />
+<input type="hidden" id="hdnattribute" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-body">
+            <table align="center">
+
+                <tr>
+                    <td style="width:25px"></td>
+                    <td><label style="font-weight:normal;font-size:13px;font-family:sans-serif">Request Date</label></td>
+                    <td style="width:20px"></td>
+                    <td>
+                        @Html.EditorFor(m => m.RequestDate, new { htmlAttributes = new { @class = "form-control", style = "height:25px;width:300px;font-weight: normal;font-size:13px;font-family:sans-serif", @placeholder = "Request Date", disabled = "disabled", @readonly = "readonly" } })
+
+                    </td>
+                </tr>
+                <tr style="height:10px"></tr>
+                <tr>
+                    <td style="width:25px"></td>
+                    <td><label style="font-weight:normal;font-size:13px;font-family:sans-serif">No of Documents</label></td>
+                    <td style="width:20px"></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.NOofDoc, new { @class = "form-control", style = "height:25px;width:300px;font-weight: normal;font-size:13px;font-family:sans-serif", @placeholder = "Documnet No", disabled = "disabled", @readonly = "readonly" })
+                        <span class="errormessage" id="erridmsg"></span>
+                    </td>
+                </tr>
+
+                <tr style="height:10px"></tr>
+
+                <tr>
+                    <td style="width:25px"></td>
+                    <td><label style="font-weight:normal;font-size:13px;font-family:sans-serif">Request From</label></td>
+                    <td style="width:20px"></td>
+                    <td>
+
+                        @Html.TextBoxFor(m => m.Request_From, new { @Value = ViewBag.Employeename, @class = "form-control", style = "height:25px;width:300px;font-weight: normal;font-size:13px;font-family:sans-serif", @placeholder = "Request From", disabled = "disabled", @readonly = "readonly" })
+                        <span class="errormessage" id="erridmsg"></span>
+                    </td>
+                </tr>
+
+
+                <tr style="height:10px"></tr>
+                <tr>
+                    <td style="width:25px"></td>
+                    <td><label style="font-weight:normal;font-size:13px;font-family:sans-serif">Required Date</label></td>
+                    <td style="width:20px"></td>
+                    <td>
+                        @Html.EditorFor(m => m.RequiredDate, new { @class = "form-control", style = "height:25px;width:400px;font-weight: normal;font-size:13px;font-family:sans-serif", @placeholder = "Required Date", autocomplete = "off" })
+                        <span class="errormessage" id="erridmsg">*</span>
+                    </td>
+                </tr>
+
+                <tr style="height:10px"></tr>
+
+                <tr>
+                    <td style="width:25px"></td>
+                    <td><label style="font-weight:normal;font-size:13px;font-family:sans-serif">Request Note</label></td>
+                    <td style="width:20px"></td>
+                    <td>
+                        @Html.TextAreaFor(m => m.Request_Note, new { @class = "form-control", style = "height:50px;width:300px;font-weight: normal;font-size:13px;font-family:sans-serif;resize:none;", @placeholder = "Description" })
+                        <span class="errormessage" id="erridmsg"></span>
+                    </td>
+                </tr>
+
+
+            </table>
+
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <div class="row text-center mt20">
+                <input type="button" name="btnsubmit" value="Save" onclick="return SubmitRequestRetrival();" id="btn_Save" class="btn btn-orange fa fa-download" />
+                <input type="button" value="Close" id="btn_cancel" onclick="return Close_RequestRetrival();" class="btn btn-orange fa fa-download" />
+
+            </div>
+
+            <div class="row text-center mt20">
+                <span class="errormessage"></span>
+            </div>
+            <div>
+                <div class="k-content" id="usergrp_list" style="overflow:scroll;">
+                </div>
+            </div>
+        </div>
+
+
+        @*<div class=" box box-orange">
+            <div>
+            </div>
+            <form method="get" class="form-horizontal" enctype="multipart/form-data" style="height:610px;" id="form">
+                <div class="box-header text-center with-border">
+                    <div class="k-content" id="usergrp_list">
+                    </div>
+                </div>
+                <div id="user-modal" style="margin-left:30px;"></div>
+            </form>
+        </div>*@
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var checkedrows = $("#attributecheckbox:checked", grid.tbody).closest("tr");
+        if (checkedrows.length == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select atleast one record in MainGrid to Send Request.!',
+                type: 'blue',
+
+            });
+            Close_RequestRetrival();
+            return false;
+           
+        }
+        debugger;
+        var Attribid = [];
+        var Attribid1 = 0;
+        for (var i = 0; i < checkedrows.length; i++) {
+            var item = grid.dataItem(checkedrows[i]);
+            var GridID = item.entries[4];
+            Attribid.push(GridID);
+        }
+        Attribid1 = Attribid.join(",");
+        var count = Attribid.length;
+        $('#NOofDoc').val(count);
+        $('#hdnattribute').val(Attribid1);
+
+        $("#RequestDate").datepicker({
+            dateFormat: "dd-mm-yy",
+            changeMonth: true,
+            changeYear: true,
+
+        });
+        $('#RequestDate').datepicker('setDate', 'today')
+        $("#RequiredDate").datepicker({
+            dateFormat: "dd-mm-yy",
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Request Retrival Kendo grid
+
+
+        var uri = "../TreeSearch/GetRequestRetival";
+        $("#usergrp_list").kendoGrid({
+            selectable: "true",
+            allowCopy: true,
+            dataBound: onDataBound,
+            dataSource: {
+                transport: {
+                    read: {
+                        type: "POST",
+                        dataType: "json",
+                        url: uri,
+                        contentType: "application/json; charset=utf-8"
+                    },
+                    parameterMap: function (options, operation) {
+                        debugger;
+                        if (operation == "read") {
+                            return kendo.stringify(options);
+                        }
+                        else {
+                            return kendo.stringify(options);
+                        }
+                    },
+                },
+                requestEnd: function (e) {
+                    var response = e.response;
+                    var type = e.type;
+                    if (e.type !== "read") {
+                        $.alert({
+                            title: 'DMS',
+                            content: 'response',
+                            type: 'blue',
+                        });
+                        $.alert({
+                            title: 'DMS',
+                            content: e.response.out_msg,
+                            type: 'blue',
+                        });
+
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "Request_gid",
+                        fields: {
+                            Request_gid: {
+                                editable: false,
+                                nullable: true,
+                                visible: false
+                            },
+                            Request_No: {
+                                editable: true,
+                                nullable: true
+                            },
+                            RequestDate: {
+                                editable: true,
+                                nullable: true
+                            },
+
+                            Noof_Doc: {
+                                editable: true,
+                                nullable: true
+                            },
+
+                            Request_From: {
+                                editable: true,
+                                nullable: true
+                            },
+
+                            RequiredDate: {
+                                editable: true,
+                                nullable: true
+                            },
+                            Request_Note: {
+                                editable: true,
+                                nullable: true
+                            },
+
+
+                        }
+                    }
+                },
+                pageSize: 10
+            },
+
+            editable: false,
+            sortable: true,
+            scrollable: false,
+            filterable: true,
+            pagable: true,
+            resizable: true,
+
+            pageable: {
+                pageSize: 5,
+                buttonCount: 4
+            },
+            height: '95%',
+
+            columns: [
+
+                {
+                    field: "Request_gid",
+                    title: "Request Id",
+                    hidden: true
+                },
+                {
+                    field: "Request_No",
+                    title: "Request No",
+                    width: "20%"
+                },
+
+                  {
+                      field: "RequestDate",
+                      title: "Request Date",
+                      width: "20%",
+                      template: "#= kendo.toString(kendo.parseDate(RequestDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
+                  },
+
+                 {
+                     field: "NOofDoc",
+                     title: "No of Doc",
+                     width: "20%"
+                 },
+                 {
+                     field: "Request_From",
+                     title: "Employee id",
+                     width: "20%"
+                 },
+                  {
+                      field: "RequiredDate",
+                      title: "Date Required",
+                      width: "20%",
+                      template: "#= kendo.toString(kendo.parseDate(RequiredDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
+                  },
+
+                    {
+                        field: "Request_Note",
+                        title: "Description",
+                        width: "30%"
+                    },
+            ],
+        })
+
+
+    });
+
+    function customDateTimePickerEditor(container, options) {
+        debugger;
+        $('<input required name="' + options.field + '"/>')
+          .appendTo(container)
+          .kendoDateTimePicker({});
+    }
+    function onDataBound() {
+        var grid = $("#usergrp_list").data("kendoGrid");
+        grid.autoFitColumn(1);
+        grid.autoFitColumn(2);
+    }
+
+    function SubmitRequestRetrival() {
+        debugger;
+        var RequestDate = $('#RequestDate').val();
+        var Requestno = $("#Requestno").val();
+        var NoofDoc = $('#NOofDoc').val();
+        var Employeeid = $('#RequestFrom').val();
+        var Requireddate = $('#RequiredDate').val();
+        var Description = $('#Request_Note').val();
+        var Attributeid = $('#hdnattribute').val();
+
+        if (Requireddate == "") {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter Required Date',
+                type: 'blue',
+            });
+            return false;
+        }
+
+        if (RequestDate > Requireddate) {
+            $.alert({
+                title: 'DMS',
+                content: 'Required Date should be greater than Request Date',
+                type: 'blue',
+            });
+            return false;
+        }
+        var params = { Requestdate: RequestDate, Requestno: Requestno, noofdcoc: NoofDoc, Employeeid: Employeeid, Requireddate: Requireddate, Description: Description, atttributeid: Attributeid };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(params),
+            dataType: "json",
+            url: '@Url.Action("SaveRequestRetival", "TreeSearch")',
+            success: function (data) {
+                debugger;
+                $.alert({
+                    title: 'DMS',
+                    content: 'Request Raised Successfully',
+                    type: 'green',
+                });
+                document.getElementById('RequiredDate').value = "";
+                document.getElementById('Request_Note').value = "";
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function Close_RequestRetrival() {
+        debugger;
+        objDialogRR.dialog("close");
+    }
+
+</script>

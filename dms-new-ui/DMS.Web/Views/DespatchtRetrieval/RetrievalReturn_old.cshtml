@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "RetrievalReturn";
+}
+<div class="content-wrapper">
+    <!-- Main content -->
+    <div class="box-header text-center with-border">
+        <h3 class="box-title">Track Docs</h3>
+    </div>
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+
+            <div class="col-md-9" style="top:10%">
+                <div>
+                    <table width="110%">
+                        <tr>
+                            @*<td><select id="DespatchMode" name="DespatchMode" class="form-control" style="width:150px;height:30px;font-weight:normal;"></select></td>*@
+                            <td><label style="font-weight:bold;">Received Date:</label></td>
+                            <td>@Html.Editor("Despatchdate", null, new { htmlAttributes = new { @class = "form-control", style = "height:30px;width:200px;" } })</td>
+
+                            <td><label style="font-weight:bold;">Note:</label></td>
+
+                            <td style="width:250px;padding-bottom: 8px;padding-right: 10px;">
+                                @Html.Editor("DespatchNote", null, new { htmlAttributes = new { @class = "form-control", style = "height:45px;width:250px;" } })
+                            </td>
+
+                            <td>
+                                <button type="button" id="btnupdate" onclick="return Update()" style="width:140px" class="btn btn-orange"><i class="fa fa-save"></i> Update</button>
+                            </td>
+                            @*<td width="1%"></td>
+                                <td> <button id="btnGetdata" class="btn btn-orange" onclick="GetDetailData()" style="width:140px"><i class="fa fa-search"></i> Search</button> </td>*@
+
+                            <td>
+                                <button class="btn btn-orange" onclick="return ClearData()"><i class="fa fa-refresh"></i> Refresh</button>
+                            </td>
+                        </tr>
+                        @*<tr style="height:10px;"></tr>*@
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-md-9" style="margin:auto;max-height:620px;max-width:100%;padding-left: -10px;padding-left: -15px;">
+                <div class="col-md-9" style="width:135%;padding-left: 2px;padding-top: -11px;">
+                    <div class=" panel panel-primary" style="height:600px;">
+                        <div class="panel-heading">Retrival Detail</div>
+                        <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                            @*<div class="col-md-9" style="margin:auto;overflow:auto;width:104%;">*@
+                            <div id="Childgrid" class="col-md-9" style="margin:auto;height:300px;top:10px;width:100%;"> </div>
+                            @*</div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="ForAttributeDetailsPartialViewRtrn"></div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var objDialog5;
+    $(document).ready(function () {
+        //$('#btnupdate').prop('disabled', true);
+
+        GetDetailData();
+
+
+    });
+    var checkedIds = {};
+    function GetDetailData() {
+        debugger
+        var grid1 = $("#grid").data("kendoGrid");
+
+        // Get checked row by getting the input and then the row containing the input
+        /*    var row1 = $("#retrievalcheckbox:checked", grid1.tbody).closest("tr");
+            if (row1.length == 0) {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Select any one records in MainGrid to get Attributes.!',
+                    type: 'blue',
+                });
+                return false;
+            }*/
+        /*var Retriveid = [];
+        var Retriveid1;
+        for (var i = 0; i < row1.length; i++) {
+            var item1 = grid1.dataItem(row1[i]);
+            var Grid1ID = item1.entries[0];
+            Retriveid.push(Grid1ID);
+        }
+        var count1 = row1.length;
+        if (Retriveid != 0 && Retriveid != null && Retriveid != "") {
+            Retriveid1 = Retriveid.join(",");
+        }*/
+
+        $.ajax({
+            url: '@Url.Action("RetrivalreturnData", "DespatchtRetrieval")',
+            //data: { 'Retrivid': Retriveid1 },
+            data: {},
+            success: function (result) {
+                debugger;
+                var columns = [];
+                var chkval = JSON.parse(result.Data1);
+                var arr = [];
+                $.each(chkval, function (i, e) {
+                    debugger;
+                    $.each(e, function (key, val) {
+                        arr.push(val);
+                    });
+
+                });
+
+                if (arr == "No Records Found!" || arr == "Error in Data!") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No Records found..!',
+                        type: 'blue',
+                    });
+                    $('#btnbulmail').prop('disabled', true);
+                    return false;
+                }
+
+
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                var i = 0;
+
+                var entryIndex = "entries[" + i + "]";
+                columns.push({
+                    title: "Select",
+                    template: '<input type="checkbox" name="retrievalchdcheckbox" id="retrievalchdcheckbox" value="" class="checkbox"></span>'
+
+                });
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+                    columns.push({
+                        field: entryIndex,
+                        title: key,
+                        type: val
+                    });
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+
+                }
+
+
+                columns.push({
+                    field: entryIndex + 1,
+                    title: 'View File',
+                    template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick=View("main")></span>',
+                    //template: '<span class="glyphicon glyphicon-download Download" name="Download" id="Download" value="Download" onclick="Download()"></span>',
+                    filterable: false,
+                    sortable: true,
+                    editable: true
+                });
+
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+
+                        entryArray.push(val);
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray
+                    }));
+
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+
+                var configuration = {
+                    dataBound: onDataBoundchild,
+                    editable: false,
+                    sortable: true,
+                    scrollable: true,
+                    filterable: true,
+                    pagable: false,
+                    resizable: true,
+                    persistSelection: true,
+                    selectable: "false",
+                    pageable: {
+                        pageSize: 10,
+                        buttonCount: 4
+                    },
+                    columns: columns,
+                    rows: viewModel
+
+                };
+
+                $("#detgrid").remove();
+                $('#Childgrid').append('<div id="detgrid" style="position:relative" class="k-content"><table id="Detailgrid" data-bind="source: gridRows" style="position:relative;overflow:scroll;width:100%"></table></div>');
+                var timeEditGrid = $("#Detailgrid").kendoGrid(configuration).data("kendoGrid");
+
+                kendo.bind($("#Detailgrid"), viewModel);
+
+                var grid = $("#Detailgrid").data("kendoGrid");
+                grid.hideColumn(1);
+                grid.hideColumn(2);
+                //grid.hideColumn(4);
+                //grid.hideColumn(5);
+                for (var i = 0; i < grid.columns.length; i++) {
+                    if (i != grid.columns.length) {
+                        grid.autoFitColumn(i);  //autofit each column.
+
+                    }
+                }
+                $('#btnbulmail').prop('disabled', false);
+                //bind click event to the checkbox
+                grid.table.on("click", ".checkbox", selectRowchild);
+
+                $('#btnupdate').prop('disabled', false);
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred.!',
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+
+
+    //on dataBound event restore previous selected rows:
+    function onDataBoundchild(e) {
+        debugger
+        var checked = [];
+        for (var i in checkedIds) {
+            if (checkedIds[i]) {
+                checked.push(i);
+                //row.addClass("k-state-selected");
+            }
+        }
+        debugger
+        var view = this.dataSource.view();
+        for (var i = 0; i < view.length; i++) {
+            if (checkedIds[view[i].entries[0]]) {
+                this.tbody.find("tr[data-uid='" + view[i].uid + "']")
+                //.addClass("k-state-selected")
+                .addClass("k-gridtest")
+                .find(".checkbox")
+                .attr("checked", "checked");
+            }
+        }
+    }
+
+
+    //on click of the checkbox:
+    function selectRowchild() {
+        debugger
+        var grid1 = $("#Detailgrid").data("kendoGrid");
+        var checked = this.checked,
+        row = $(this).closest("tr"),//$("input:checked", grid1.tbody).closest("tr");//$(this).closest("tr"),
+        gridss = $("#Detailgrid").data("kendoGrid"),
+        dataItem = gridss.dataItem(row);
+
+        checkedIds[dataItem.entries[0]] = checked;
+        if (checked) {
+            //-select the row
+            //row.addClass("k-state-selected");
+            row.addClass("k-gridtest");
+        }
+        else {
+            //-remove selection
+            //row.removeClass("k-state-selected");
+            row.removeClass("k-gridtest");
+        }
+    }
+
+    function ClearData() {
+        window.location.href = '@Url.Action("RetrievalReturn", "DespatchtRetrieval")';
+    }
+
+    $('#Despatchdate').datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true
+    })
+
+
+    function Update() {
+
+        debugger
+        var grid1 = $("#Detailgrid").data("kendoGrid");
+
+        // Get checked row by getting the input and then the row containing the input
+        var row1 = $("#retrievalchdcheckbox:checked", grid1.tbody).closest("tr");
+        if (row1.length == 0) {
+            $.alert({
+                title: 'DMS',
+                content: 'Select any one records in MainGrid to get Attributes.!',
+                type: 'blue',
+            });
+            return false;
+        }
+        var Retriveid = [];
+        var Retriveid1;
+        for (var i = 0; i < row1.length; i++) {
+            var item1 = grid1.dataItem(row1[i]);
+            var Grid1ID = item1.entries[0];
+            Retriveid.push(Grid1ID);
+        }
+        var count1 = row1.length;
+        if (Retriveid != 0 && Retriveid != null && Retriveid != "") {
+            Retriveid1 = Retriveid.join(",");
+        }
+
+
+        var DespatchMode = '0'//$("#DespatchMode").val();
+        var Despatchdate = $("#Despatchdate").val();
+        var DespatchNote = $("#DespatchNote").val();
+        /* if (DespatchMode == "" || DespatchMode == null || DespatchMode == "undefined" || DespatchMode == 0) {
+             alert("DespatchMode should not be Empty!");
+             return false;
+         }*/
+        if (Despatchdate == "" || Despatchdate == null || Despatchdate == "undefined" || Despatchdate == 0) {
+            alert("Despatchdate should not be Empty!");
+            return false;
+        }
+        if (DespatchNote == "" || DespatchNote == null || DespatchNote == "undefined" || DespatchNote == 0) {
+            alert("DespatchNote should not be Empty!");
+            return false;
+        }
+        $.ajax({
+            url: '@Url.Action("updatereturnRetrivalData", "DespatchtRetrieval")',
+            // data: { 'Retrivid': Retriveid1, 'DespatchMode': DespatchMode, 'Despatchdate': Despatchdate, 'DespatchNote': DespatchNote },
+            data: { 'Retrivid': Retriveid1, 'Despatchdate': Despatchdate, 'DespatchNote': DespatchNote },
+            success: function (result) {
+                var data = JSON.parse(result.Data1);
+                debugger;
+                if (data[0].Clear == "0") {
+                    alert(data[0].Message);
+                    //Getsummary();
+                    GetDetailData();
+                }
+                else {
+                    alert("Despatch Updload Fail!");
+                }
+            },
+            error: function (result) {
+                alert("Error" + result.Data1);
+            }
+        });
+    }
+
+    function View(type) {
+        debugger;
+
+        objDialog5 = $("[id$='ForAttributeDetailsPartialViewRtrn']");
+        objDialog5.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 1250,
+            height: 680
+        });
+        var grid;
+        grid = $("#Detailgrid").data("kendoGrid");
+        model = grid.dataItem($(event.target).closest("tr"));
+        $("#hdn_filegid").val("");
+        //filegid = (model.entries[2]);
+        filegid = (model.entries[1]);
+        $("#hdn_filegid").val(filegid);
+        var mode = type;
+        objDialog5.load('../DespatchtRetrieval/ViewIndexedDocDetails?filegid=' + filegid);
+        objDialog5.dialog({ title: 'Archival Details' });
+        objDialog5.dialog("open");
+    }
+</script>

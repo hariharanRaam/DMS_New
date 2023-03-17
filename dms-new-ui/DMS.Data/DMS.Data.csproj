@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CB0E76FB-7465-4551-B4CB-460B4DB5985E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DMS.Data</RootNamespace>
+    <AssemblyName>DMS.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\..\Phase1(DMS)\Final Solution\DMS.Web\DMS.Web\bin\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DMS.Web\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApproveEditedIndexedDoc_Data.cs" />
+    <Compile Include="AutoNumbering_Data.cs" />
+    <Compile Include="BasicReport_Data.cs" />
+    <Compile Include="ConfigureAttributes_Data.cs" />
+    <Compile Include="DataConnection.cs" />
+    <Compile Include="CreateMaster_Data.cs" />
+    <Compile Include="DepartmentMaster_Data.cs" />
+    <Compile Include="DocArchivalBulkUpload_Data.cs" />
+    <Compile Include="DocArchival_Data.cs" />
+    <Compile Include="DocgroupMaster_Data.cs" />
+    <Compile Include="DocNameMaster_Data.cs" />
+    <Compile Include="DocumentLinking_Data.cs" />
+    <Compile Include="EditIndexedDocument_Data.cs" />
+    <Compile Include="EmployeeMaster_Data.cs" />
+    <Compile Include="Employee_Data.cs" />
+    <Compile Include="Emp_Profile.cs" />
+    <Compile Include="Forgotpwd_Data.cs" />
+    <Compile Include="GetAllDocuments_Data.cs" />
+    <Compile Include="GetDeletedIndexedDocuments_Data.cs" />
+    <Compile Include="InterFilingData.cs" />
+    <Compile Include="Link_Data.cs" />
+    <Compile Include="Login_Data.cs" />
+    <Compile Include="LOVMaster_Data.cs" />
+    <Compile Include="OrgHierarchy_Data.cs" />
+    <Compile Include="PhysicalArchival_Data.cs" />
+    <Compile Include="Piechartdata.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retrival_Data.cs" />
+    <Compile Include="Search_Data.cs" />
+    <Compile Include="SetDocAttributes_Data.cs" />
+    <Compile Include="Storageattribute_Data.cs" />
+    <Compile Include="TreeSearch_Data.cs" />
+    <Compile Include="UnitMaster_Data.cs" />
+    <Compile Include="UserGroups_Data.cs" />
+    <Compile Include="ViewAttributeLOV_Data.cs" />
+    <Compile Include="ViewDocumentAttributes_Data.cs" />
+    <Compile Include="ViewDocument_Data.cs" />
+    <Compile Include="ViewStorageAttributes_Data.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DMS.Model\DMS.Model.csproj">
+      <Project>{bbe9a199-4472-4d90-abc5-0d1d5fc86a09}</Project>
+      <Name>DMS.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\DMS.Data.dll" />
+    <Content Include="bin\Debug\DMS.Data.pdb" />
+    <Content Include="bin\Debug\DMS.Model.dll" />
+    <Content Include="bin\Debug\DMS.Model.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

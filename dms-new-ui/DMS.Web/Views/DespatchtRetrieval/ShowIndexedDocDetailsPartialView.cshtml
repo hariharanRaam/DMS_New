@@ -1,0 +1,954 @@
+﻿@model DMS.Model.SetDocAttributes_Model
+@using GleamTech.AspNet.Mvc
+@using GleamTech.DocumentUltimate
+@using GleamTech.DocumentUltimate.AspNet
+@using GleamTech.DocumentUltimate.AspNet.UI
+@using System.Web.UI.WebControls;
+@{
+    int i = 0;
+}
+
+<style>
+    /*.ui-dialog-titlebar-close {
+        display: none;
+    }
+
+    .panel {
+        margin-bottom: 1px;
+    }*/
+
+    .ui-dialog-titlebar-close:after {
+        content: 'X';
+        color: black;
+    }
+
+    .ui-widget-header {
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .panel {
+        margin-bottom: 1px;
+    }
+
+    .ui-dialog {
+        z-index: 1040 !important;
+    }
+
+
+    /*.ui-dialog-titlebar-close:after {
+        content: 'X';
+    }*/
+    /*body {
+        font: normal 13px Source Sans Pro, Helvetica Neue, Helvetica,Arial,sans-serif;
+    }*/
+    .tab-content {
+        font: normal 13px Source Sans Pro, Helvetica Neue, Helvetica,Arial,sans-serif;
+    }
+</style>
+@*<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />*@
+
+@*<div class="panel panel-primary">
+        <div class="panel-heading">
+            <table>
+                <tr>
+                    <td><label style="font-weight:normal">View</label></td>
+                    <td width="100%"></td>
+                    <td><button type="button" id="btnclose" style="color:black;font-weight:bold;" onclick="return Close_ForDetails();">X</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>*@
+
+
+
+<div id="tabs">
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="#tab_1" data-toggle="tab" style="font-weight:bold;font-size:13px">Indexed Document</a>
+        </li>
+        <li>
+            <a href="#tab_2" onclick="return getlinkinterfiledocuments()" data-toggle="tab" style="font-weight:bold;font-size:13px">Linked/InterFile Document</a>
+        </li>
+        <li>
+            <a href="#tab_3" data-toggle="tab" style="font-weight:bold;font-size:13px">Notes</a>
+        </li>
+        <li>
+            <a href="#tab_4" data-toggle="tab" style="font-weight:bold;font-size:13px">Signature</a>
+        </li>
+        <li>
+            <a href="#tab_5" onclick="return getauditdocuments()" data-toggle="tab" style="font-weight:bold;font-size:13px">Audit Trail</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+
+        <div id="tab_1">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div style="width:380px;border:groove thin;height:150px">
+                            <table>
+                                <tr style="height:10px;">
+                                    <td style="left:15px;position:relative">
+                                        @Html.Label("ORG")
+                                    </td>
+                                <tr style="height:30px;">
+                                    <td style="left:15px; position:relative">
+                                        @Html.Label("Doc Name", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.SubCateName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" }, { "Id", "SubCateName" } })
+                                    </td>
+                                </tr>
+
+
+                                <tr style="height:30px;">
+                                    <td style="left:15px; position:relative">
+                                        @Html.Label("Doc Group", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.CateName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;font-weight: normal;" }, { "Id", "CateName" } })
+                                    </td>
+                                </tr>
+
+
+                                <tr style="height:30px;">
+                                    <td style="left:15px; position:relative">
+                                        @Html.Label("Unit", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.UnitName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;font-weight: normal;" }, { "Id", "UnitName" } })
+                                    </td>
+                                </tr>
+
+
+                                <tr style="height:30px;">
+
+                                    <td style="left:15px; position:relative">
+                                        @Html.Label("Department", new { style = "width:120px;font-weight: normal;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.DeptName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;font-weight: normal;" }, { "Id", "DeptName" } })
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <div style="height:175px;overflow:auto;overflow-x: hidden;width:380px;border:groove thin;">
+                            <table>
+                                <tr style="height:5px;"></tr>
+
+                                <td style="left:15px;position:relative">
+                                    @Html.Label("Attributes")
+                                </td>
+
+                                @foreach (var category in Model.dept)
+                                {
+                                    if (category.attrbname != " " && category.attrbname != "0" && category.attrbname != null)
+                                    {
+                                        <tr style="height:30px;">
+
+                                            <td style="left:15px; position:relative">
+                                                <label style="width:120px;font-weight: normal;">@category.attrbname </label>
+                                            </td>
+
+                                            <td style="width:120px">
+                                                @Html.TextBox("ctl" + i, @category.attrbdesc, new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;", disabled = "disabled" })
+                                            </td>
+
+                                        </tr>}
+                                    i++;
+
+                                }
+                                <tr></tr>
+                            </table>
+                        </div>
+                        <div style="height:15px"></div>
+
+                        <div style="width:380px;overflow:auto;overflow-x: hidden;border:groove thin;height:170px">
+                            <table>
+                                <tr style="height:10px;"></tr>
+
+                                <td style="left:15px;position:relative">
+                                    @Html.Label("PHYSICAL STORAGE")
+                                </td>
+
+
+
+                                @foreach (var category in Model.dept)
+                                {
+                                    if (category.Satr_Name != " " && category.Satr_Name != "0" && category.Satr_Name != null)
+                                    {
+                                        <tr style="height:30px;">
+
+                                            <td style="left:15px; position:relative">
+                                                <label style="width:120px;font-weight: normal;">@category.Satr_Name </label>
+                                            </td>
+
+                                            <td style="width:120px">
+                                                @Html.TextBox("ctl" + i, @category.Sattribdtl_Description, new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;", disabled = "disabled" })
+                                            </td>
+
+                                        </tr>
+                                    }
+                                    i++;
+
+                                }
+
+
+                            </table>
+                        </div>
+
+
+
+
+
+                        <div style="height:15px"></div>
+                        @* <div style="width:380px;border:groove thin;height:170px">
+                                <table>
+                                    <tr style="height:10px;"></tr>
+                                    <tr style="height:30px;">
+                                        <td style="left:15px; position:relative">
+                                            @Html.Label("File Name", new { style = "width:120px;font-weight: normal;" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.FileName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+
+                                        </td>
+
+                                    </tr>
+                                    <tr style="height:30px">
+                                        <td style="left:15px; position:relative">
+                                            @Html.Label("File Type", new { style = "width:120px;font-weight: normal;" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.FileType, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                        </td>
+                                    </tr>
+                                    <tr style="height:30px;">
+                                        <td style="left:15px; position:relative">
+                                            @Html.Label("Version Name", new { style = "width:120px;font-weight: normal;" })
+                                        </td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.VersionName, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                        </td>
+                                    </tr>
+                                    <tr style="height:30px;">
+                                        <td style="left:15px; position:relative">
+                                            @Html.Label("Version Date", new { style = "width:120px;font-weight: normal;" })
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(model => model.VersionDate, new { htmlAttributes = new { @class = "form-control", style = "height:25px;width:225px;font-weight: normal;", disabled = "disabled", @readonly = "readonly" } })
+                                        </td>
+                                    </tr>
+                                    <tr style="height:30px;">
+                                        <td style="left:15px; position:relative">
+                                            @Html.Label("Signature", new { style = "width:120px;font-weight: normal;" })
+                                        </td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.Signature, new Dictionary<string, object>() { { "readonly", "true" }, { "class", "form-control" }, { "style", "height:25px;width:225px;font-weight: normal;" } })
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            @Html.HiddenFor(m => m.HideDocArchId, new { @class = "form-control", style = "height:25px;" })
+                                        </td>
+                                        <td>
+                                            @Html.HiddenFor(m => m.Filepathfrom, new { @class = "form-control", style = "height:25px;" })
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </div>*@
+                        <div style="height:5px"></div>
+                    </div>
+                    <div class="col-md-6" style="margin-left:40px;">
+                        <table>
+                            @{
+                                var documentViewer = new DocumentViewer
+            {
+                Width = 750,
+                Height = 537,
+                Document = ViewBag.FilePath
+            };
+                            }
+                            @this.RenderBody(documentViewer)
+                            @this.RenderHead(documentViewer)
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="tab_2">
+            <div class=" panel panel-primary" style="height:280px;width:80%;padding-left: -10px;padding-left: -15px;">
+                <div class="panel-heading" style="font-size:15px">Linked File</div>
+                <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                    <div class="col-md-9" style="margin:auto;width:104%;">
+                        <div id="Linkdiv" class="col-md-9" style="margin:auto;height:200px;top:10px;width:100%;"></div>
+                        @*<div id="Maingrid" class="col-md-9" style="margin:auto;height:300px;top:10px;width:100%;"> </div>*@
+                    </div>
+                </div>
+            </div>
+            <div style="width:10px"></div>
+            <div class=" panel panel-primary" style="height:275px;width:80%;padding-left: -10px;padding-left: -15px;">
+                <div class="panel-heading" style="font-size:15px">InterFiling File</div>
+                <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                    <div class="col-md-9" style="margin:auto;width:104%;">
+                        <div id="interfilediv" class="col-md-9" style="margin:auto;height:200px;top:10px;width:100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab_3">
+            <div class="row">
+                <p>Content for Tab 3 goes here.</p>
+            </div>
+
+        </div>
+
+        <div id="tab_4">
+            <div class="row">
+                <p>Content for Tab 4 goes here.</p>
+            </div>
+        </div>
+
+        <div id="tab_5">
+            @*<div>
+                    <div class="row">
+                        <p>Content for Tab 5 goes here.</p>
+                    </div>
+                </div>*@
+            <div class=" panel panel-primary" style="height:280px;width:80%;padding-left: -10px;padding-left: -15px;">
+                <div class="panel-heading" style="font-size:15px">Audit Trail</div>
+                <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                    <div class="col-md-9" style="margin:auto;width:104%;">
+                        <div id="Audit" class="col-md-9" style="margin:auto;height:200px;top:10px;width:100%;"></div>
+                        @*<div id="Maingrid" class="col-md-9" style="margin:auto;height:300px;top:10px;width:100%;"> </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.box-body -->
+@*<div class="box-footer">
+        <div class="row text-center mt20">
+            <input type="button" value="Close" id="btn_cancel" onclick="return Close_ForDetails();" class="btn btn-orange fa fa-download" />
+        </div>
+    </div>*@
+
+
+@*<div class="row" id="ForDocumentPartialview"></div>*@
+<div class="row" id="ForDocAttributePartialview"></div>
+<div class="row" id="FormailPartialview"></div>
+
+@*<script src="~/Scripts/Gijgo/gijgo.js"></script>
+    <link href="http://code.gijgo.com/1.3.0/css/gijgo.css" rel="stylesheet" type="text/css" />*@
+<script>
+    var objDialog10;
+    var objDialog11;
+    //var objDialog12;
+    $(document).ready(function() {
+        debugger;
+        $("#tabs").tabs();
+        objDialog10 = $("[id$='ForDocAttributePartialview']");
+        objDialog10.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 450,
+            height: 300
+        });
+
+        objDialog11 = $("[id$='FormailPartialview']");
+        objDialog11.dialog({
+            autoOpen: false,
+            modal: true,
+            width: 550,
+            height: 550
+        });
+
+        //objDialog12 = $("[id$='ForDocumentPartialview']");
+        //objDialog12.dialog({
+        //    autoOpen: false,
+        //    modal: true,
+        //    width: 850,
+        //    height: 650
+        //});
+
+        $("#VersionName").val("0.1");
+        $("#Signature").val("Test");
+        var UsersList = @Html.Raw(Json.Encode(@Model.dept))
+        var i=0;
+        var mode
+        $.each(UsersList, function (index, item) {
+            debugger;
+            var Atrtype = item.attrbtype;
+            mode = item.attrbmode;
+            if (Atrtype == "Datetime") {
+                $('#ctl' + i).datepicker({
+                    dateFormat:"dd-mm-yy",
+                    changeMonth :true,
+                    changeYear: true  })
+
+                $('#ctl'+i).datepicker('setDate', item.attrbdesc)
+            }
+            i++;
+        });
+
+        $("#VersionDate").datepicker({dateFormat:"dd-mm-yy",
+            changeMonth :true,
+            changeYear: true  });
+    });
+
+    function Close_ForDetails() {
+        debugger;
+        objDialog5.dialog("close");
+    }
+
+    function getlinkinterfiledocuments()
+    {
+        debugger
+        var grid;
+        //grid = $("#grid").data("kendoGrid");
+        //model = grid.dataItem($(event.target).closest("tr"));
+        //filegid = (model.entries[2]);
+        //alert('@Model.HideDocArchId');
+        Attribid = '@Model.HideDocArchId';//$("#hdn_filegid").val();
+        var interFile = $("#interFiletable").data("kendoGrid");
+        var Link = $("#Linktable").data("kendoGrid");
+        var method = "ShowlinkandInterfileDocs/";
+        var Contol = "TreeSearch";
+        $.ajax({
+            //url: method + Contol,
+            url: '@Url.Action("ShowlinkandInterfileDocs", "TreeSearch")',
+            data: {'Attribid': Attribid },
+            success: function (result) {
+                debugger
+                if (result.Data1 != 0) {
+                    LinkGridbind(result);
+                }
+                if (result.Data3 != 0) {
+                    debugger
+                    InterFileGridbind(result);
+                }
+
+                if(result.Data5 != 0){
+                    debugger
+                    RetrievalAudit(result);
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred!',
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+
+
+    function getauditdocuments()
+    {
+        debugger
+        var grid;
+        //grid = $("#grid").data("kendoGrid");
+        //model = grid.dataItem($(event.target).closest("tr"));
+        //filegid = (model.entries[2]);
+        //alert('@Model.HideDocArchId');
+        Attribid = '@Model.HideDocArchId';//$("#hdn_filegid").val();
+        var interFile = $("#interFiletable").data("kendoGrid");
+        var Link = $("#Linktable").data("kendoGrid");
+        var method = "ShowlinkandInterfileDocs/";
+        var Contol = "TreeSearch";
+        $.ajax({
+            //url: method + Contol,
+            url: '@Url.Action("ShowlinkandInterfileDocs", "TreeSearch")',
+            data: {'Attribid': Attribid },
+            success: function (result) {
+                debugger
+                if(result.Data5 != 0){
+                    debugger
+                    RetrievalAudit(result);
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred!',
+                    type: 'red',
+                });
+            }
+        });
+    }
+
+    function LinkGridbind(result) {
+        debugger
+        $("#Link").remove();
+        //$('#Linkdiv').append('<div id="Link" style="position:relative;background-color:#ecf0f5;" class="k-content"> <span id="lbllink"></span><table id="Linktable" data-bind="source: gridRows"></table></div></div>');
+        $('#Linkdiv').append('<div id="Link" style="position:relative;background-color:#ecf0f5;" class="k-content"><table id="Linktable" data-bind="source: gridRows"></table></div></div>');
+        //$("#lbllink").text("Linked File");
+        var chkval = JSON.parse(result.Data1);
+        var arr = [];
+        $.each(chkval, function (i, e) {
+            $.each(e, function (key, val) {
+                arr.push(val);
+            });
+        });
+
+        var columns = [];
+        var data = JSON.parse(result.Data1);
+        var data2 = JSON.parse(result.Data2);
+        debugger;
+        var i = 0;
+        var entryIndex = "entries[" + i + "]";
+
+        for (var key in data[0]) {
+            var val = data2[0][key];
+            columns.push({
+                field: entryIndex,
+                title: key,
+                width: 20,
+                type: val
+            });
+            i = i + 1;
+            entryIndex = "entries[" + i + "]";
+        }
+        if (arr != "NoRecords") {
+            columns.push({
+                field: entryIndex + 1,
+                title: 'View',
+                template: '<span class="fa fa-eye eye" name="Download" id="Download" value="Download" onclick="viewlinkfile()"></span>',
+                filterable: false,
+                sortable: true,
+                editable: true,
+                //width: 5
+            });
+
+            columns.push({
+                field: entryIndex + 1,
+                title: 'Mail',
+                //template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick="Mail()"></span>',
+                template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick=Grid2Mail("link")></span>',
+                filterable: false,
+                sortable: true,
+                editable: true,
+                //width: 5
+            });
+
+            columns.push({
+                field: entryIndex + 1,
+                title: 'View File',
+                template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick= ViewDocument("link")></span>',
+                filterable: false,
+                sortable: true,
+                //width: 80,
+                editable: true
+            });
+        }
+
+        var rows = [];
+        var data1 = JSON.parse(result.Data1);
+
+        $.each(data1, function (i, e) {
+            var entryArray = [];
+            $.each(e, function (key, val) {
+                //entryArray.push(key);
+                entryArray.push(val);
+
+            });
+            rows.push(kendo.observable({
+                entries: entryArray
+            }));
+
+        });
+
+        var viewModel = kendo.observable({
+            gridRows: rows
+        });
+
+        var configuration = {
+            editable: false,
+            sortable: true,
+            scrollable: true,
+            filterable: true,
+            pagable: true,
+            resizable: true,
+            selectable: 'row',
+            pageable: {
+                pageSize: 3,
+                buttonCount: 4
+            },
+            columns: columns,
+            rows: viewModel,
+            //height: '95%'
+        };
+
+        var timeEditGrid = $("#Linktable").kendoGrid(configuration).data("kendoGrid");
+        kendo.bind($("#Linktable"), viewModel);
+        var grid = $("#Linktable").data("kendoGrid");
+        if (arr != "NoRecords") {
+            grid.hideColumn(0);
+        }
+        for (var i = 0; i < grid.columns.length; i++) {
+            if (i != grid.columns.length - 1) {
+                grid.autoFitColumn(i);  //autofit each column.
+
+            }
+        }
+    }
+
+    function InterFileGridbind(result) {
+        debugger
+        $("#interFile").remove();
+        //$('#interfilediv').append('<div id="interFile" style="position:relative;background-color:#ecf0f5;" class="k-content"> <span id="lblinterfiling"></span><table id="interFiletable" data-bind="source: gridRows"></table></div></div>');
+        $('#interfilediv').append('<div id="interFile" style="position:relative;background-color:#ecf0f5;" class="k-content"> <table id="interFiletable" data-bind="source: gridRows"></table></div></div>');
+        //$("#lblinterfiling").text("Interfiling File");
+
+        var chkval = JSON.parse(result.Data3);
+        var arr = [];
+        $.each(chkval, function (i, e) {
+            $.each(e, function (key, val) {
+                arr.push(val);
+            });
+        });
+
+        var columns = [];
+        var data = JSON.parse(result.Data3);
+        var data2 = JSON.parse(result.Data4);
+        debugger;
+        var i = 0;
+        var entryIndex = "entries[" + i + "]";
+
+        for (var key in data[0]) {
+            var val = data2[0][key];
+            columns.push({
+                field: entryIndex,
+                title: key,
+                width: 20,
+                type: val
+            });
+            i = i + 1;
+            entryIndex = "entries[" + i + "]";
+        }
+        if (arr != "NoRecords") {
+            columns.push({
+                field: entryIndex + 1,
+                title: 'View',
+                template: '<span class="fa fa-eye eye" name="Download" id="Download" value="Download" onclick="viewinterfilingfile()"></span>',
+                filterable: false,
+                sortable: true,
+                editable: true,
+                //width: 5
+            });
+
+            columns.push({
+                field: entryIndex + 1,
+                title: 'Mail',
+                //template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick="Mail()"></span>',
+                template: '<span class="glyphicon glyphicon-envelope mail" name="mail" id="mail" value="mail" onclick=Grid2Mail("interfile")></span>',
+                filterable: false,
+                sortable: true,
+                editable: true,
+                //width: 5
+            });
+
+            columns.push({
+                field: entryIndex + 1,
+                title: 'View File',
+                template: '<span class="fa fa-eye view" name="view" id="view" value="view" onclick=ViewDocument("interfiling")></span>',
+                //template: '<span class="glyphicon glyphicon-download Download" name="Download" id="Download" value="Download" onclick="Download()"></span>',
+                filterable: false,
+                sortable: true,
+                //width: 80,
+                editable: true
+            });
+        }
+
+        var rows = [];
+        var data1 = JSON.parse(result.Data3);
+
+        $.each(data1, function (i, e) {
+            var entryArray = [];
+            $.each(e, function (key, val) {
+                //entryArray.push(key);
+                entryArray.push(val);
+
+            });
+            rows.push(kendo.observable({
+                entries: entryArray
+            }));
+
+        });
+
+        var viewModel = kendo.observable({
+            gridRows: rows
+        });
+
+        var configuration = {
+            editable: false,
+            sortable: true,
+            scrollable: true,
+            filterable: true,
+            pagable: true,
+            resizable: true,
+            selectable: 'row',
+            pageable: {
+                pageSize: 3,
+                buttonCount: 4
+            },
+            columns: columns,
+            rows: viewModel,
+            //height: '95%'
+        };
+
+        var timeEditGrid = $("#interFiletable").kendoGrid(configuration).data("kendoGrid");
+        kendo.bind($("#interFiletable"), viewModel);
+        var grid = $("#interFiletable").data("kendoGrid");
+        if (arr != "NoRecords") {
+            grid.hideColumn(0);
+        }
+        for (var i = 0; i < grid.columns.length; i++) {
+            if (i != grid.columns.length - 1) {
+                grid.autoFitColumn(i);  //autofit each column.
+
+            }
+        }
+    }
+
+
+
+    function RetrievalAudit(result){
+        $("#RetAudit").remove();
+        //$('#interfilediv').append('<div id="interFile" style="position:relative;background-color:#ecf0f5;" class="k-content"> <span id="lblinterfiling"></span><table id="interFiletable" data-bind="source: gridRows"></table></div></div>');
+        $('#Audit').append('<div id="RetAudit" style="position:relative;background-color:#ecf0f5;" class="k-content"> <table id="RetAudittable" data-bind="source: gridRows"></table></div></div>');
+        //$("#lblinterfiling").text("Interfiling File");
+
+        var chkval = JSON.parse(result.Data5);
+        var arr = [];
+        $.each(chkval, function (i, e) {
+            $.each(e, function (key, val) {
+                arr.push(val);
+            });
+        });
+
+        var columns = [];
+        var data = JSON.parse(result.Data5);
+        var data2 = JSON.parse(result.Data6);
+        debugger;
+        var i = 0;
+        var entryIndex = "entries[" + i + "]";
+
+        for (var key in data[0]) {
+            var val = data2[0][key];
+            columns.push({
+                field: entryIndex,
+                title: key,
+                width: 20,
+                type: val
+            });
+            i = i + 1;
+            entryIndex = "entries[" + i + "]";
+        }
+
+        var rows = [];
+        var data1 = JSON.parse(result.Data5);
+
+        $.each(data1, function (i, e) {
+            var entryArray = [];
+            $.each(e, function (key, val) {
+                //entryArray.push(key);
+                entryArray.push(val);
+
+            });
+            rows.push(kendo.observable({
+                entries: entryArray
+            }));
+
+        });
+
+        var viewModel = kendo.observable({
+            gridRows: rows
+        });
+
+        var configuration = {
+            editable: false,
+            sortable: true,
+            scrollable: true,
+            filterable: true,
+            pagable: true,
+            resizable: true,
+            selectable: 'row',
+            pageable: {
+                pageSize: 3,
+                buttonCount: 4
+            },
+            columns: columns,
+            rows: viewModel,
+            //height: '95%'
+        };
+
+        var timeEditGrid = $("#RetAudittable").kendoGrid(configuration).data("kendoGrid");
+        kendo.bind($("#RetAudittable"), viewModel);
+        var grid = $("#RetAudittable").data("kendoGrid");
+        // if (arr != "NoRecords") {
+        grid.hideColumn(0);
+        //}
+        for (var i = 0; i < grid.columns.length; i++) {
+            if (i != grid.columns.length) {
+                grid.autoFitColumn(i);  //autofit each column.
+
+            }
+        }
+    }
+
+    function viewlinkfile() {
+        debugger;
+        var grid = $("#Linktable").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var linkgid = (model.entries[0]);
+        $("#hdn_type").val("link");
+        $("#hdn_gridgid").val(linkgid);
+        //objDialog10.load('../TreeSearch/showlinkinterfilingattributes');
+        objDialog10.load('../TreeSearch/showlinkinterfilingattributes?type=link'+'&gid='+linkgid);
+        objDialog10.dialog({ title: 'View Link Attributes' });
+        objDialog10.dialog("open");
+    }
+    function viewinterfilingfile() {
+        debugger;
+        var grid = $("#interFiletable").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var interfilinggid = (model.entries[0]);
+        $("#hdn_type").val("interfiling");
+        $("#hdn_gridgid").val(interfilinggid);
+        //objDialog10.load('../TreeSearch/showlinkinterfilingattributes');
+        objDialog10.load('../TreeSearch/showlinkinterfilingattributes?type=interfiling'+'&gid='+interfilinggid);
+        objDialog10.dialog({ title: 'View InterFiling Attributes' });
+        objDialog10.dialog("open");
+    }
+    function Grid2Mail(type) {
+        debugger;
+        var grid;
+        var model;
+        var attachedid;
+        var mode;
+        if (type == "link") {
+            grid = $("#Linktable").data("kendoGrid");
+            model = grid.dataItem($(event.target).closest("tr"));
+            attachedid = (model.entries[0]);
+            mode = "link";
+        }
+        if (type == "interfile") {
+            grid = $("#interFiletable").data("kendoGrid");
+            model = grid.dataItem($(event.target).closest("tr"));
+            attachedid = (model.entries[0]);
+            mode = "interfile";
+        }
+        //var grid = $("#grid2").data("kendoGrid");
+        //var model = grid.dataItem($(event.target).closest("tr"));
+        //var attachedid = (model.entries[0]);
+        $("#hdn_attachid").val("");
+        $("#hdn_mode").val("")
+        $("#hdn_attachid").val(attachedid);
+        $("#hdn_linkorinterfile").val(mode);
+        //objDialog11.load('../TreeSearch/Showmailpartialview1');
+        objDialog11.load('../TreeSearch/Showmailpartialview1?attachedid='+attachedid + '&mode=' + mode);
+        objDialog11.dialog({ title: 'Send Mail' });
+        objDialog11.dialog("open");
+        return false;
+    }
+
+    function SendMail() {
+        debugger;
+        // var mailfrom = $("#MailFrom").val();
+        var mailto = $("#MailTo").val();
+        var mailcc = $("#MailCc").val();
+        if (mailto == "") {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter email address..!!',
+                icon: 'fa fa-success',
+                type: 'green',
+            });
+            return false;
+        }
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (!emailReg.test(mailto)) {
+            $.alert({
+                title: 'DMS',
+                content: 'Enter valid email address..!!',
+                icon: 'fa fa-success',
+                type: 'red',
+            });
+            return false;
+        }
+        var subject = $("#MailSubject").val();
+        var content = $("#MailContent").val();
+        var filelocation = $("#hdn_filelocation").val();
+        var mailtype = $("#hdn_mailtype").val();
+        $.ajax({
+            url: '@Url.Action("SendMail", "TreeSearch")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'mailto': mailto, 'subject': subject, 'content': content, 'filelocation': filelocation, 'mailcc': mailcc, 'mailtype': mailtype },
+            success: function (data) {
+                debugger;
+                if (data == "success") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Mail sent successfully!',
+                        icon: 'fa fa-success',
+                        type: 'blue',
+                    });
+                    setTimeout(function () {
+                        //window.location.reload(1);
+                        objDialog.dialog("close");
+                    }, 2500);
+                }
+                else {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Mail could not be sent!!',
+                        icon: 'fa fa-success',
+                        type: 'orange',
+                    });
+                }
+            },
+        });
+    }
+
+    //function ViewDocument(type) {
+    //    debugger;
+    //    var grid;
+    //    var model;
+    //    var viewid;
+    //    if (type == "link") {
+    //        grid = $("#Linktable").data("kendoGrid");
+    //        model = grid.dataItem($(event.target).closest("tr"));
+    //        viewid = (model.entries[0]);
+    //    }
+    //    if (type == "interfiling") {
+    //        grid = $("#interFiletable").data("kendoGrid");
+    //        viewid = (model.entries[0]);
+    //    }
+
+    //    var mode = type;
+    //    //$("#hdn_viewfilepath").val(result);
+    //    objDialog12.load('../TreeSearch/showdocuments?viewid=' + viewid + '&mode=' + mode);
+    //    objDialog12.dialog({ title: 'view' });
+    //    objDialog12.dialog("open");
+    //}
+
+</script>

@@ -1,0 +1,635 @@
+﻿
+
+<style>
+    /*. ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable
+    {
+        width: 1000px;
+    }*/
+
+
+    .ui-dialog-titlebar-close:after {
+        content: 'X';
+    }
+
+    .ui-dialog {
+        z-index: 1040 !important;
+    }
+
+    /*label {
+        font-weight: 400;
+    }*/
+</style>
+<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />
+@*class="modal-dialog fixed fade in"*@
+
+
+@*<table id="myTable1" style="width:100%;">
+        <tr style="width:100%">
+            <td style="width:25%;left:22px;position:relative">
+                <label style="width:40%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Doc Name:</label>
+                <span id="documentnametext" style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"></span>
+
+            </td>
+            <td style="width:20%;left:50px;position:relative">
+                <label style="width:43%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Doc Group:</label>
+                <span id="documentgrouptext" style="width:130%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"></span>
+            </td>
+            <td style="width:10%;left:50px;position:relative">
+                <label style="width:30%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Unit:</label>
+                <span id="unittext" style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"></span>
+            </td>
+            <td style="width:15%;left:100px;position:relative">
+                <label style="width:60%; font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Department:</label>
+                <span id="departmenttext" style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"></span>
+            </td>
+        </tr>
+    </table>*@
+<div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+    <div class=" panel panel-primary" style="margin-bottom:5px;height:200px;">
+        <div class="panel-heading">Atributes</div>
+        <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+            <div class="col-md-9" style="margin:auto;height:110px;overflow:auto;width:104%;">
+
+                <table id="myTable1" style="width:50%;">
+                    <tr>
+                        <td style="width:20%">
+                            <label style=" width:100%;font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;">
+                                Doc Name:
+                            </label>
+
+                        </td>
+                        <td style="width:20%">
+                            <input type="text" id="documentnametext" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width:20%">
+                            <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Doc Group:</label>
+
+                        </td>
+                        <td style="width:20%">
+                            <input type="text" id="documentgrouptext" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                            @*<span id="documentgrouptext" style="width:130%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"></span>*@
+                        </td>
+
+                    </tr>
+
+                    <tr style="display:none" id="orgcol4">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl4lbl">Orglvl4</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl4val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol3">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl3lbl">Orglvl4</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl3val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol2">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl2lbl">Orglvl4</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl2val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+
+                    <tr style="display:none" id="orgcol1">
+                        <td>
+                            <label style="font-weight:bold;font-size: 13px;font-family:'source sans pro','helvetica neue',helvetica,arial,sans-serif;" id="orglvl1lbl">Orglvl1</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orglvl1val" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>
+
+
+                    @*<tr>
+                        <td style="width:20%">
+                            <label style="width:20%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Unit:</label>
+
+                        </td>
+                        <td style="width:20%">
+                            <input type="text" id="unittext" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width:20%">
+                            <label style="width:20%; font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Department:</label>
+
+                        </td>
+                        <td style="width:20%">
+                            <input type="text" id="departmenttext" disabled style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" />
+                        </td>
+                    </tr>*@
+                    @*<tr>@Html.Partial("BindOrgLevels")</tr>*@
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@*<table id="myTable1" style="width:100%">
+        <tr style="width:100%">
+            <td style="width:25%;left:70px;position:relative"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Storage Type</label></td>
+            <td style="width:20%"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Data Type</label></td>
+            <td style="width:10%"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Length</label></td>
+            <td style="width:15%;left:20px;position:relative"> <label style="width:100%; font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Mandatory</label></td>
+            <td style="width:15%" class="col-sm-1">
+                <button type="button" class="btn btn bg-green " id="addrow" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </td>
+        </tr>
+    </table>*@
+
+<div class="col-md-9" style="width:102%;padding-left: 2px;padding-top: -11px;">
+    <div class=" panel panel-primary" style="margin-bottom:5px;height:300px;">
+        <div class="panel-heading">Grid View</div>
+        <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+            <div class="col-md-9" style="margin:auto;height:210px;overflow:auto;width:104%;">
+
+                <table id="myTable1" style="width:100%">
+                    <tr style="width:100%">
+                        <td style="width:25%;left:50px;position:relative"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Order by </label> </td>
+                        <td style="width:25%;right:10px;position:relative"><label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Storage Type</label></td>
+                        <td style="width:20%;right:30px;position:relative"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">Data Type</label></td>
+                        <td style="width:10%;right:20px;position:relative"> <label style="width:100%;font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Length</label></td>
+                        <td style="width:15%;left:20px;position:relative"> <label style="width:100%; font-weight:bold;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;"> Mandatory</label></td>
+                        <td style="width:15%" class="col-sm-1">
+                            <button type="button" class="btn btn bg-green " id="addrow" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <table id="myTable" class="table order-list" style="width:100% ;font-weight:normal;"></table>
+                @*<input type="button" value="Update" id="btnupdate" class="btn btn-orange fa-align-center" />*@
+                <div class="row text-center mt20">
+                    <input type="button" value="Update" id="btnupdate" class="btn btn-orange fa-align-center" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="documentnameid" />
+<input type="hidden" id="documentgroupid" />
+<input type="hidden" id="orglvl4" />
+<input type="hidden" id="orglvl3" />
+<input type="hidden" id="orglvl2" />
+<input type="hidden" id="orglvl1" />
+
+@*<div style="width:100%">
+        <table id="myTable" class="table order-list" style="width:100% ;font-weight:normal;"></table>
+
+        <div class="row text-center mt20">
+
+            <input type="button" value="Update" id="btnupdate" class="btn btn-orange fa-align-center" />
+
+        </div>
+
+    </div>*@
+
+<script>
+    var orglevelcode1 = "";
+    var orglevelcode2 = "";
+    var orglevelcode3 = "";
+    var orglevelcode4 = "";
+    var orglevel1 = "";
+    var orglevel2 = "";
+    var orglevel3 = "";
+    var orglevel4 = "";
+    var counter = 0;
+    var countdata = [];
+    $(document).ready(function () {
+        debugger;
+        loaddynamiccolumns();
+        var group_gid = $("#hdn_ugrp_gid").val();
+        $.ajax({
+            url: '@Url.Action("GetDisplayDocumentValues", "ViewStorageAttributes")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'group_gid': group_gid },
+            success: function (result) {
+                debugger;
+
+                var data = JSON.parse(result.Data2);
+
+                $("#documentnameid").val(data[0].Dname_Id)
+                $("#documentgroupid").val(data[0].Dgroup_Id);
+                //   $("#unitid").val(data[0].Unit_Id);
+                //   $("#departmentid").val(data[0].Dept_Id);
+
+                $("#documentnametext").val(data[0].Dname_Name);
+                $("#documentgrouptext").val(data[0].Dgroup_Name);
+                //    $("#unittext").val(data[0].Unit_name);
+                //   $("#departmenttext").val(data[0].Dept_name);
+
+                try {
+                    //if (orglevelcode4 != null && orglevelcode4 != "" && orglevelcode4 != "undefined") {
+                    //    $("#" + orglevelcode4).data("kendoDropDownList").value(data[0].orglvlcode4);
+                    //    $("#" + orglevelcode4).kendoDropDownList({
+                    //        enable: false
+                    //    });
+                    //}
+                    //if (orglevelcode3 != null && orglevelcode3 != "" && orglevelcode3 != "undefined") {
+                    //    $("#" + orglevelcode3).data("kendoDropDownList").value(data[0].orglvlcode3);
+                    //    $("#" + orglevelcode3).kendoDropDownList({
+                    //        enable: false
+                    //    });
+                    //}
+                    //if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                    //    $("#" + orglevelcode2).data("kendoDropDownList").value(data[0].orglvlcode2);
+                    //    $("#" + orglevelcode2).kendoDropDownList({
+                    //        enable: false
+                    //    });
+                    //}
+                    //if (orglevelcode2 != null && orglevelcode2 != "" && orglevelcode2 != "undefined") {
+                    //    $("#" + orglevelcode1).data("kendoDropDownList").value(data[0].orglvlcode1);
+                    //    $("#" + orglevelcode1).kendoDropDownList({
+                    //        enable: false
+                    //    });
+                    //}
+
+
+                    var orglvl4 = data[0].Org_Level4;
+                    var orglvl3 = data[0].Org_Level3;
+                    var orglvl2 = data[0].Org_Level2;
+                    var orglvl1 = data[0].Org_Level1;
+                    // alert(orglvl4);
+                    if (orglvl4 != "" && orglvl4 != null && orglvl4 != "undefined") {
+                        $("#orglvl4val").val(orglvl4);
+                        $("#orgcol4").show()
+                    }
+                    if (orglvl3 != "" && orglvl3 != null && orglvl3 != "undefined") {
+                        $("#orglvl3val").val(orglvl3);
+                        $("#orgcol3").show()
+                    }
+                    if (orglvl2 != "" && orglvl2 != null && orglvl2 != "undefined") {
+                        $("#orglvl2val").val(orglvl2);
+                        $("#orgcol2").show()
+                    }
+                    if (orglvl1 != "" && orglvl1 != null && orglvl1 != "undefined") {
+                        $("#orglvl1val").val(orglvl1);
+                        $("#orgcol1").show()
+                    }
+                } catch (er) {
+                }
+            },
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetStorageAttributeValues", "ViewStorageAttributes")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'group_gid': group_gid },
+            success: function (data) {
+                debugger;
+                // counter = data.count;
+                var data2 = JSON.parse(data.Data1);
+                //for (i = 0; i < counter; i++) {
+                counter = 0;
+                for (i = 0; i < data2.length; i++) {
+                    var newRow = $("<tr  width='100%'>");
+                    var cols = "";
+                    var radname = "mandatory" + counter;
+                    var orderby = counter + 1;
+
+                    cols += '<td style="width:25%"><input  type="hidden"   name="gid' + orderby + '" id="gid' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+                    cols += '<td style=width:20%;right:50px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input style="width:50px; type="text" ; maxlength ="2"; value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+                    cols += '<td style="width:25%;right:20px;position:relative"><input  type="text"   name="name' + orderby + '" id="name' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+                    cols += '<td style="width:100px;right:30px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><select onchange="test(' + orderby + ')" name="type' + orderby + '" id="type' + orderby + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+                    cols += '<td style="width:10%;right:40px;position:relative"><input  type="text"  name="len' + orderby + '" id="len' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+                    cols += '<td style="width:25%;right:30px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input type="radio"  name="mand' + orderby + '" id="mand' + orderby + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mand' + orderby + '" id="mand' + orderby + '" value="N"/>&nbsp;&nbsp;No</td>'
+                    cols += '<td style="right:10px;position:relative"><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td>';
+                    countdata.push(orderby);
+                    newRow.append(cols);
+                    $("table.order-list").append(newRow);
+
+
+                    //$("#gid" + i).val(data2[i].Satr_Id);
+                    //$("#name" + i).val(data2[i].Satr_Name);
+                    //$("#type" + i).val(data2[i].Satr_Type);
+                    //$("#len" + i).val(data2[i].Satr_Length);
+                    //$('input:radio[name="mand' + i + '"][value=' + data2[i].Satr_Mandotry + ']').prop('checked', true);
+
+                    $("#gid" + orderby).val(data2[i].Satr_Id);
+                    $('#orderbyid' + orderby).val(data2[i].Storage_orderid);
+                    $("#name" + orderby).val(data2[i].Satr_Name);
+                    $("#type" + orderby).val(data2[i].Satr_Type);
+                    $("#len" + orderby).val(data2[i].Satr_Length);
+                    $('input:radio[name="mand' + orderby + '"][value=' + data2[i].Satr_Mandotry + ']').prop('checked', true);
+                    counter++;
+                    $("#counter").val(counter);
+
+
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Failed to create..!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+
+        // For new Row added
+        $("#addrow").on("click", function () {
+            debugger;
+
+            var newRow = $("<tr  width='100%'>");
+            var cols = "";
+            var radname = "mandatory" + counter;
+            var orderby = counter + 1;
+            /*  cols += '<td style="width:25%"><input  type="hidden" value="0"  name="gid' + i + '" id="gid' + i + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+              cols += '<td style="width:25%;right:100px;position:relative"><input  type="text"   name="name' + i + '" id="name' + i + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+              cols += '<td style="width:100px;right:100px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><select onchange="test(' + orderby + ')" name="type' + i + '" id="type' + i + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+              cols += '<td style="width:10%;right:100px;position:relative"><input  type="text"  name="len' + i + '" id="len' + i + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+              cols += '<td style="width:25%;right:90px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input type="radio"  name="mand' + i + '" id="mand' + i + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mand' + i + '" id="mand' + i + '" value="N"/>&nbsp;&nbsp;No</td>'
+              cols += '<td style="right:80px;position:relative"><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td>';*/
+
+            cols += '<td style="width:25%"><input  type="hidden" value="0" name="gid' + orderby + '" id="gid' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+            cols += '<td style=width:20%;right:50px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input style="width:50px; type="text" ; maxlength ="2"; value="' + orderby + '" name="name' + orderby + '" id="orderbyid' + orderby + '"   onkeypress="return isNumberKey(event)"/><span id="error" style="color: Red; display: none"><br/>* Special Characters not allowed</span></td>';
+            cols += '<td style="width:25%;right:20px;position:relative"><input  type="text"   name="name' + orderby + '" id="name' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+            cols += '<td style="width:100px;right:30px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><select onchange="test(' + orderby + ')" name="type' + orderby + '" id="type' + orderby + '"><option value="0">Select Type</option><option value="Numeric">Numeric</option><option value="Alpha Numeric">Alpha Numeric</option><option value="Amount">Amount</option><option value="Datetime">Datetime</option><option value="Logical">Logical</option></select></td>';
+            cols += '<td style="width:10%;right:40px;position:relative"><input  type="text"  name="len' + orderby + '" id="len' + orderby + '" style="font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+            cols += '<td style="width:25%;right:30px;position:relative;font-weight:normal;font-size: 13px;height:20px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"><input type="radio"  name="mand' + orderby + '" id="mand' + orderby + '" value="Y"/> &nbsp;&nbsp; Yes &nbsp;<input type="radio"  name="mand' + orderby + '" id="mand' + orderby + '" value="N"/>&nbsp;&nbsp;No</td>'
+            cols += '<td style="right:10px;position:relative"><button type="button" class="ibtnDel btn btn-md btn-danger " ><span class="glyphicon glyphicon-trash"></span></button></td>';
+            countdata.push(orderby);
+            newRow.append(cols);
+            $("table.order-list").append(newRow);
+            counter++;
+            $("#counter").val(counter);
+        });
+
+        //fOR  Update
+        $("#btnupdate").on("click", function () {
+            debugger;
+            var strid = $("#hdn_ugrp_gid").val();
+            var orderid = $("#orderbyid").val();
+            //   var DeptID = $("#departmentid").val();
+            //   var UnitID = $("#unitid").val();
+            var DgroupID = $("#documentgroupid").val();
+            var DNameID = $("#documentnameid").val();
+
+            var attributes0 = new Array();
+            var attributes1 = new Array();
+            var attributes2 = new Array();
+            var attributes3 = new Array();
+            var attributes4 = new Array();
+            var attributes5 = new Array();
+
+            var z = 0;
+
+            //for (var i = 0; i < counter; i++) {
+            for (var j = 0; j < counter; j++) {
+
+                var i = countdata[j];
+
+
+                if ($("#name" + i).val() == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - name.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+                if ($("#type" + i).val() == "0") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+
+                if ($("#len" + i).val() == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - drp.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+
+                if ($('input[id=mand' + i + ']:checked').val() == undefined) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the values in the attribute row/Delete the empty row - mandatory.!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+
+                var attribute = [];
+                attributes0[z] = $("#gid" + i).val();
+                attributes1[z] = $("#name" + i).val();
+                attributes2[z] = $("#type" + i).val();
+                attributes3[z] = $("#len" + i).val();
+                attributes4[z] = $('input[id=mand' + i + ']:checked').val();
+                attributes5[z] = $("#orderbyid" + i).val();
+                if (attributes5[z] == "") {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Please fill all the order by values in the attribute row!',
+                        type: 'blue',
+                    });
+                    return;
+                }
+                z++;
+            }
+
+
+            $.ajax({
+                contentType: "application/json;charset=utf-8",
+                url: "../ViewStorageAttributes/Update",
+                type: "POST",
+                dataType: "json",
+                //data: '{"DeptID":"' + DeptID + '","UnitID":"' + UnitID + '","DgroupID":"' + DgroupID + '","DNameID":"' + DNameID + '","attributes1":"' + attributes1 + '","attributes2":"' + attributes2 + '","attributes3":"' + attributes3 + '","attributes4":"' + attributes4 + '","attributes5":"' + attributes5 + '"}',
+                data: '{"attributes0":"' + attributes0 + '","DgroupID":"' + DgroupID + '","DNameID":"' + DNameID + '","attributes1":"' + attributes1 + '","attributes2":"' + attributes2 + '","attributes3":"' + attributes3 + '","attributes4":"' + attributes4 + '","attributes5":"' + attributes5 + '"}',
+                success: function (data) {
+                    debugger;
+                    if (data.success == 1) {
+                        debugger;// if true (1)
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Attributes are Update successfully.!',
+                            type: 'green',
+                        });
+                        setTimeout(function () {// wait for 5 secs(2)
+                            location.reload(); // then reload the page.(3)
+                        }, 2500);
+                    }
+                }
+            });
+
+        });
+
+
+        // For Delete
+        $("table.order-list").on("click", ".ibtnDel", function (event) {
+            debugger;
+
+            var res = $(this).closest('tr').find('.gid').text();
+            alert(res);
+            $(this).closest("tr").remove();
+            counter -= 1
+            $("#counter").val(counter);
+            // alert($(this).closest('tr').find('input').val());
+            var strid = $(this).closest('tr').find('input').val();
+
+            $.ajax({
+                contentType: "application/json;charset=utf-8",
+                url: "../ViewStorageAttributes/DeleteAttribute",
+                type: "POST",
+                dataType: "json",
+                data: '{"strid":"' + strid + '"}',
+                success: function (data) {
+                    if (data.success == 1) {
+                        debugger;// if true (1)
+                        $.alert({
+                            title: 'DMS',
+                            content: 'Attributes are Deleted successfully.!',
+                            type: 'green',
+                        });
+
+                    }
+                }
+            });
+
+        });
+
+
+
+    });
+
+
+    @*function UpdateAttribute() {
+        debugger;
+        var storagetype = $("#name" + i).val();
+        var datatype = $("#type").val();
+        var length = $("#len").val();
+        var mandatory = $("#mand").val();
+
+        $.ajax({
+            url: '@Url.Action("Updae", "ViewStorageAttributes")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'group_gid': group_gid },
+            success: function (data) {
+                debugger;
+
+            },
+        });
+    }*@
+
+    function loaddynamiccolumns() {
+        try {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                url: '@Url.Action("getlabellist", "DocGroupMaster")',
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    // var orglevelcode1 = data[0].orghierarchy_code;
+                    if (data.length >= 1) {
+                        orglevelcode1 = data[0].orghierarchy_code;
+                        var org1val = data[0].orghierarchy_name;
+                        $("#orglvl1lbl").text(org1val);
+                        // orglevelval1 = $("#" + orglevelcode1).val();
+                    }
+                    if (data.length >= 2) {
+                        orglevelcode2 = data[1].orghierarchy_code;
+                        var org1va2 = data[1].orghierarchy_name;
+                        $("#orglvl2lbl").text(org1va2);
+                        // orglevelval2 = $("#" + orglevelcode2).val();
+                    }
+                    if (data.length >= 3) {
+                        orglevelcode3 = data[2].orghierarchy_code;
+                        var org1va3 = data[2].orghierarchy_name;
+                        $("#orglvl3lbl").text(org1va3);
+                        //orglevelval3 = $("#" + orglevelcode3).val();
+                    }
+                    if (data.length == 4) {
+                        orglevelcode4 = data[3].orghierarchy_code;
+                        var org1va4 = data[3].orghierarchy_name;
+                        $("#orglvl4lbl").text(org1va4);
+                        //orglevelval4 = $("#" + orglevelcode4).val();
+                    }
+
+
+                    // alert(orglevelcode1);
+                    //setTimeout(function () {
+                    //    window.location.reload(1);
+                    //}, 2500);
+                },
+            });
+        } catch (er) {
+            alert(er);
+        }
+    }
+    function test(SeltVal) {
+        debugger;
+        var lovname;
+        //var counter = 0;
+        for (i = 1; i < counter + 1; i++) {
+            var type = $("#type" + i).val();
+            if (type == "Alpha Numeric") {
+                $("#len" + i).val("500");
+                //$("#Length" + i).prop("readonly").disabled = false;
+                $("#len" + i).prop("readonly", false);
+              //  $("#tdlov" + SeltVal).css('display', 'none');
+                $("#len" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Numeric") {
+                $("#len" + i).val("0");
+                $("#len" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#len" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Datetime") {
+                //$("#Length" + i).prop("readonly").value = "0";
+                $("#len" + i).val("0");
+                $("#len" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#len" + SeltVal).css('display', 'inline');
+            }
+            if (type == "Amount") {
+                $("#len" + i).val("0");
+                $("#len" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#len" + SeltVal).css('display', 'inline');
+            }
+
+            if (type == "Logical") {
+                $("#len" + i).val("0");
+                $("#len" + i).prop("readonly", true);
+                $("#tdlov" + SeltVal).css('display', 'none');
+                $("#len" + SeltVal).css('display', 'inline');
+            }
+        }
+
+    }
+
+</script>

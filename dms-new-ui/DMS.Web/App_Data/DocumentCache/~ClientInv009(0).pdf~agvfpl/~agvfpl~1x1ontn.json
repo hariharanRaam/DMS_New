@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "agvfpl",
+  "CachePdfKey": "agvfpl/agvfpl-1k3kk2s.pdf",
+  "CacheXpzKey": "agvfpl/agvfpl-1x1ontn.xpz",
+  "CacheInfoKey": "agvfpl/agvfpl-1x1ontn.json",
+  "CacheCopyKey": null,
+  "Document": "\\\\192.168.20.7\\DMS_file_data\\Invoice\\Vendor Invoice\\ClientInv009(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv009(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "agvfpl",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

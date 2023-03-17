@@ -1,0 +1,73 @@
+﻿<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+</style>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <table>
+            <tr>
+                <td><label style="font-weight:normal">Attributes</label></td>
+                <td width="85%"></td>
+                <td><button type="button" id="btnclose" style="color:black;font-weight:bold;" onclick="return Close_Forlinkedfile();">X</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div style="width:100%">
+    <table id="myTable" class="table order-list" style="width:100% ;font-weight:normal;"></table>
+
+    @*<div class="row text-center mt20">
+        <input type="button" value="Close" id="btn_cancel" onclick="return Close_Forlinkedfile();" class="btn btn-orange fa-align-center" />
+    </div>*@
+</div>
+
+<script>
+    function Close_Forlinkedfile() {
+        debugger;
+        objDialog10.dialog("close");
+    }
+
+    $(document).ready(function () {
+        debugger;
+
+        //var group_type = $("#hdn_type").val();
+        //var group_gid = $("#hdn_gridgid").val();
+        var group_type = "@ViewBag.type";
+        var group_gid = "@ViewBag.gid";
+        //$("#hdn_mode").val(mode);
+        $.ajax({
+            url: '@Url.Action("showdynamicattributes", "TreeSearch")',
+            type: "POST",
+            datatype: "json",
+            async: false,
+            data: { 'group_gid': group_gid, 'group_type': group_type },
+            success: function (data) {
+                debugger;
+                var data2 = JSON.parse(data);
+                for (i = 0; i < data2.length; i++) {
+                    var newRow = $("<tr  width='100%'>");
+                    var cols = "";
+                    cols += '<td><label id="name' + i + '" style="font-weight:normal;font-size: 13px;height:3px;">' + data2[i].Atr_Name + '</label></td> <td><label name="val' + i + '" id="val' + i + '" style="font-weight:normal;font-size: 13px;height:3px">' + data2[i].Attribdtl_Description + '</label></td>';
+                    newRow.append(cols);
+                    $("table.order-list").append(newRow);
+                }
+                for (i = 0; i < data2.length; i++) {
+                    $("#name" + i).text(data2[i].Atr_Name);
+                    $("#val" + i).text(data2[i].Attribdtl_Description);
+                    $("#name1").text("test");
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Failed to create..!',
+                    type: 'blue',
+                });
+                return false;
+            }
+        });
+    });
+</script>

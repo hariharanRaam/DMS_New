@@ -1,0 +1,304 @@
+﻿@using Kendo.Mvc.UI;
+
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+
+@model  IList<DMS.Model.PieChart>
+@{
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+
+@foreach (var item in ViewData.Model)
+{
+    var data1 = @item.master_code;
+    var data2 = @item.master_name;
+    var data = @item.archid;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pie Charts</title>
+    <style>
+        .vl {
+            border-left: 2px solid #337ab7;
+            height: 500px;
+            position: absolute;
+            left: 54%;
+            margin-left: -3px;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+            <div class="row" style="margin-top:-15px;margin-bottom:15px;">
+                <div class="col-md-6 col-xl-2" style="margin-left:11px;">
+                    <div class="card shadow-none bg-transparent border border-primary mb-3" style="border-radius: 20px;border-color: #696cff !important;margin: 25px;margin-left: 17px;margin-right: -60px;">
+                        <div class="card-body" style="background:#696CFF;border-radius: 20px;">
+                            <h5 class="card-title" style="color: #fff;font-size: 20px !important;" id="DD_val">@ViewBag.DD</h5>
+                            <center><p class="card-text">Document Digitized</p></center>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-2">
+                    <div class="card shadow-none bg-transparent border border-secondary mb-3" style="border-radius: 20px;border-color: #FFAB00 !important;margin: 25px;margin-right: -60px;position: relative;left: 20px;">
+                        <div class="card-body" style="background:#FFAB00;border-radius: 20px;">
+                            <h5 class="card-title" style="color: #fff;font-size: 20px !important;" id="DT_val">@ViewBag.DT</h5>
+                            <center><p class="card-text">Document Types</p></center>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-2">
+                    <div class="card shadow-none bg-transparent border border-success mb-3" style="border-radius: 20px;border-color: #71DD37 !important;margin: 25px;margin-right: -60px;position: relative;left: 40px;">
+                        <div class="card-body" style="background:#71DD37;border-radius: 20px;">
+                            <h5 class="card-title" style="color: #fff;font-size: 20px !important;" id="DG_val">@ViewBag.DG</h5>
+                            <center><p class="card-text">Document Groups</p></center>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-2">
+                    <div class="card shadow-none bg-transparent border border-success mb-3" style="border-radius: 20px;border-color: #8592A3 !important;margin: 25px;margin-right: -60px;position: relative;left: 60px;">
+                        <div class="card-body" style="background:#8592A3;border-radius: 20px;">
+                            <h5 class="card-title" style="color: #fff;font-size: 20px !important;" id="org1_val">@ViewBag.ORG1</h5>
+                            <center><p class="card-text" id="org1_name">@ViewBag.ORG1N</p></center>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-2">
+                    <div class="card shadow-none bg-transparent border border-success mb-3" style="border-radius: 20px;border-color: #ef8737 !important;margin: 25px;margin-right: -60px;position: relative;left: 80px;">
+                        <div class="card-body" style="background:#ef8737;border-radius: 20px;">
+                            <h5 class="card-title" style="color: #fff;font-size: 20px !important;" id="org2_val">@ViewBag.ORG2</h5>
+                            <center><p class="card-text" id="org2_name">@ViewBag.ORG2N</p></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xl-5 border">
+                    <h5>Document Digitized By Department</h5>
+                    <div id="chart" class="chart" style="width: 400px; height: 300px;"></div>
+                </div>
+                <div class="col-md-6 col-xl-5 border">
+                    <h5 style="margin-bottom:25px !important;">Document Digitized By Timeline</h5>
+                    <div id="chart_div" class="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+
+    google.charts.load('current', { packages: ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawBasic);
+
+    function drawBasic() {
+
+
+        var tags = @Html.Raw(Json.Encode(Model));
+        var opt1 = [];
+        var opt2 = [];
+        for (var i = 0; i < tags.length; i++) {
+            var mastername = tags[i].master_name;
+            var archid = tags[i].archid;
+            var opt1 = [mastername,archid];
+            if(i == 0){
+                
+                opt2.push(['','Documents']);
+                opt2.push(opt1);
+            }else{
+                opt2.push(opt1);
+            }
+        }
+
+      //  var data = google.visualization.arrayToDataTable([
+      //['', 'Documents'],
+      //['Apr-22', 5231],
+      //['Mar-22', 4006],
+      //['Feb-22', 2389],
+      //['Jan-22', 411]
+      //  ]);
+
+        var data = google.visualization.arrayToDataTable(opt2);
+        var options = {
+            chart: {
+                title: '',
+                subtitle: '',
+            },
+            bars: 'horizontal', // Required for Material Bar Charts.
+            hAxis: { format: 'decimal', gridlines: { color: 'transparent' } },
+            width: 500, height: 300,
+            legend: { 'position': 'bottom', 'alignment': 'end' },
+            fontSize: 12,
+            colors: ['#7679FA', '#EF8737']
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+    function drawVisualization() {
+        // Create and populate the data table.
+
+        var tags = @Html.Raw(Json.Encode(Model));
+        var opt1 = [];
+        var opt2 = [];
+        for (var i = 0; i < tags.length; i++) {
+            var mastername = tags[i].master_name;
+            var archid = tags[i].archid;
+            var opt1 = [mastername,archid];
+            if(i == 0){
+                
+                opt2.push(['Task','Hours per Day']);
+                opt2.push(opt1);
+            }else{
+                opt2.push(opt1);
+            }
+        }
+       
+
+        //var data = google.visualization.arrayToDataTable([
+        //        ['Task', 'Hours per Day'],
+        //        ['Finance', 37],
+        //        ['HR', 27],
+        //        ['Admin', 16],
+        //        ['Marketing', 19]
+        //]);
+        var data = google.visualization.arrayToDataTable(opt2);
+        var options = {
+            title: '',
+            is3D: true,
+        };
+
+        // Create and draw the visualization.
+        var chart = new google.visualization.PieChart(document.getElementById('chart'));
+        chart.draw(data, options);
+    }
+
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawVisualization);
+    $(window).resize(function () {
+        drawChart();
+        chart();
+    });
+
+
+    $(document).ready(function () {
+        debugger;
+
+    }
+    );
+
+    function drawChart() {
+        debugger;
+        var options = {
+            title: 'Department',
+            is3D: true
+
+        };
+    }
+
+    /* function grid(piesrvicelst) {
+         debugger
+         var columns = [];
+         var chkval = JSON.parse(piesrvicelst.Data1);
+         var arr = [];
+         $.each(chkval, function (i, e) {
+             debugger;
+             $.each(e, function (key, val) {
+                 arr.push(val);
+             });
+
+         });
+
+         if (arr == "No Records Found!" || arr == "Error in Data!") {
+             $.alert({
+                 title: 'DMS',
+                 content: 'No Records found..!',
+                 type: 'blue',
+             });
+             return false;
+         }
+
+
+         var data = JSON.parse(piesrvicelst.Data1);
+         var data2 = JSON.parse(piesrvicelst.Data2);
+         var i = 0;
+
+         var entryIndex = "entries[" + i + "]";
+
+
+         for (var key in data[0]) {
+             var val = data2[0][key];
+             columns.push({
+                 field: entryIndex,
+                 title: key,
+                 type: val
+             });
+             i = i + 1;
+             entryIndex = "entries[" + i + "]";
+
+         }
+
+         var rows = [];
+         var data1 = JSON.parse(piesrvicelst.Data1); $.each(data1, function (i, e) {
+             var entryArray = [];
+             $.each(e, function (key, val) {
+
+                 entryArray.push(val);
+             });
+             rows.push(kendo.observable({
+                 entries: entryArray
+             }));
+
+         });
+         var data2 = JSON.parse(piesrvicelst.Data2);
+
+
+         var viewModel = kendo.observable({
+             gridRows: rows
+         });
+
+         var configuration = {
+             // dataBound: onDataBound,
+             editable: false,
+             sortable: true,
+             scrollable: true,
+             filterable: true,
+             pagable: false,
+             resizable: true,
+             persistSelection: true,
+             // selectable: "false",
+             pageable: {
+                 pageSize: 10,
+                 buttonCount: 4
+             },
+             columns: columns,
+             rows: viewModel
+         };
+
+         $("#example").remove();
+         $('#Maingrid').append('<div id="example" style="position:relative" class="k-content"><table id="grid" data-bind="source: gridRows" style="position:relative;overflow:scroll;width:100%"></table></div>');
+         var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+
+         kendo.bind($("#grid"), viewModel);
+
+         var grid = $("#grid").data("kendoGrid");
+         grid.hideColumn(3);
+         //grid.hideColumn(4);
+         //grid.hideColumn(5);
+         for (var i = 0; i < grid.columns.length; i++) {
+             if (i != grid.columns.length) {
+                 grid.autoFitColumn(i);  //autofit each column.
+
+             }
+         }
+
+     }*/
+</script>

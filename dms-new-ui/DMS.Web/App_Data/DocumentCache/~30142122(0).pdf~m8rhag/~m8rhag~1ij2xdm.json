@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "m8rhag",
+  "CachePdfKey": "m8rhag/m8rhag-1k3kk2s.pdf",
+  "CacheXpzKey": "m8rhag/m8rhag-1ij2xdm.xpz",
+  "CacheInfoKey": "m8rhag/m8rhag-1ij2xdm.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\Invoice\\Supplier Invoice\\30142122(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "30142122(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "m8rhag",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}

@@ -1,0 +1,177 @@
+﻿@using Kendo.Mvc.UI;
+<html>
+<head>
+    <title></title>
+    <style>
+        ul {
+            display: block;
+        }
+    </style>
+    <style>
+        .k-content {
+            font-weight: normal;
+            font-size: 13px;
+        }
+
+        .k-state-selected {
+            background-color: #337ab7;
+        }
+    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <meta name="viewport" content="width=device-width" />
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed" id="editdoc">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Modify - Maker</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form method="get" class="form-horizontal" enctype="multipart/form-data" id="form">
+
+                            <div id="example" style="top:20px; position:relative" class="k-content">
+                                <table id="grid" data-bind="source: gridRows"></table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $.ajax({
+            url: '@Url.Action("GetIndexedDocuments", "EditIndexedDocument")',
+            data: {},
+            type: 'Post',
+            datatype: 'json',
+            async: false,
+            success: function (result) {
+                debugger;
+                var columns = [];
+                var data = JSON.parse(result.Data1);
+                var data2 = JSON.parse(result.Data2);
+                if (data.length == 0) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'No records found.!',
+                        type: 'blue',
+                    });
+                    return false;
+                }
+                var i = 0;
+                var entryIndex = "entries[" + i + "]";
+
+                for (var key in data[0]) {
+                    var val = data2[0][key];
+
+                    columns.push({
+                        field: entryIndex,
+                        title: key,
+                        type: val,
+                        //width: 20
+
+                    });
+                    i = i + 1;
+                    entryIndex = "entries[" + i + "]";
+                }
+
+                columns.push({
+                    field: entryIndex + 1,
+                    title: 'Edit',
+                    template: '<span class="btn btn-orange fa fa-edit" id="btnEdit" onclick="Edit()" ></span>',
+                    filterable: false,
+                    sortable: true,
+                    editable: true,
+                    width: '2%'
+                });
+
+                columns.push({
+                    field: entryIndex + 1,
+                    title: 'Delete',
+                    template: '<span class="btn btn-orange fa fa-trash-o" id="btnDelete" onclick="Delete()"></span>',
+                    filterable: false,
+                    sortable: true,
+                    editable: true,
+                    width: '2%'
+                });
+
+                var rows = [];
+                var data1 = JSON.parse(result.Data1);
+
+
+                $.each(data1, function (i, e) {
+                    var entryArray = [];
+                    $.each(e, function (key, val) {
+                        entryArray.push(val);
+
+                    });
+                    rows.push(kendo.observable({
+                        entries: entryArray 
+                    }));
+
+                });
+
+                var viewModel = kendo.observable({
+                    gridRows: rows
+                });
+                var configuration = {
+                    editable: false,
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    pagable: true,
+                    resizable: true,
+                    pageable: {
+                        pageSize: 10,
+                        buttonCount: 4
+                    },
+                    columns: columns,
+                    rows: viewModel,
+                    height: '100%'
+                };
+
+                var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+                kendo.bind($("#grid"), viewModel);
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Some error has occurred.!',
+                    type: 'blue',
+                });
+            }
+        });
+    });
+
+    function Edit() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var id = (model.entries[0]);
+        var mode = "E";
+        window.location.href = '../SetDocAttributes/SetDocAttributes?id=' + id + '&Action=' + mode;
+    }
+    function Delete() {
+        debugger;
+        var grid = $("#grid").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var id = (model.entries[0]);
+        var mode = "D";
+        window.location.href = '../SetDocAttributes/SetDocAttributes?id=' + id + '&Action=' + mode;
+    }
+</script>

@@ -1,0 +1,330 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model  IList<DMS.Model.PieChart>
+@{
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pie Charts</title>
+    <style>
+        .vl {
+            border-left: 2px solid #337ab7;
+            height: 500px;
+            position: absolute;
+            left: 54%;
+            margin-left: -3px;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:650px">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Dashboard</h3>
+                        </div>
+
+                        <table style="width:100%;" border="1">
+                            <tr style="padding-left:25%">
+                                <td style="width:100px;text-align:center; font-size: 20px;">
+                                    <label class="Lbl">Department</label>
+                                </td>
+
+                                <td style="width:100px; text-align:center; font-size: 20px;">
+                                    <label> Unit</label>
+
+                                </td>
+                                <td style="width:100px;text-align:center;font-size: 20px;">
+                                    <label>Docname </label>
+
+                                </td>
+                                <td style="width:100px;text-align:center; font-size: 20px;">
+                                    <label>Docgroup </label>
+                                </td>
+
+                                <td style="width:100px;text-align:center; font-size: 20px;">
+                                    <label class="Lbl">Documents</label>
+                                </td>
+                            </tr>
+                            <tr style="color: white;padding-left:100%">
+
+                                <td style="width:100px;height:50px;text-align:center; font-size: 20px; background-color:#ac841d ">
+
+                                    <span class="errormessage" id="erridmsg">@ViewBag.Dept </span>
+                                </td>
+                                <td style="width:100px; text-align:center; font-size: 20px;background-color:#2c741a">
+
+                                    <span class="errormessage" id="erridmsg1">@ViewBag.Unit </span>
+                                </td>
+                                <td style="width:100px; text-align:center; font-size: 20px;background-color:#838882">
+
+                                    <span class="errormessage" id="erridmsg2">@ViewBag.Docname </span>
+                                </td>
+                                <td style="width:100px; text-align:center; font-size: 20px;background-color:#a75e1b">
+
+                                    <span class="errormessage" id="erridmsg3">@ViewBag.Docgroup</span>
+                                </td>
+
+                                <td style="width:100px;text-align:center; font-size: 20px;background-color:#000">
+
+                                    <span class="errormessage" id="erridmsg4">@ViewBag.docattributes </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- Pichart and BarChart-->
+                        @*<div class="col-md-9" style="width:102%;padding-left: 2px; top:20px; position:relative; padding-top: -11px;">
+                                <div class=" panel panel-primary" style="margin-bottom:5px;height:500px;">
+                                    <div class="panel-heading">Chart</div>
+
+                                    <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                                        <div class="col-md-9" style="margin:auto; height:420px;width:101%;">
+
+                                            <table style="width:100%;">
+                                                <tr style="width:50%">
+                                                    <td>
+                                                        <div id="chart" style="right:15%;position:relative"></div>
+                                                    </td>
+                                                    <td style="width:100%">
+                                                        <div id="container" style="width:230%;height:350px; bottom:10px;right:250px;position:relative">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+
+                                                </tr>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+
+
+
+                        <div class="col-md-9" style="width:101%;padding-left: 2px; top:20px; position:relative; padding-top: -11px;">
+                            <div class=" panel panel-primary" style="margin-bottom:5px;height:500px;">
+                                <div class="panel-heading">Chart</div>
+
+
+                                <div class="panel-body" style="padding-right:50px;width:100%;max-height:100%">
+                                    <div class="col-md-9" style="margin:auto; height:420px;width:101%;">
+
+                                        <table style="width:100%;">
+                                            <tr style="width:100%">
+                                                <td style="width:5%">
+                                                    <div id="chart"></div>
+                                                </td>
+                                                <td style="width:90%">
+                                                    <div id="container">
+                                                        @*style="width:100%;height:100%; bottom:10%;*@
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr></tr>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+
+    //google.charts.load('current', { 'packages': ['corechart'] });
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+    //google.charts.setOnLoadCallback(DrawonLoad);
+
+    function drawChart() {
+        debugger;
+        var options = {
+            title: 'Department',
+            is3D: true
+
+        };
+
+        @*$.ajax({
+            type: "GET",
+            // url: '/Dashboard/Piechartcount',
+            url: '@Url.Action("Piechartcount", "Dashboard")',
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (piesrvicelst) {
+                debugger;
+
+                //  var data = google.visualization.arrayToDataTable(r);
+                var data = new google.visualization.DataTable();
+                debugger;
+                data.addColumn('string', 'Dept_name');
+                data.addColumn('number', 'Count');
+                //for (var i = 0; i < r.length; i++) {
+                //    if(i==0)
+                //        data.addColumn('string', r[i].;
+                //    else
+                //        data.addColumn('number', r[i])
+                //}
+                //alert(piesrvicelst.piesrvicelst);
+                var datas = piesrvicelst.piesrvicelst;
+                for (var i = 0; i < datas.length; i++) {
+                    // alert(datas[i].Dept_name);
+                    data.addRow([datas[i].Dept_name, datas[i].totalcount]);
+
+                    /*  $("#erridmsg").text = piesrvicelst[0].Dept;
+
+                      $("#erridmsg1").text = piesrvicelst[1].Unit;
+                      $("#erridmsg2").text = piesrvicelst[2].Docname;
+                      $("#erridmsg3").text = piesrvicelst[3].Docgroup;
+                      $("#erridmsg4").text = piesrvicelst[4].Docattributes;*/
+                }
+                debugger;
+
+
+
+                //new google.visualization.PieChart(document.getElementById('myChartDiv')).
+                //draw(data, { title: "Google Chart in Asp.net using jQuery" });
+                // var options = { title: 'volumes', isStacked: true };
+                var chart = new google.visualization.PieChart($("#chart")[0]);
+                //  var chart = new google.visualization.is3D($("#chart")[0])
+
+                //chart.draw(data, { width: 730, height: 290, }, options);
+                //chart.draw(data, { width: 730, height: 390, }, options);
+                chart.draw(data, { width: 500, height: 390, }, options);
+
+                var optionss = { title: 'volumes', isStacked: true };
+
+                // Instantiate and draw the chart.
+                var charts = new google.visualization.BarChart(document.getElementById('container'));
+                charts.draw(data, { width: 450, height: 390, }, options);
+                // charts.draw(data, options);
+
+                //  grid(piesrvicelst);
+
+            },
+
+            failure: function (r) {
+                alert(r.d);
+            },
+            error: function (r) {
+                alert(r);
+            }
+        });*@
+    }
+
+    /* function grid(piesrvicelst) {
+         debugger
+         var columns = [];
+         var chkval = JSON.parse(piesrvicelst.Data1);
+         var arr = [];
+         $.each(chkval, function (i, e) {
+             debugger;
+             $.each(e, function (key, val) {
+                 arr.push(val);
+             });
+
+         });
+
+         if (arr == "No Records Found!" || arr == "Error in Data!") {
+             $.alert({
+                 title: 'DMS',
+                 content: 'No Records found..!',
+                 type: 'blue',
+             });
+             return false;
+         }
+
+
+         var data = JSON.parse(piesrvicelst.Data1);
+         var data2 = JSON.parse(piesrvicelst.Data2);
+         var i = 0;
+
+         var entryIndex = "entries[" + i + "]";
+
+
+         for (var key in data[0]) {
+             var val = data2[0][key];
+             columns.push({
+                 field: entryIndex,
+                 title: key,
+                 type: val
+             });
+             i = i + 1;
+             entryIndex = "entries[" + i + "]";
+
+         }
+
+         var rows = [];
+         var data1 = JSON.parse(piesrvicelst.Data1); $.each(data1, function (i, e) {
+             var entryArray = [];
+             $.each(e, function (key, val) {
+
+                 entryArray.push(val);
+             });
+             rows.push(kendo.observable({
+                 entries: entryArray
+             }));
+
+         });
+         var data2 = JSON.parse(piesrvicelst.Data2);
+
+
+         var viewModel = kendo.observable({
+             gridRows: rows
+         });
+
+         var configuration = {
+             // dataBound: onDataBound,
+             editable: false,
+             sortable: true,
+             scrollable: true,
+             filterable: true,
+             pagable: false,
+             resizable: true,
+             persistSelection: true,
+             // selectable: "false",
+             pageable: {
+                 pageSize: 10,
+                 buttonCount: 4
+             },
+             columns: columns,
+             rows: viewModel
+         };
+
+         $("#example").remove();
+         $('#Maingrid').append('<div id="example" style="position:relative" class="k-content"><table id="grid" data-bind="source: gridRows" style="position:relative;overflow:scroll;width:100%"></table></div>');
+         var timeEditGrid = $("#grid").kendoGrid(configuration).data("kendoGrid");
+
+         kendo.bind($("#grid"), viewModel);
+
+         var grid = $("#grid").data("kendoGrid");
+         grid.hideColumn(3);
+         //grid.hideColumn(4);
+         //grid.hideColumn(5);
+         for (var i = 0; i < grid.columns.length; i++) {
+             if (i != grid.columns.length) {
+                 grid.autoFitColumn(i);  //autofit each column.
+
+             }
+         }
+
+     }*/
+</script>

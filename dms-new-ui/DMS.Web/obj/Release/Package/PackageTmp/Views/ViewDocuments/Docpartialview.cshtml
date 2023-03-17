@@ -1,0 +1,50 @@
+﻿@using GleamTech.AspNet.Mvc
+@using GleamTech.DocumentUltimate
+@using GleamTech.DocumentUltimate.AspNet
+@using GleamTech.DocumentUltimate.AspNet.UI
+@using System.Web.UI.WebControls;
+<style>
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+
+    label {
+        font-size: medium;
+        font-family: Cambria;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-body">
+            <div class="row">
+                <table>
+                    @{
+                        var documentViewer = new DocumentViewer
+    {
+        Width = 800,
+        Height = 570,
+        Document = ViewBag.FilePath
+    };
+                    }
+                    @this.RenderBody(documentViewer)
+                    @this.RenderHead(documentViewer)
+
+                </table>
+            </div>
+        </div>
+
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <div class="row text-center mt20">
+                <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange fa fa-download" />                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Close() {
+        debugger;
+        objDialog1.dialog("close");
+    }
+</script>

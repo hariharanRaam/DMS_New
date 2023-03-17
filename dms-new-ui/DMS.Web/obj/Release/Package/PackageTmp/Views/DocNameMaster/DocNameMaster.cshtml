@@ -1,0 +1,249 @@
+﻿@using Kendo.Mvc.UI;
+@using Kendo.Mvc.UI.Fluent;
+@using Kendo.Mvc.Extensions;
+@model DMS.Model.DocNameMaster_Model
+
+<!Doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .error_show {
+            color: red;
+            margin-left: 10px;
+        }
+
+        .k-state-active {
+            display: none;
+        }
+
+        .k-header {
+            font-weight: bold;
+        }
+
+    </style>
+    
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-orange" style="height:650px">
+                        <div class="box-header text-center with-border">
+                            <h3 class="box-title">Doc Name</h3>
+                        </div>
+                        @using (Html.BeginForm("DocNameMaster", "DocNameMaster", FormMethod.Post, new { @id = "form2" }))
+                        {
+                            <div>
+                                @(Html.Kendo().Grid<DMS.Model.DocNameMaster_Model>().Name("DocName")
+                                .HtmlAttributes(new { style = "width:100%;line-height:2em;font-weight:normal" })
+                                .Resizable(resizing => resizing.Columns(true))
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(m => m.DNameID).Title("SL No").Width(20);
+                                    columns.Bound(m => m.DocName).Title("Doc Name").Width(80);
+                                    columns.Bound(m => m.DgroupName).Title("Doc Group").Width(80);
+                                    columns.Bound(m => m.Unit).Title("Unit").Width(100);
+                                    columns.Bound(m => m.Dept_Name).Title("Department").Width(100);
+                                    columns.Command(cmd => { cmd.Edit();}).Width(50);
+                                    columns.Template(p => { }).ClientTemplate("<button type='button' onclick='return myDeleteJs()'><i class='fa fa-trash-o' aria-hidden='true'></i>Delete</button>").Width(50).Title("Delete");
+
+                                })
+                                .ToolBar(toolbar => toolbar.Create().Text("Add New DocName"))
+                                .Editable(editable => { editable.Mode(GridEditMode.PopUp).TemplateName("DocNameMasterPartialPopUp"); })
+                                .Pageable()
+                                .Sortable()
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                .Events(events => events.Error("error_handler"))
+                                .Model(model => model.Id(p => p.UnitID))
+                                .Create(Create => Create.Action("SaveDocName", "DocNameMaster"))
+                                .Read(read => read.Action("GetAllDocNames", "DocNameMaster"))
+                                .Update(update => update.Action("UpdateDocName", "DocNameMaster"))
+                                .Destroy(delete => delete.Action("DeleteDocName", "DocNameMaster"))))
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({
+                title: 'DMS',
+                content: message,
+                type: 'blue',
+            });
+        }
+    }
+
+    function onChangeDocGroup() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "DocGroup"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("DocGroupDropDown/DocNameMaster?masteritemid=" + masteritemid + "&master=" + master, function (data) {
+                debugger;
+                var unit = data.unitdropdownlist;
+                var dept = data.deptdropdownlist;
+                $("#UnitID").data("kendoDropDownList").dataSource.data(unit);
+                $("#Dept_Id").data("kendoDropDownList").dataSource.data(dept);
+                if (unit.length == 2) {
+                    $("#UnitID").data("kendoDropDownList").select(1)
+                }
+                else {
+                    $("#UnitID").data("kendoDropDownList").select(0)
+                }
+                if (dept.length == 2) {
+                    $("#Dept_Id").data("kendoDropDownList").select(1)
+                }
+                else {
+                    $("#Dept_Id").data("kendoDropDownList").select(0)
+                }
+
+            });
+        }
+    }
+
+    function onChangeunit() {
+        debugger;
+        var masteritemid = this.value();
+        var master = "Unit"
+        if (masteritemid == "" || masteritemid == null || masteritemid == "undefined" || masteritemid == 0) {
+            return false;
+        }
+        else {
+            $.getJSON("UnitDropDown/DocNameMaster?masteritemid=" + masteritemid + "&master=" + master, function (data) {
+                debugger;
+                var dept = data;
+                $("#Dept_Id").data("kendoDropDownList").dataSource.data(dept);
+
+                if (dept.length == 2) {
+                    $("#Dept_Id").data("kendoDropDownList").select(1)
+                }
+                else {
+                    $("#Dept_Id").data("kendoDropDownList").select(0)
+                }
+
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        debugger;
+        $("#DocName").data("kendoGrid").dataSource.bind("requestEnd", onRequestEnd);
+        //code for showing confirmation alert message once the delete button is clicked.
+        //$("#DocName").data("kendoGrid").setOptions({ "editable": { "confirmation": true } });
+        var grid = $("#DocName").data("kendoGrid");
+        //function for changing kendo popup title.
+        grid.bind("edit", function (event) {
+            debugger;
+            event.container.parent().find('.k-window-title').text(event.model.isNew() ? "New" : "Edit");
+        });
+    })
+
+    function onRequestEnd(e) {
+        debugger;
+        //Check request type
+        if (e.type == "create") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Doc Name has been created successfully!',
+                    type: 'green',
+                });
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 2500);
+            }
+        }
+        if (e.type == "update") {
+            //check for errors in the response
+            if (e.response == null || e.response.Errors == null) {
+                $.dialog({
+                    title: 'DMS',
+                    content: 'Doc Name has been Edited successfully!',
+                    type: 'green',
+                });
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 2500);
+            }
+        }
+    }
+
+    function myDeleteJs() {
+        debugger;
+        var grid = $("#DocName").data("kendoGrid");
+        var model = grid.dataItem($(event.target).closest("tr"));
+        var DNameID = (model.DNameID);
+
+        $.confirm({
+            icon: 'fa fa-warning',
+            title: 'DMS',
+            autoClose: 'cancel|10000',
+            theme: 'dark',
+            animationSpeed: 700,
+            content: 'Are you sure do you want to delete this record!',
+            type: 'orange',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        url: '@Url.Action("DeletingDocName", "DocNameMaster")',
+                        data: "{ DNameID:'" + DNameID + "'}",
+                        success: function (data) {
+                            debugger;
+                            if (data == 'Success') {
+                                $.alert({
+                                    icon: 'fa fa-success',
+                                    title: 'DMS',
+                                    theme: 'dark',
+                                    content: 'Record deleted.!',
+                                    type: 'green',
+                                    animationSpeed: 700,
+                                });
+                            }
+                            setTimeout(function () {
+                                window.location.reload(1);
+                            }, 2500);
+                        },
+                    });
+
+                },
+                cancel: function () {
+                    $.alert({
+                        icon: 'fa fa-success',
+                        title: 'DMS',
+                        theme: 'dark',
+                        content: 'Delete Canceled.!',
+                        type: 'blue',
+                        animationSpeed: 700,
+                    });
+                },
+            }
+        });
+    }
+
+</script>

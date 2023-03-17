@@ -1,0 +1,161 @@
+﻿@model DMS.Model.ViewAttributeLOV_Model
+@using System.Web.UI.WebControls;
+@{
+    int i = 0;
+    //int colcnt = 0;
+}
+<style>
+    /*.ui-dialog-titlebar-close {
+        display: none;
+    }*/
+    .ui-dialog-titlebar-close:after {
+        content: 'X';
+    }
+
+    label {
+        font-weight: 400;
+    }
+</style>
+<link href="~/Content/css/jquery-ui0.css" rel="stylesheet" />
+<div style="width:100%">
+
+    <div class="modal-content">
+        <div class="modal-body">
+            <table>
+                <tr style="height:40px;">
+                    <td style="width:10px"></td>
+                    <td style="width:120px">
+                        <button class="btn btn-orange pull-left" onclick="return Add();" id=" btn_new">
+                            <span class="fa fa-plus-circle"></span>
+                        </button>
+                    </td>
+                    @*<td style="width:120px">
+                            <button class="btn btn-orange pull-left" onclick="return del();" id=" btn_new">
+                                <span class="fa fa-minus-circle"></span>
+                            </button>
+                        </td>*@
+                </tr>
+            </table>
+            <div>
+                <table id="table">
+                    @*<tr style="height:10px;"></tr>*@
+                    @foreach (var category in Model.dept)
+                    {
+                        <tr style="height:40px;">
+                            <td style="width:10px"></td>
+                            <td style="width:120px">
+                                @Html.TextBox("ctl" + i, @category.lovtext, new { @class = "form-control", @onchange = "onchangeevent();", style = "height:30px;width:300px;font-weight:normal;font-size: 13px;font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;" })
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                    @*<tr></tr>*@
+                </table>
+                <table id="myTable" class=" table order-list"></table>
+                <input type="hidden" id="ctlcount" value="@i" />
+            </div>
+            <div class="row text-center mt20">
+                <input type="button" value="Close" id="btn_cancel" onclick="return Close();" class="btn btn-orange fa-align-center" />
+                <input type="button" value="Update" id="btn_Save" onclick="return Save();" class="btn btn-orange fa-align-center" />
+            </div>
+            <div class="row text-center mt20">
+                <span class="errormessage"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btn_Save").prop('disabled', true);
+    });
+    function onchangeevent() {
+        debugger;
+        $("#btn_Save").prop('disabled', false);
+    }
+    function Add() {
+        debugger;
+        var i = $("#ctlcount").val();
+        var newRow = $("<tr style='height:40px;'>");
+        var cols = "";
+        cols += '<td width="120px"><input  type="text"  name="ctl' + i + '" id="ctl' + i + '" onchange = "onchangeevent();" class="form-control" style = "height:30px;width:300px;font-weight: normal;;font-size: 13px;font-family:Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;"/></td>';
+        newRow.append(cols);
+        $("table.order-list").append(newRow);
+        i++;
+        $("#ctlcount").val(i);
+    }
+    //function del() {
+    //    debugger;
+    //    $('#table tr:last').remove();
+    //}
+    function Save() {
+        debugger;
+        var person = {};
+        person.masterid = $('#hdn_ugrp_gid').val();
+        person.slno = $('#ctlcount').val();
+
+        var txtcount = $("#ctlcount").val();
+        var textboxvalues = [];
+        for (var i = 0; i < txtcount; i++) {
+            var txtdesc = $('#ctl' + i).val();
+            if (txtdesc == undefined || txtdesc == "") {
+                $.alert({
+                    title: 'DMS',
+                    content: "Fields should not be blank.!!",
+                    type: 'blue',
+                });
+                return false;
+            }
+            else {
+                textboxvalues.push(txtdesc);
+            }
+        }
+
+        var postData = " form : [ "
+        $.each(textboxvalues, function (index, item) {
+            debugger;
+            if (index == txtcount - 1) {
+                postData = postData + "'" + textboxvalues[index] + "'";
+            } else {
+                postData = postData + "'" + textboxvalues[index] + "',";
+            }
+        });
+        postData = postData + "]";
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: '@Url.Action("UpdateLOV", "ViewAttributeLOV")',
+            data: '{modelObj: ' + JSON.stringify(person) + ',' + postData + '}',
+            success: function (data) {
+                debugger;
+                if (data == 1) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Updated successfully.!',
+                        type: 'green',
+                    });
+                    setTimeout(function () {
+                        objDialog.dialog("close");
+                    }, 2500);
+                }
+                if (data == 0) {
+                    $.alert({
+                        title: 'DMS',
+                        content: 'Update failed.!',
+                        type: 'red',
+                    });
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: 'DMS',
+                    content: 'Error.!',
+                    type: 'red',
+                });
+            }
+        });
+    }
+</script>

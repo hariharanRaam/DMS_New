@@ -1,0 +1,25 @@
+{
+  "CacheSourceKey": "1tciq0i",
+  "CachePdfKey": "1tciq0i/1tciq0i-1k3kk2s.pdf",
+  "CacheXpzKey": "1tciq0i/1tciq0i-192mgfk.xpz",
+  "CacheInfoKey": "1tciq0i/1tciq0i-192mgfk.json",
+  "CacheCopyKey": null,
+  "Document": "D:\\dmsfilesave\\ClientInv001(0).pdf",
+  "DocumentHandlerType": null,
+  "DocumentFileName": "ClientInv001(0).pdf",
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "FastWebViewEnabled": false,
+    "Password": null,
+    "Format": "Pdf"
+  },
+  "XpzOutputOptions": {
+    "Password": "1tciq0i",
+    "HighQualityEnabled": false,
+    "Format": "Xpz"
+  }
+}
