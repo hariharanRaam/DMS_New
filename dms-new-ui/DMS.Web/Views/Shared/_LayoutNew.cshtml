@@ -16,9 +16,20 @@
       dir="ltr"
       data-theme="theme-default"
       data-assets-path="~/Assets/assets/"
-      data-template="vertical-menu-template">
+      data-template="vertical-menu-template" style="overflow:hidden">
 <head>
     <style type="text/css">
+         .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #e4e4e4;
+            color: white;
+            text-align: center;
+            z-index: 2;
+            height:30px
+        }
         /*.multi-select-container {
               display: inline-block;
               position: relative;
@@ -538,6 +549,9 @@
                             </ul>
                         </li>*@
             </aside>
+            <footer class="footer">
+                <h6 class="copyright" style="color:#000;font-family:inherit;font-size:14px">DMS. &#169; by Flexicode Technologies (P) Ltd </h6>
+            </footer>
             <!-- / Menu -->
             <!-- Layout container -->
             <div class="layout-page">
@@ -740,30 +754,29 @@
                             <!--/ User -->
                         </ul>
                     </div>
+
                 </nav>
                 <!-- / Navbar -->
                 <!-- Content wrapper -->
 
-                <div class="container" style="
+                <div class="container-xxl flex-grow-1 container-p-y" style="
     /* background: #fff; */
     padding-right: 20px;
     margin-bottom: 20px;
-    padding-left: 20px;
+    padding-left: 20px;border-radius:20px;margin-top:-9px;
 ">
-                    <div class="row" style="background: #fff;border-radius: 5px;/* width: 103.6%; */margin-right: 5px;margin-left: 5px;/* margin-bottom: 20px; *//* padding-left: 3px; */">
+                    <div class="row" style="background: #fff;border-radius: 15px;/* width: 103.6%; */margin-right: 8px;margin-left: 8px;/* margin-bottom: 20px; *//* padding-left: 3px; */">
                         <div class="col-sm-12" style="
     margin-left: 10px;
 ">
                             <div class="row" id="collapse_div">
                                 <div class="col-sm-4">
-
                                 </div>
                                 <div class="col-sm-4">
-
                                 </div>
                                 <div class="col-sm-4">
-                                    <img src="../Assets/images/plus.png" id="collapse_img" style="float: right; height: 10px; width: 10px; margin: 1px; display: block;">
-                                    <img src="../Assets/images/minus.png" id="collapse_img2" style="float: right; height: 10px; width: 10px; margin: 1px; display: none;">
+                                    <img src="../Assets/images/plus.png" id="collapse_img" style="float: right; height: 15px; width: 15px; margin: 3px; display: block;">
+                                    <img src="../Assets/images/minus.png" id="collapse_img2" style="float: right; height: 15px; width: 15px; margin: 3px; display: none;">
                                 </div>
                             </div>
                             <div class="row" id="collapse_org" style="margin-bottom: 22px; display:none">
@@ -782,7 +795,6 @@
                                 <div class="col-sm-3" style="width: 23%;">
                                     <center><label for="orglvl4valO" id="orglvl4lblO">Level 4</label></center>
                                     <select class="form-select" id="orglvl4valO" name="orglvl4valO" onchange="onChangeunit(4, 'orglvl4valO')" disabled="" style="/* width:143%; */"></select>
-
                                 </div>
                                 <div class="col-sm-12">
                                     <button type="button" id="btn_transferorg" class="btn btn-sm btn-primary" onclick="storeheader()" style="float: right;margin-top: -33px;margin-right: 28px;">Apply</button>
@@ -792,11 +804,13 @@
                         </div>
                     </div>
                 </div>
-
-                
+               
+               
 <div class="content-wrapper">
     @RenderBody()
+
 </div>
+              
 <!-- Content wrapper -->
 </div>
 <!-- / Layout page -->
@@ -808,7 +822,7 @@
 <div class="drag-target"></div>
     </div>
 <!-- / Layout wrapper -->
-
+   
 <div class="modal fade" id="searchcourse" tabindex="-1" aria-hidden="true" style="width:50%;margin-left:25%">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">

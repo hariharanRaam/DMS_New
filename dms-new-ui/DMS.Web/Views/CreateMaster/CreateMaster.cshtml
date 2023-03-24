@@ -2,9 +2,7 @@
 @using Kendo.Mvc.UI.Fluent;
 @using Kendo.Mvc.Extensions;
 @model  DMS.Model.CreateMaster_Model
-@{
-   
-
+@{  
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
 }
 <!Doctype html>
@@ -16,7 +14,7 @@
             color: red;
             margin-left: 10px;
         }
-      
+       
  .k-dropdown-wrap.k-state-default{
             background-clip: padding-box;
            
@@ -112,48 +110,51 @@
             .k-edit.k-icon {
                 display: none;
             }
+           
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini fixed">
     <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
-            <div class="card-body" style="margin-top:-9px;">
+            <div class="card-body" style="margin-top:-15px;">
                 <div class="col-md-12">
-                    <div class="box box-orange" style="height:650px">
-
-                        <div class="box-header text-left  with-border">
-                            <table style="width:30% !important;position:relative;align-content :flex-start  ">
-                                <tr style="height:10px;"></tr>
-                                <tr>
-                                    <td style="left:15px;top:10px; position:relative">
-                                        @Html.Label("Master", new { @class="form-label" @*,style = "width:120px;font-weight: bold;"*@ })
-                                    </td>
-                                    <td style="left:15px; position:relative">
-                                        @(Html.Kendo().DropDownList().Name("MasterTypeId")
+                    <div class="box box-orange" style="height:515px;">
+                        <div class="row">
+                            <div class="col-md-4" style="margin-top:-20px;">
+                                <table style="width:30% !important;position:relative;align-content :flex-start  ">
+                                    <tr style="height:10px;"></tr>
+                                    <tr>
+                                        <td style="left:15px;position:relative">
+                                            @Html.Label("Master", new
+                                   {
+                                       @class = "form-label" @*,style = "width:120px;font-weight: bold;"*@ })
+                                        </td>
+                                        <td style="left:54px; position:relative">
+                                            @(Html.Kendo().DropDownList().Name("MasterTypeId")
                                  .DataTextField("MasterTypeName")
                                  .DataValueField("MasterTypeId")
-                // .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
+                                                    // .HtmlAttributes(new { style = "height:25px;width:225px;font-weight: normal;" })
                          .DataSource(source => { source.Read(read => { read.Action("GetMasterType", "CreateMaster"); }).ServerFiltering(true); })
                  .SelectedIndex(0)
                  .Events(e => e.Change("onChange"))
-                                        )
-                                        @* <select id="Master" name="Master" onchange="fetchMaster()" class="form-control"></select>*@
-                                    </td>
+                                            )
+                                            @* <select id="Master" name="Master" onchange="fetchMaster()" class="form-control"></select>*@
+                                        </td>
+                                        @Html.Hidden("OrgMasterId", "", new { style = "height:25px;width:225px;font-weight: normal;" })
+                                    </tr>
+                                    <tr style="height:10px;"></tr>
+                                </table>
 
-                                    @Html.Hidden("OrgMasterId", "", new { style = "height:25px;width:225px;font-weight: normal;" })
-
-                                </tr>
-
-                                <tr style="height:10px;"></tr>
-                            </table>
+                            </div>
+                            <div class="col-md-8">
+                                <h3 style="margin-left:130px;margin-top:-7px" class="box-title"></h3>
+                            </div>
                         </div>
 
-                        <div class="box-header text-center with-border">
-                            <h3 class="box-title"></h3>
-                        </div>
 
 
-                        @(Html.Kendo().Grid<DMS.Model.CreateMaster_Model>().Name("Department")
+                            @(Html.Kendo().Grid<DMS.Model.CreateMaster_Model>().Name("Department")
+                                    .Scrollable(s => s.Height(270))
                                     .HtmlAttributes(new { style = "width:100%;height:auto;line-height:1em;font-size:12px;" })
                                     .Resizable(resizing => resizing.Columns(true))
                             .Columns(columns =>
@@ -165,38 +166,36 @@
                                 //columns.Bound(m => m.CreatedDate).Title("Created Date").Width(20).Format("{0: dd-MM-yyyy }");
                                 //columns.Bound(m => m.Createdby).Title("Created By").Width(20);
                                 columns.Bound(m => m.MasterTypeId).Title("MasterType").Hidden();
-                                columns.Command(cmd => { cmd.Edit().Text("<center><img src = '../Assets/images/editicons.png' ></center>"); }).Title("Edit").Width(5).HtmlAttributes(new { style = "text-align:center" });
-                                columns.Template(p => { }).ClientTemplate("<center><img src = '../Assets/images/del.png'  onclick='return myDeleteJs()' ></center>").Width(3).Title("Delete");
+                                columns.Command(cmd => { cmd.Edit().Text("<center><img src = '../Assets/images/editicons.png' ></center>"); }).Title("Edit").Width(200).HtmlAttributes(new { style = "text-align:center" });
+                                columns.Template(p => { }).ClientTemplate("<center><img src = '../Assets/images/del.png'  onclick='return myDeleteJs()' ></center>").Width(100).Title("Delete");
                             })
                             .ToolBar(toolbar => toolbar.Create())
                             .Editable(ed => ed.Mode(GridEditMode.PopUp).TemplateName("CreateMasterDropdown"))
                             .Pageable(pageable => pageable
                                         .Refresh(true)
-                                        .PageSizes(true)
+                                        .PageSizes(new[] { 10, 50, 500, 1000 })
                                         .ButtonCount(5))
                             .Filterable()
                             .Sortable()
                             .Selectable()
-                                //.Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
+                                    //.Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
                             .DataSource(dataSource => dataSource
                             .Ajax()
                             .PageSize(10)
                             .ServerOperation(false)
                             .Events(events => events.Error("error_handler"))
-
                                     .Model(model =>
                                     {
                                         model.Id(p => p.Id);
                                         //  model.Field(p => p.MasterTypeId).DefaultValue("additionalinfo");
                                     })
-
-                                            .Update(update => update.Action("DepartmentGrid_Update", "CreateMaster").Data("additionalinfo"))
-                                            .Create(Create => Create.Action("DepartmentGrid_Save", "CreateMaster").Data("additionalinfo"))
-                                           .Read(read => read.Action("MasterGrid_Read", "CreateMaster").Data("additionalinfo"))
+                                  .Update(update => update.Action("DepartmentGrid_Update", "CreateMaster").Data("additionalinfo"))
+                                  .Create(Create => Create.Action("DepartmentGrid_Save", "CreateMaster").Data("additionalinfo"))
+                                  .Read(read => read.Action("MasterGrid_Read", "CreateMaster").Data("additionalinfo"))
                             )
-                        )
+                            )
 
-                    </div>
+                        </div>
                 </div>
             </div>
             </div>
@@ -213,7 +212,7 @@
         $("#navhead").text("Masters");
         getScreenAccess(46, "Masters");
     })
-
+   
     function getScreenAccess(screenID, screenName) {
         debugger;
         var result_;
@@ -283,7 +282,12 @@
         });
         $('.k-icon.k-edit').attr('hidden',true);
     })
-
+    $(function () {
+        $("#Department").on("click", ".k-grid-update", function () {
+            var grid = $("#Department").data("kendoGrid");
+            grid.saveChanges();
+        });
+    });
     function onLoad(e)
     {
         alert("load");
@@ -468,5 +472,12 @@
             Master_TypeId: MasterTypeId, dep_id: depid
 
         }
+    }
+    function save() {
+
+    }
+
+    function closeopup() {
+
     }
 </script>

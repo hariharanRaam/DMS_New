@@ -12,7 +12,10 @@
      .accordion_container {
         width: 100%;
     }
-
+     .table-responsive {
+    overflow: hidden !important;
+   
+}
     .accordion_head {
         background-color: #337ab7;
         color: white;
@@ -70,7 +73,9 @@
     div#kwindow_Filter {
         overflow: hidden;
     }
-
+    .k-pager-wrap .k-dropdown {
+    width: 5.5em;
+}
     .foo {
         outline: 1px solid #337ab7;
     }
@@ -171,7 +176,9 @@
         color: #000;
         border-color: inherit;
     }
-
+    .k-grid-content{
+        height: 281px !important;
+    }
 </style>
 <link rel="stylesheet" href="styles/kendo.common.min.css" />
 <link rel="stylesheet" href="styles/kendo.default.min.css" />
@@ -221,9 +228,9 @@
                                 <input type="radio" value="N" name="active_flag" id="rbN" /> No
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <button type="button" data-bs-toggle="modal" id="add_attrib" data-bs-target="#applyfilter" onclick="AddAttributes()" class="btn btn-sm btn-primary me-2" style="margin-top: 30px;">Apply Filter</button>
+                        <div class="col-sm-3">                           
                             <button type="button" id="transfer1" data-bs-dismiss="modal" class="btn btn-sm btn-default " onclick="return ShowResultWithoutFilter();" style="margin-top: 30px; background-color:#4CAF50;color:white;"> Search</button>
+                            <button type="button" data-bs-toggle="modal" id="add_attrib" data-bs-target="#applyfilter" onclick="AddAttributes()" class="btn btn-sm btn-primary me-2" style="margin-top: 30px;">Apply Filter</button>
                         </div>
                         <div class="col-md-3" style="display: none;margin-top: 36px;height:auto;margin-left: 18px;/* margin-right: 13px; *//* width:100%; */" id="showresult1">
                             <img src="../Assets/images/excel.png" style="float:right;margin-top:-3px;margin-left:10px;cursor:pointer;" onclick=" excelexportnew()" data-bs-toggle="tooltip" data-bs-placement="top" title="Excel Export" id="excelexport">
@@ -248,7 +255,7 @@
                     </div>*@
                     <div class="row" id="showresult" style="margin-top:33px">
                         <div class="col-sm-12">
-                            <div id="Maingrid" class="col-md-9" style="margin:auto;height:auto;top:10px;width:100%;">
+                            <div id="Maingrid" class="col-md-9" style="margin:auto;top:10px;width:100%;">
 
                             </div>
                         </div>
@@ -1410,6 +1417,7 @@
                     //        this.autoFitColumn(i);
                     //    }
                     //},
+                    height: "360px",
                     editable: false,
                     sortable: true,
                     scrollable: true,
@@ -1420,9 +1428,9 @@
                   //  persistSelection: true,
                     selectable: "false",
                     pageable: {
-                        pageSize: 8,
+                        pageSize: 10,
                         buttonCount: 4,
-                        pageSizes: [10, 20, 30, 40, 50]
+                        pageSizes: [10,50,500,1000]
                     },
                     columns: columns,
                     //toolbar: ["excel"],

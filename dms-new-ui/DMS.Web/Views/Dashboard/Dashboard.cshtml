@@ -36,7 +36,7 @@
     <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
 
-            <div class="row" style="margin-top:-15px;margin-bottom:15px;">
+            <div class="row" style="margin-top:-20px;margin-bottom:5px;">
                 <div class="col-md-6 col-xl-2" style="margin-left:11px;">
                     <div class="card shadow-none bg-transparent border border-primary mb-3" style="border-radius: 20px;border-color: #696cff !important;margin: 25px;margin-left: 17px;margin-right: -60px;">
                         <div class="card-body" style="background:#696CFF;border-radius: 20px;">
@@ -78,10 +78,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top:-45px">
                 <div class="col-md-6 col-xl-5 border">
                     <h5>Document Digitized By Department</h5>
-                    <div id="chart" class="chart" style="width: 400px; height: 300px;"></div>
+                    <div id="chart" class="chart"></div>
                 </div>
                 <div class="col-md-6 col-xl-5 border">
                     <h5 style="margin-bottom:25px !important;">Document Digitized By Timeline</h5>
@@ -117,13 +117,13 @@
             }
         }
 
-      //  var data = google.visualization.arrayToDataTable([
-      //['', 'Documents'],
-      //['Apr-22', 5231],
-      //['Mar-22', 4006],
-      //['Feb-22', 2389],
-      //['Jan-22', 411]
-      //  ]);
+        var dataopt = google.visualization.arrayToDataTable([
+      ['', 'Documents'],
+      ['Apr-22', 5231],
+      ['Mar-22', 4006],
+      ['Feb-22', 2389],
+      ['Jan-22', 411]
+        ]);
 
         var data = google.visualization.arrayToDataTable(opt2);
         var options = {
@@ -131,9 +131,10 @@
                 title: '',
                 subtitle: '',
             },
-            bars: 'horizontal', // Required for Material Bar Charts.
+            orientation: 'vertical',
+            //bars: 'horizontal', // Required for Material Bar Charts.
             hAxis: { format: 'decimal', gridlines: { color: 'transparent' } },
-            width: 500, height: 300,
+            width: 500, height: 235,
             legend: { 'position': 'bottom', 'alignment': 'end' },
             fontSize: 12,
             colors: ['#7679FA', '#EF8737']
@@ -141,7 +142,7 @@
 
         var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
 
-        chart.draw(data, options);
+        chart.draw(dataopt, options);
     }
     function drawVisualization() {
         // Create and populate the data table.
@@ -163,17 +164,18 @@
         }
        
 
-        //var data = google.visualization.arrayToDataTable([
-        //        ['Task', 'Hours per Day'],
-        //        ['Finance', 37],
-        //        ['HR', 27],
-        //        ['Admin', 16],
-        //        ['Marketing', 19]
-        //]);
+        var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Finance', 37],
+                ['HR', 27],
+                ['Admin', 16],
+                ['Marketing', 0]
+        ]);
         var data = google.visualization.arrayToDataTable(opt2);
         var options = {
             title: '',
             is3D: true,
+            legend: { 'position': 'bottom', 'alignment': 'end' },
         };
 
         // Create and draw the visualization.
